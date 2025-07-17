@@ -1,0 +1,333 @@
+<script setup>
+import { ref, computed, onUnmounted, onMounted } from 'vue';
+import store from '@/store';
+import { vibrate } from '@/utils';
+import { backButton } from '@/tg';
+
+const activeInput = ref()
+const filters = computed(() => store.state.filters);
+const buttons = [1, 2, 3, 4, 5]
+
+const emit = defineEmits(["close", "filter-updated"])
+let backButtonClickHandler
+
+const closeWindow = () => {
+    emit("close")
+};
+
+onMounted(() => {
+    backButton.show();
+    backButtonClickHandler = function() {
+        closeWindow();
+    };
+    backButton.onClick(backButtonClickHandler);
+});
+
+
+onUnmounted(() => {
+    backButton.offClick(backButtonClickHandler)
+})
+
+
+
+const setFilterRating = (value_) => {
+    if (rating.value == value_) {
+        rating.value = null
+    } else {
+        vibrate()
+        rating.value = value_
+    }
+    emitFilters();
+}
+
+const setFilterPackageItemCount = (value_) => {
+    if (package_item_count.value == value_) {
+        package_item_count.value = null
+    } else {
+        vibrate()
+        package_item_count.value = value_
+    }
+    emitFilters();
+}
+
+const updatePriceFrom = () => {
+    priceFrom.value = Math.max(0, priceFrom.value)
+    emitFilters();
+}
+
+const updatePriceTo = () => {
+    priceTo.value = Math.max(0, priceTo.value);
+    emitFilters();
+}
+
+
+const initialRating = computed(() => {
+    const filter = store.state.filters.find(filter => filter.name === "Рейтинг");
+    return filter ? filter.rating : null;
+});
+
+
+const initialPackageItemCount = computed(() => {
+    const filter = filters.value.find(filter => filter.name === "Количество");
+    return filter ? filter.package_item_count : null;
+});
+
+
+const initialPrice = computed(() => {
+    return filters.value.find(filter => filter.name === "Цена") || {};
+});
+
+
+const rating = ref(initialRating.value);
+const package_item_count = ref(initialPackageItemCount.value);
+const priceFrom = ref(initialPrice.value.price_from || 0);
+const priceTo = ref(initialPrice.value.price_to || 0);
+
+const setActiveInput = (field) => {
+    activeInput.value = field
+}
+
+
+const emitFilters = () => {
+    const filterValues = {
+        rating: rating.value || null,
+        priceFrom: priceFrom.value || null,
+        priceTo: priceTo.value || null,
+        packageItemCount: package_item_count.value || null
+    };
+    const filtersToEmit = [];
+    if (filterValues.rating) {
+        filtersToEmit.push({
+            name: "Рейтинг",
+            rating: filterValues.rating,
+            package_item_count: null,
+            price_from: null,
+            price_to: null
+        });
+    }
+    if (filterValues.priceFrom || filterValues.priceTo) {
+        filtersToEmit.push({
+            name: "Цена",
+            rating: null,
+            package_item_count: null,
+            price_from: filterValues.priceFrom,
+            price_to: filterValues.priceTo
+        });
+    }
+    if (filterValues.packageItemCount) {
+        filtersToEmit.push({
+            name: "Количество",
+            rating: null,
+            package_item_count: filterValues.packageItemCount,
+            price_from: null,
+            price_to: null
+        });
+    }
+    emit("filter-updated", filtersToEmit);
+};
+
+
+</script>
+
+<template>
+    <div class="m-food-sup-card-filter-container">
+        <div class="m-food-sup-card-filter-content">
+            <div class="m-food-sup-card-filter-title">Мин. рейтинг</div>
+            <div class="m-food-sup-card-filter-raiting-buttons">
+                <button 
+                    class="m-food-sup-card-filter-raiting-buttons-item"
+                    :class="{active: rating == button}"
+                    @click="setFilterRating(button)"
+                    v-for="button in buttons">
+                {{ button }}
+                </button>
+            </div>
+            <div class="m-food-sup-card-filter-title">Цена, ₽</div>
+            <div class="m-food-sup-card-filter-price-pagination">
+                <p>от</p>
+                <input 
+                    type="number" 
+                    class="m-food-sup-card-filter-price-pagination-item"
+                    :class="{ active: activeInput === 'from' }"
+                    @focus="setActiveInput('from')"
+                    v-model="priceFrom"
+                    @input="updatePriceFrom">
+                <p>до</p>
+                <input 
+                    type="number"
+                    class="m-food-sup-card-filter-price-pagination-item"
+                    :class="{ active: activeInput === 'to' }"
+                    @focus="setActiveInput('to')"
+                    v-model="priceTo"
+                    @input="updatePriceTo">
+            </div>
+            <div class="m-food-sup-card-filter-title">Кол-во в упаковке</div>
+            <div class="m-food-sup-card-filter-counter-pagination-radio">
+                <input 
+                    type="radio" 
+                    name="package_item_count" 
+                    value="12" 
+                    @click="setFilterPackageItemCount(12)"
+                    :checked="package_item_count === 12"/>
+                <label>12</label>
+                <input 
+                    type="radio" 
+                    name="package_item_count" 
+                    value="24" 
+                    @click="setFilterPackageItemCount(24)"
+                    :checked="package_item_count === 24"/>
+                <label>24</label>
+            </div>
+        </div>
+  </div>
+</template>
+
+<style scoped>
+
+
+.m-food-sup-card-filter-container{
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 1);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: auto; 
+  position: fixed
+}
+
+.m-food-sup-card-filter-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: auto; 
+}
+
+.m-food-sup-card-filter-title{
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.m-food-sup-card-filter-raiting-buttons{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0px 18px 0px;
+}
+
+.m-food-sup-card-filter-raiting-buttons-item {
+    background-color: white;
+    border: none;
+    height: 32px;
+    width: 32px;
+    font-size: 12px;
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: 4px;
+    color: black;
+}
+
+.m-food-sup-card-filter-raiting-buttons-item:first-child{
+    margin-left: 0px;
+}
+
+.m-food-sup-card-filter-raiting-buttons-item.active{
+    border: 1px solid #013b45;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+    background-color: #c4dfe6;
+    color: #013b45;
+}
+
+
+.m-food-sup-card-filter-price-pagination{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0px 18px 0px;
+}
+
+
+.m-food-sup-card-filter-price-pagination p{
+    margin-left: 16px;
+}
+
+
+.m-food-sup-card-filter-price-pagination-item{
+    display: block;
+    background-color: white;
+    margin-left: 8px;
+    width: 96px;
+    height: 24px;
+    font-size: 18px;
+    outline: none;
+    border: 1px solid black;
+    text-align: right;
+    border-radius: 2px;
+    padding-right: 4px;
+}
+
+.m-food-sup-card-filter-price-pagination-item.active{
+    border: 1px solid #013b45;
+}
+
+.m-food-sup-card-filter-counter-pagination-radio{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0px 0px 0px;
+}
+
+input[type='radio']{
+    margin-left: 10px;
+}
+
+input[type='radio']:after {
+    width: 16px;
+    height: 16px;
+    border-radius: 15px;
+    top: 0px;
+    left: 0px; 
+    position: relative;
+    background-color: white;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid black;
+}
+
+    
+input[type='radio']:checked:after {
+    width: 16px;
+    height: 16px;
+    border-radius: 15px;
+    top: 0px;
+    left: 0px; 
+    position: relative;
+    background-color: #c4dfe6;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid #013b45;
+}
+
+label{
+    font-size: 24px;
+    margin-left: 4px;
+}
+
+.m-food-sup-card-filter-main-button{
+    background-color: white;
+    border: 1px solid black;
+    margin: 8px 10px;
+    border-radius: 4px;
+}
+
+
+</style>
+
+
