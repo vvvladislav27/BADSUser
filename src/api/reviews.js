@@ -5,7 +5,7 @@ import store from "@/store";
 
 
 const getReviews = async(foodSupId, page) => {
-    const response = await fetch(`${API_BASE_URL}/v0/reviews/list_food_sup_reviews/${foodSupId}?page=${page}`, {
+    const response = await fetch(`${API_BASE_URL}/v0/reviews/items/${foodSupId}?page=${page}`, {
         method: "GET",
         headers: {
             'bypass-tunnel-reminder': 'true',

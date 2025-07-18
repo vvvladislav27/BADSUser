@@ -9,7 +9,7 @@ const getFoodSupsWithFilters = async(filters, type, sort, q) => {
         "sort": sort,
         "q": q
     }
-    const response = await fetch(`${API_BASE_URL}/v0/food_sups/items`, {
+    const response = await fetch(`${API_BASE_URL}/v0/food_sups/search_for_user`, {
         method: "POST",
         headers: {
             'bypass-tunnel-reminder': 'true' ,

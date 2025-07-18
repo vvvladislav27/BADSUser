@@ -49,7 +49,7 @@ const getFavFoodSupsWithFilters = async(filters, type, sort, q) => {
         "q": q,
         "uid": null
     }
-    const response = await fetch(`${API_BASE_URL}/v0/fav_food_sups/search_user_favorite_items`, {
+    const response = await fetch(`${API_BASE_URL}/v0/fav_food_sups/search_for_user`, {
         method: "POST",
         headers: {
             'bypass-tunnel-reminder': 'true' ,

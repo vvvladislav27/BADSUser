@@ -3,7 +3,7 @@ import store from "@/store";
 
 
 const getCart = async () => {
-    const response = await fetch(`${API_BASE_URL}/v0/carts/user`, {
+    const response = await fetch(`${API_BASE_URL}/v0/carts/`, {
         method: "GET",
         headers: {
             'bypass-tunnel-reminder': 'true',
@@ -19,7 +19,7 @@ const getCart = async () => {
 }
 
 const getCartItems = async() => {
-    const response = await fetch(`${API_BASE_URL}/v0/carts/user/items`, {
+    const response = await fetch(`${API_BASE_URL}/v0/carts/items`, {
         method: "GET",
         headers: {
             'bypass-tunnel-reminder': 'true',
@@ -42,7 +42,7 @@ const addCartItem = async (cartId, foodSupId, count) => {
         "food_sup_id": foodSupId,
         "count": count
     }
-    const response = await fetch(`${API_BASE_URL}/v0/carts/user/items`, {
+    const response = await fetch(`${API_BASE_URL}/v0/carts/items`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ const updateCartItem = async (cartItemId, cartId, foodSupId, count) => {
         "food_sup_id": foodSupId,
         "count": count
     }
-    const response = await fetch(`${API_BASE_URL}/v0/carts/user/items/${cartItemId}`, {
+    const response = await fetch(`${API_BASE_URL}/v0/carts/items/${cartItemId}`, {
         method: "PUT",
         headers: {
             'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const updateCartItem = async (cartItemId, cartId, foodSupId, count) => {
 }
 
 const deleteCartItem = async(itemId) => {
-    const response = await fetch(`${API_BASE_URL}/v0/carts/user/items/${itemId}`, {
+    const response = await fetch(`${API_BASE_URL}/v0/carts/items/${itemId}`, {
         method: "DELETE",
         headers: {
             'bypass-tunnel-reminder': 'true',
@@ -102,7 +102,7 @@ const deleteCartItem = async(itemId) => {
 
 
 const clearCart = async(cartId) => {
-    const response = await fetch(`${API_BASE_URL}/v0/carts/clear_items/${cartId}`, {
+    const response = await fetch(`${API_BASE_URL}/v0/carts/clear_cart/${cartId}`, {
         method: "DELETE",
         headers: {
             'bypass-tunnel-reminder': 'true',
