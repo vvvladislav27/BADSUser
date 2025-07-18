@@ -15,9 +15,10 @@ const cartFoodSups = computed(() => store.state.userCartItems);
 const favFoodSups = computed(() => store.state.favFoodSups);
 const photos = computed(() => store.state.foodSupsPhotos);
 const foodSup = ref();
-const reviews = ref();
+const reviews = ref([]);
 const page = ref(1);
-const hasMoreReviews = ref(true);
+
+const hasMoreReviews = ref();
 
 let mainButtonClickHandler;
 let secondaryButtonClickHandler;
@@ -97,6 +98,9 @@ onBeforeMount(async() => {
     ])
     foodSup.value = food_sup
     reviews.value = list_reviews
+    if (reviews.value.length == 10) {
+        hasMoreReviews.value = true;
+    };
     await getImage(foodSup.value.photo_path);
     setAnimationForText('.m-food-sup-name-wrapper');
     setTgButtons();
