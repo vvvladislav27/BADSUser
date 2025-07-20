@@ -107,6 +107,7 @@ onMounted(() => {
 
 
 onBeforeUnmount(() => {
+    tg.offEvent("invoiceClosed", handleInvoiceClosed)
     backButton.offClick(backButtonClickHandler);
     mainButton.offClick(mainButtonClickHandler);
     mainButton.hide();
