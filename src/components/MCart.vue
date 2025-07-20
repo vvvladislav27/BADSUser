@@ -27,7 +27,7 @@ const initButtons = () => {
         backButton.show();
     }
     backButtonClickHandler = function() {
-        if (lastRoute.name == "FoodSups" || !lastRoute.name || lastRoute.name == "ClientOrder") {
+        if (lastRoute.name == "FoodSups" || !lastRoute.name || lastRoute.name == "CreateOrder") {
             router.push('/second-app/');
         } else {
             router.push(lastRoute.path)
