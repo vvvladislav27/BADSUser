@@ -41,30 +41,6 @@ const toggleFavFoodSup = async(foodSupId) => {
 }
 
 
-const getFavFoodSupsWithFilters = async(filters, type, sort, q) => {
-    const data = {
-        "filters": filters,
-        "type": type,
-        "sort": sort,
-        "q": q,
-        "uid": null
-    }
-    const response = await fetch(`${API_BASE_URL}/v0/fav_food_sups/search_for_user`, {
-        method: "POST",
-        headers: {
-            'bypass-tunnel-reminder': 'true' ,
-            'Content-Type': 'application/json',
-            "auth": store.state.auth,
-            "app": "user"
-        },
-        body: JSON.stringify(data)
-    });
-    if (response.ok) {
-        return await response.json()
-    } else {
-        return []
-    }
-};
 
 
-export {getFavFoodSups, toggleFavFoodSup, getFavFoodSupsWithFilters}
+export {getFavFoodSups, toggleFavFoodSup}
