@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch, onBeforeMount } from 'vue';
 
 import {getSortedNameText, formatAmount, getOrderStateTextRu, getImage } from '@/utils';
+import { searchData } from '@/api/search';
 import MSearch from './MSearch.vue';
 import MContextMenu from './MContextMenu.vue';
 import MOrderFilter from './MOrderFilter.vue';
@@ -37,7 +38,8 @@ let backButtonClickHandler;
 const orders = ref();
 
 const getOrders = async() => {
-    orders.value = await getOrdersWithFilters(filters.value, type.value, sort.value, search.value);
+    const data = await searchData("orders", filters.value, type.value, sort.value, search.value);
+    orders.value = data.orders;
 }
 
 onBeforeMount(async() => {

@@ -1,4 +1,4 @@
-import { getFoodSupsWithFilters } from "@/api/food_sup";
+import { searchData } from "@/api/search";
 import { getFavFoodSups, toggleFavFoodSup } from "@/api/fav_food_sup";
 import { 
     getCartItems,
@@ -30,13 +30,13 @@ export const GET_DATA = async({commit, state}) => {
     const [userCart, favFoodSups, foodSups, userCartItems, userCountOrders] = await Promise.all([
         getCart(),
         getFavFoodSups(),
-        getFoodSupsWithFilters(state.filters, state.type, state.sort),
+        searchData("food_sups", state.filters, state.type, state.sort),
         getCartItems(),
         getNumberOrders(),
     ])
     commit("SET_USER_CART", userCart);
     commit("SET_FAV_FOOD_SUPS", favFoodSups);
-    commit("SET_PRODUCTS", foodSups);
+    commit("SET_PRODUCTS", foodSups.food_sups);
     commit("SET_USER_CART_ITEMS", userCartItems);
     commit("SET_IS_DATA_LOADED");
     commit("SET_COUNT_USER_ORDERS", userCountOrders)
@@ -65,8 +65,8 @@ export const GET_AND_SET_USER_CART_ITEMS_AFTER_PAID = async({commit}) => {
 
 
 export const GET_AND_SET_PRODUCTS = async({commit, state}) => {
-    const foodSups = await getFoodSupsWithFilters(state.filters, state.type, state.sort, state.search)
-    commit("SET_PRODUCTS", foodSups)
+    const foodSups = await searchData("food_sups", state.filters, state.type, state.sort, state.search)
+    commit("SET_PRODUCTS", foodSups.food_sups)
 }
 
 export const REMOVE_CART_PRODUCT = ({commit}, index) => {

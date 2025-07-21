@@ -5,7 +5,7 @@ import store from '@/store';
 import MContextMenu from './MContextMenu.vue';
 import MFoodSupFilter from './MFoodSupFilter.vue';
 import MSearch from './MSearch.vue';
-import { getFavFoodSupsWithFilters } from '@/api/fav_food_sup';
+import { searchData } from '@/api/search';
 
 import { getSortedNameText, getImage, formatAmount } from '@/utils';
 import { router } from '@/router';
@@ -39,7 +39,8 @@ let backButtonClickHandler;
 const foodSups = ref();
 
 const getFoodSups = async() => {
-    foodSups.value = await getFavFoodSupsWithFilters(filters.value, type.value, sort.value, search.value)
+    let data = await searchData("favorite_food_sups", filters.value, type.value, sort.value, search.value);
+    foodSups.value = data.food_sups;
 }
 
 
