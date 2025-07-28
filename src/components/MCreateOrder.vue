@@ -4,11 +4,9 @@ import store from '@/store';
 import { router } from '@/router';
 import { formatAmount, getImage } from '@/utils';
 import { getInvoiceLink } from '@/api/order';
-import { showTelegramPopUp, mainButton, backButton, initData } from '@/tg';
-import { DEBUG, FAKE_WEB_APP_DATA } from '@/config';
+import { showTelegramPopUp, mainButton, backButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
-const authDate = computed(() => store.state.auth);
 const user = computed(() => store.state.user);
 const photos = computed(() => store.state.foodSupsPhotos);
 const orderItems = computed(() => Object.values(store.state.userOrderItems));
@@ -76,15 +74,6 @@ const calculateTotalPriceAndSetMainButton = () => {
 
 
 onBeforeMount(async() => {
-    if (!authDate.value) {
-        let auth;
-        if (!DEBUG) {
-            auth = initData;
-        } else {
-            auth = FAKE_WEB_APP_DATA
-        }
-        await store.dispatch("SET_AUTH_DATA", auth);
-    }
     setAnimationForText(".m-create-order-item-content-name-wrapper");
     for (let item of orderItems.value) {
         await getImage(item.food_sup.photo_path)

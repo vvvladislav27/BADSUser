@@ -4,13 +4,11 @@ import store from '@/store';
 import { getImage, getPackageItemCountText, getStockItemCountText, vibrate, formatAmount, formatDate } from '@/utils';
 import { getFoodSupById } from '@/api/food_sup';
 import { router, lastRoute } from '@/router';
-import { DEBUG, FAKE_WEB_APP_DATA } from '@/config';
 import { getReviews } from '@/api/reviews';
 import MReview from './MReview.vue';
-import { showTelegramPopUpWithKeyboard, mainButton, secondaryButton, backButton, initData, copyTextAndShowPopUp } from '@/tg';
+import { showTelegramPopUpWithKeyboard, mainButton, secondaryButton, backButton, copyTextAndShowPopUp } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
-const authData = computed(() => store.state.auth);
 const cartFoodSups = computed(() => store.state.userCartItems);
 const favFoodSups = computed(() => store.state.favFoodSups);
 const photos = computed(() => store.state.foodSupsPhotos);
@@ -83,15 +81,6 @@ const setTgButtons = () => {
 
 
 onBeforeMount(async() => {
-    if (!authData.value) {
-        let auth;
-        if (!DEBUG) {
-            auth = initData;
-        } else {
-            auth = FAKE_WEB_APP_DATA
-        }
-        await store.dispatch("SET_AUTH_DATA", auth);
-    }
     const [food_sup, list_reviews] = await Promise.all([
         getFoodSupById(props.id),
         getReviews(props.id, page.value)

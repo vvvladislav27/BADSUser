@@ -4,11 +4,9 @@ import { getOrderById, updateOrderStatus } from '@/api/order';
 import { formatAmount, formatTime, formatDateForOrder, getOrderStateTextRu } from '@/utils';
 import store from '@/store';
 import { router } from '@/router';
-import { showTelegramPopUpWithKeyboard, mainButton, backButton, initData } from '@/tg';
+import { showTelegramPopUpWithKeyboard, mainButton, backButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
-import { DEBUG, FAKE_WEB_APP_DATA } from '@/config';
 
-const authDate = computed(() => store.state.auth);
 const photos = computed(() => store.state.foodSupsPhotos);
 const order = ref();
 
@@ -65,15 +63,6 @@ const setTgButtons = () => {
 
 
 onBeforeMount(async() => {
-    if (!authDate.value) {
-        let auth;
-        if (!DEBUG) {
-            auth = initData;
-        } else {
-            auth = FAKE_WEB_APP_DATA
-        }
-        await store.dispatch("SET_AUTH_DATA", auth);
-    }
     order.value = await getOrderById(props.id);
     setAnimationForText('.m-admin-order-item-content-name-wrapper')
     setTgButtons(order.value.state);

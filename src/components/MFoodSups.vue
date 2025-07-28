@@ -67,7 +67,7 @@ onMounted(async() => {
 });
 
 
-//Проверить что можно без этого
+
 onUnmounted(() =>{
     mainButton.offClick(mainButtonClickHandler);
     secondaryButton.offClick(secondaryButtonClickHandler);

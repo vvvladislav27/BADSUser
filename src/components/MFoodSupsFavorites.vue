@@ -9,8 +9,7 @@ import { searchData } from '@/api/search';
 
 import { getSortedNameText, getImage, formatAmount } from '@/utils';
 import { router } from '@/router';
-import { DEBUG, FAKE_WEB_APP_DATA } from '@/config';
-import { mainButton, secondaryButton, backButton, initData } from '@/tg';
+import { mainButton, secondaryButton, backButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 
@@ -46,15 +45,6 @@ const getFoodSups = async() => {
 
 
 onBeforeMount(async() => {
-    if (!authDate.value) {
-        let auth;
-        if (!DEBUG) {
-            auth = initData;
-        } else {
-            auth = FAKE_WEB_APP_DATA
-        }
-        await store.dispatch("SET_AUTH_DATA", auth);
-    }
     await getFoodSups()
     setAnimationForText(".m-food-sups-favorites-item-name-wrapper");
     for (let food_sup of foodSups.value) {

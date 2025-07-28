@@ -4,11 +4,9 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { formatAmount } from '@/utils';
 import { router, lastRoute } from '@/router';
 import { vibrate, getImage } from '@/utils';
-import { DEBUG, FAKE_WEB_APP_DATA } from '@/config';
-import { showTelegramPopUp, showTelegramPopUpWithKeyboard, mainButton, secondaryButton, backButton, initData } from '@/tg';
+import { showTelegramPopUp, showTelegramPopUpWithKeyboard, mainButton, secondaryButton, backButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
-const authDate = computed(() => store.state.auth);
 const photos = computed(() => store.state.foodSupsPhotos);
 const cartFoodSups = computed(() => store.state.userCartItems);
 const orderFoodSups = computed(() => store.state.userOrderItems)
@@ -64,15 +62,6 @@ const getTextForMainButton = () => {
 
 
 onMounted(async() => {
-    if (!authDate.value) {
-        let auth;
-        if (!DEBUG) {
-            auth = initData;
-        } else {
-            auth = FAKE_WEB_APP_DATA
-        }
-        await store.dispatch("SET_AUTH_DATA", auth);
-    }
     for (let item of Object.values(cartFoodSups.value) ) {
         if (item) {
             await getImage(item.food_sup.photo_path)

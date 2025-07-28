@@ -43,15 +43,6 @@ const getOrders = async() => {
 }
 
 onBeforeMount(async() => {
-    if (!authDate.value) {
-        let auth;
-        if (!DEBUG) {
-            auth = initData;
-        } else {
-            auth = FAKE_WEB_APP_DATA
-        }
-        await store.dispatch("SET_AUTH_DATA", auth);
-    }
     await getOrders()
     setAnimationForText(".m-order-item-content-name-wrapper");
     for (let order of orders.value) {
