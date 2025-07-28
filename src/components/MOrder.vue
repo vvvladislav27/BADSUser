@@ -1,7 +1,7 @@
 <script setup>
 import { onBeforeUnmount, ref, computed, watch, onBeforeMount } from 'vue';
 import { getOrderById, updateOrderStatus } from '@/api/order';
-import { formatAmount, formatTime, formatDateForOrder, getOrderStateTextRu } from '@/utils';
+import { formatAmount, formatTime, formatDateForOrder, getOrderStateTextRu, getImage } from '@/utils';
 import store from '@/store';
 import { router } from '@/router';
 import { showTelegramPopUpWithKeyboard, mainButton, backButton } from '@/tg';
@@ -72,6 +72,10 @@ onBeforeMount(async() => {
     backButton.onClick(backButtonClickHandler);
     if (!backButton.isVisible) {
         backButton.show();
+    }
+    for (let item of order.value.items) {
+
+        await getImage(item.food_sup.photo_path)
     }
 })
 

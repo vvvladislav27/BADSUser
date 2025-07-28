@@ -98,15 +98,6 @@ const removeDataFromList = async(data) => {
 
 
 onBeforeMount(async() => {
-    if (!authDate.value) {
-        let auth;
-        if (!DEBUG) {
-            auth = initData;
-        } else {
-            auth = FAKE_WEB_APP_DATA
-        }
-        await store.dispatch("SET_AUTH_DATA", auth);
-    }
     backButtonClickHandler = () => {
         router.push("/second-app/create_order");
     }
