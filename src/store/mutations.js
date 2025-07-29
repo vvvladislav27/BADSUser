@@ -2,7 +2,7 @@ export const SET_AUTH_DATA = (state, auth) => {
     state.auth = auth;
 };
 
-export const GET_AND_SET_USER = (state, user) => {
+export const SET_USER = (state, user) => {
     state.user = user;
 }
 

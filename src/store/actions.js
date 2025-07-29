@@ -37,20 +37,20 @@ export const GET_DATA = async({commit, state}) => {
 }
 
 
-export const INIT_APP_DATA = async({commit, state}) => {
+export const CHEK_USER_STATUS = async({commit}) => {
     const user = await getSelf();
     if (user.is_blocked) {
         await showTelegramPopUp("Вы заблокированы администратором приложения")
         return true;
     }
-    commit("GET_AND_SET_USER", user);
+    commit("SET_USER", user);
     return false
 }
 
 
 export const GET_AND_SET_USER_CART_ITEMS = async({commit}) => {
     const user = await getSelf();
-    commit("GET_AND_SET_USER", user);
+    commit("SET_USER", user);
     const [userCart, userCartItems] = await Promise.all([
         getCart(),
         getCartItems()
@@ -248,7 +248,7 @@ export const UPDATE_USER = async({ commit, state }, { data, field, action }) => 
 
     const response = await updateUserOrderData(user);
     if (response) {
-        commit("GET_AND_SET_USER", response);
+        commit("SET_USER", response);
     }
 }
 
