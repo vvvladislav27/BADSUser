@@ -13,13 +13,6 @@ import { getNumberOrders } from "@/api/order";
 import { showTelegramPopUp } from "@/tg";
 
 
-export const SET_AUTH_DATA = ({commit}, auth) => {
-    commit("SET_AUTH_DATA", auth)
-}
-
-
-const tg = window.Telegram.WebApp
-
 export const GET_DATA = async({commit, state}) => {
     const [userCart, favFoodSups, foodSups, userCartItems, userCountOrders] = await Promise.all([
         getCart(),

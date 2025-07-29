@@ -1,7 +1,3 @@
-export const SET_AUTH_DATA = (state, auth) => {
-    state.auth = auth;
-};
-
 export const SET_USER = (state, user) => {
     state.user = user;
 }
