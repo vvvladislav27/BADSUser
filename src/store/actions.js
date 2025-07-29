@@ -13,7 +13,7 @@ import { getNumberOrders } from "@/api/order";
 import { showTelegramPopUp } from "@/tg";
 
 
-export const CHEK_USER_STATUS = async({commit}) => {
+export const GET_AND_SET_DATA = async({commit}) => {
     let is_blocked = false;
     const user = await getSelf();
     if (user.is_blocked) {
@@ -21,24 +21,21 @@ export const CHEK_USER_STATUS = async({commit}) => {
         is_blocked = true;
     }
     commit("SET_USER", user);
-    return is_blocked
-}
-
-
-export const GET_DATA = async({commit, state}) => {
-    const [userCart, favFoodSups, foodSups, userCartItems, userCountOrders] = await Promise.all([
+    if (is_blocked) {
+        return is_blocked
+    }
+    const [cart, countOrders, favoriteFoodSup, cartItems] = await Promise.all([
         getCart(),
-        getFavFoodSups(),
-        searchData("food_sups", state.filters, state.type, state.sort, state.search),
-        getCartItems(),
         getNumberOrders(),
+        getFavFoodSups(),
+        getCartItems(),
     ])
-    commit("SET_USER_CART", userCart);
-    commit("SET_FAV_FOOD_SUPS", favFoodSups);
-    commit("SET_PRODUCTS", foodSups.food_sups);
-    commit("SET_USER_CART_ITEMS", userCartItems);
+    commit("SET_USER_CART", cart);
+    commit("SET_COUNT_USER_ORDERS", countOrders);
+    commit("SET_FAV_FOOD_SUPS", favoriteFoodSup);
+    commit("SET_USER_CART_ITEMS", cartItems);
     commit("SET_IS_DATA_LOADED");
-    commit("SET_COUNT_USER_ORDERS", userCountOrders)
+    return is_blocked
 }
 
 
