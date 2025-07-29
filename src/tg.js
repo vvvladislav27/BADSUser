@@ -1,7 +1,6 @@
-
+import { FAKE_WEB_APP_DATA, DEBUG } from "./config";
 
 const tg = window.Telegram.WebApp
-
 
 const mainButton = tg.MainButton;
 mainButton.color = "#c4dfe6"
@@ -14,7 +13,8 @@ secondaryButton.color = '#f0f0f0';
 
 const backButton = tg.BackButton;
 
-const initData = tg.initData;
+const initData = !DEBUG? tg.initData: FAKE_WEB_APP_DATA;
+
 
 const showTelegramPopUp = async(message) => {
     try{
