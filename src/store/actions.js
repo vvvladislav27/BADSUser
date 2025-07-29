@@ -21,12 +21,6 @@ export const SET_AUTH_DATA = ({commit}, auth) => {
 const tg = window.Telegram.WebApp
 
 export const GET_DATA = async({commit, state}) => {
-    const user = await getSelf();
-    if (user.is_blocked) {
-        await showTelegramPopUp("Вы заблокированы администратором приложения")
-        return;
-    }
-    commit("GET_AND_SET_USER", user);
     const [userCart, favFoodSups, foodSups, userCartItems, userCountOrders] = await Promise.all([
         getCart(),
         getFavFoodSups(),
@@ -40,6 +34,16 @@ export const GET_DATA = async({commit, state}) => {
     commit("SET_USER_CART_ITEMS", userCartItems);
     commit("SET_IS_DATA_LOADED");
     commit("SET_COUNT_USER_ORDERS", userCountOrders)
+}
+
+
+export const INIT_APP_DATA = async({commit, state}) => {
+    const user = await getSelf();
+    if (user.is_blocked) {
+        await showTelegramPopUp("Вы заблокированы администратором приложения")
+        return;
+    }
+    commit("GET_AND_SET_USER", user);
 }
 
 
