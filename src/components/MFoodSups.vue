@@ -55,7 +55,7 @@ const ordersForReviews = ref();
 onMounted(async() => {
     ordersForReviews.value = await getOrdersForInsertReviews();
     checkOrdersForReviews();
-    await store.dispatch("GET_DATA");
+    await store.dispatch("GET_AND_SET_PRODUCTS");
 });
 
 
@@ -294,6 +294,7 @@ const addReview = async() => {
 </script>
 
 <template>
+    <button style="width: 30px; height: 30px;" @click="openCabinet"></button>
    <video
         autoplay
         muted
