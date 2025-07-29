@@ -1,15 +1,17 @@
 <script setup>
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import store from './store';
 
+const isBlocked = ref()
+
 onBeforeMount(async() => {
-  await store.dispatch("INIT_APP_DATA")
+  isBlocked.value = await store.dispatch("INIT_APP_DATA")
 })
 
 </script>
 
 <template>
-  <router-view></router-view>
+  <router-view v-if="!isBlocked"></router-view>
 </template>
 
 <style scoped>

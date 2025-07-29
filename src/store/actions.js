@@ -41,9 +41,10 @@ export const INIT_APP_DATA = async({commit, state}) => {
     const user = await getSelf();
     if (user.is_blocked) {
         await showTelegramPopUp("Вы заблокированы администратором приложения")
-        return;
+        return true;
     }
     commit("GET_AND_SET_USER", user);
+    return false
 }
 
 
