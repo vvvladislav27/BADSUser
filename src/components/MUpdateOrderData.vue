@@ -2,13 +2,11 @@
 import { computed, ref, onBeforeMount, onBeforeUnmount } from 'vue';
 import store from '@/store';
 import { router } from '@/router';
-import { DEBUG, FAKE_WEB_APP_DATA } from '@/config';
 import { getFullAddress } from '@/api/user';
 import { useTelInput } from 'vue3-headless-tel-input';
-import { showTelegramPopUp, showTelegramPopUpWithKeyboard, mainButton, backButton, initData } from '@/tg';
+import { showTelegramPopUp, showTelegramPopUpWithKeyboard, mainButton, backButton } from '@/tg';
 
 const user = computed(() => store.state.user);
-const authDate = computed(() => store.state.auth);
 const inputData = ref();
 const inputText = ref("")
 

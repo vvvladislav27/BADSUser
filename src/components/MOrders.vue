@@ -6,17 +6,14 @@ import { searchData } from '@/api/search';
 import MSearch from './MSearch.vue';
 import MContextMenu from './MContextMenu.vue';
 import MOrderFilter from './MOrderFilter.vue';
-import { getOrdersWithFilters } from '@/api/order';
-import { mainButton, secondaryButton, backButton, initData} from '@/tg';
+import { mainButton, secondaryButton, backButton} from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 
 import store from '@/store';
 import { router } from '@/router';
-import { DEBUG, FAKE_WEB_APP_DATA } from '@/config';
 
 
-const authDate = computed(() => store.state.auth);
 const filters = computed(() => store.state.searchFiltersForOrders);
 const search = computed(() => store.state.searchQueryForOrders);
 const type = computed(() => store.state.searchTypeForOrders);

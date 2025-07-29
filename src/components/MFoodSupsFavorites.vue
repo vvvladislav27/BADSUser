@@ -13,8 +13,6 @@ import { mainButton, secondaryButton, backButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 
-
-const authDate = computed(() => store.state.auth);
 const filters = computed(() => store.state.filters);
 const search = computed(() => store.state.search);
 const type = computed(() => store.state.type);
