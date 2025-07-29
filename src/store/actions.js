@@ -13,6 +13,18 @@ import { getNumberOrders } from "@/api/order";
 import { showTelegramPopUp } from "@/tg";
 
 
+export const CHEK_USER_STATUS = async({commit}) => {
+    let is_blocked = false;
+    const user = await getSelf();
+    if (user.is_blocked) {
+        await showTelegramPopUp("Вы заблокированы администратором приложения");
+        is_blocked = true;
+    }
+    commit("SET_USER", user);
+    return is_blocked
+}
+
+
 export const GET_DATA = async({commit, state}) => {
     const [userCart, favFoodSups, foodSups, userCartItems, userCountOrders] = await Promise.all([
         getCart(),
@@ -29,16 +41,6 @@ export const GET_DATA = async({commit, state}) => {
     commit("SET_COUNT_USER_ORDERS", userCountOrders)
 }
 
-
-export const CHEK_USER_STATUS = async({commit}) => {
-    const user = await getSelf();
-    if (user.is_blocked) {
-        await showTelegramPopUp("Вы заблокированы администратором приложения")
-        return true;
-    }
-    commit("SET_USER", user);
-    return false
-}
 
 
 export const GET_AND_SET_USER_CART_ITEMS = async({commit}) => {
