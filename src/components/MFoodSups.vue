@@ -8,11 +8,10 @@ import MSearch from './MSearch.vue';
 import MFoodSupFilter from './MFoodSupFilter.vue';
 import MReviewContextMenu from './MReviewContextMenu.vue';
 import { getSortedNameText } from '@/utils';
-import { DEBUG, FAKE_WEB_APP_DATA } from '@/config';
 import { getOrdersForInsertReviews } from '@/api/order';
 import { insertReview } from '../api/reviews';
 import { skipFoodSupReview } from '@/api/order';
-import { showTelegramPopUp, mainButton, secondaryButton, initData, backButton } from '@/tg';
+import { showTelegramPopUp, mainButton, secondaryButton, backButton } from '@/tg';
 
 
 const filters = computed(() => store.state.filters);
@@ -54,13 +53,6 @@ const openCabinet = async() => {
 const ordersForReviews = ref();
 
 onMounted(async() => {
-    let auth;
-    if (!DEBUG) {
-        auth = initData;
-    } else {
-        auth = FAKE_WEB_APP_DATA
-    }
-    await store.dispatch("SET_AUTH_DATA", auth);
     ordersForReviews.value = await getOrdersForInsertReviews();
     checkOrdersForReviews();
     await store.dispatch("GET_DATA");
