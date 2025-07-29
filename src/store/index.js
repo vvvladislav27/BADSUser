@@ -9,7 +9,6 @@ const state = {
     isVideoVisible: true,
     isVideoLoaded: false,
     isDataLoaded: false,
-    auth: "", 
     products: [],
     isSearchInputActive: false,
     search: "",
@@ -34,7 +33,6 @@ const state = {
     key: 'reload-data',
     storage: window.localStorage,
     reducer: (state) => ({
-      auth: state.auth,
       userCart: state.userCart,
       userCartItems: state.userCartItems,
       userCartFoodSups: state.userCartFoodSups,
