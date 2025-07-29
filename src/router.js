@@ -8,6 +8,8 @@ import MFoodSupsFavorites from "./components/MFoodSupsFavorites.vue";
 import MOrders from "./components/MOrders.vue";
 import MOrder from "./components/MOrder.vue";
 import MUpdateOrderData from "./components/MUpdateOrderData.vue";
+import MBlocked from "./components/MBlocked.vue";
+import store from "./store";
 
 
 
@@ -22,6 +24,7 @@ const routes = [
     {path: "/second-app/orders/:id", name: "Order", component: MOrder, props: true},
     {path: "/second-app/create_order", name: "CreateOrder", component: MCreateOrder},
     {path: "/second-app/create_order/update_data/:dataType", name: "UpdateOrderData", component: MUpdateOrderData, props: true},
+    {path: "/second-app/blocked", name: "Blocked", component: MBlocked}
 ]
 
 const router = createRouter(
@@ -34,9 +37,15 @@ const router = createRouter(
 let lastRoute = null;
 
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+    const isBlocked = store.state.user.is_blocked;
+    if (isBlocked && to.path !== '/second-app/blocked') {
+        return next({ path: '/second-app/blocked' });
+    }
     lastRoute = from;
     next();
-  });
+});
+
+
   
 export { router, lastRoute };
