@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/config";
-import store from "@/store";
+import { initData } from "@/tg";
 
 
 const searchData = async(what, filters, type, sort, q) => {
@@ -14,7 +14,7 @@ const searchData = async(what, filters, type, sort, q) => {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         },
         body: JSON.stringify(data)

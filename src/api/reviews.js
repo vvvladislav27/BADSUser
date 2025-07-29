@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/config";
-import store from "@/store";
+import { initData } from "@/tg";
 
 
 
@@ -9,7 +9,7 @@ const getReviews = async(foodSupId, page) => {
         method: "GET",
         headers: {
             'bypass-tunnel-reminder': 'true',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         }
     });
@@ -27,7 +27,7 @@ const insertReview = async(review) => {
         headers: {
             'bypass-tunnel-reminder': 'true' ,
             'Content-Type': 'application/json',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         },
         body: JSON.stringify(review)

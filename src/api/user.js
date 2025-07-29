@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/config";
-import store from "@/store";
+import { initData } from "@/tg";
 
 
 
@@ -8,7 +8,7 @@ const getSelf = async() => {
         method: "GET",
         headers: {
             'bypass-tunnel-reminder': 'true',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         }
     });
@@ -29,7 +29,7 @@ const getFullAddress = async(address) => {
         headers: {
             'Content-Type': 'application/json',
             'bypass-tunnel-reminder': 'true',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         },
         body: JSON.stringify(data)
@@ -48,7 +48,7 @@ const updateUserOrderData = async(data) => {
         headers: {
             'Content-Type': 'application/json',
             'bypass-tunnel-reminder': 'true',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         },
         body: JSON.stringify(data)
@@ -72,7 +72,7 @@ const updateAddresses = async(address, remove) => {
         headers: {
             'Content-Type': 'application/json',
             'bypass-tunnel-reminder': 'true',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         },
         body: JSON.stringify(data)

@@ -1,12 +1,12 @@
 import { API_BASE_URL } from "@/config";
-import store from "@/store";
+import { initData } from "@/tg";
 
 const getPhoto = async (photo_path) => {
     const response = await fetch(`${API_BASE_URL}/v0/images/${photo_path}`, {
         method: "GET",
         headers: {
             'bypass-tunnel-reminder': 'true',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         }
     });

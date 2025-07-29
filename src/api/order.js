@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/config";
-import store from "@/store";
+import { initData } from "@/tg";
 
 const getInvoiceLink = async(cartItemsIds) => {
     const data = {
@@ -10,7 +10,7 @@ const getInvoiceLink = async(cartItemsIds) => {
         headers: {
             'Content-Type': 'application/json',
             'bypass-tunnel-reminder': 'true',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         },
         body: JSON.stringify(data)
@@ -28,7 +28,7 @@ const getNumberOrders = async() => {
         method: "GET",
         headers: {
             'bypass-tunnel-reminder': 'true',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         }
     });
@@ -53,7 +53,7 @@ const getOrdersWithFilters = async(filters, type, sort, q) => {
         headers: {
             'bypass-tunnel-reminder': 'true',
             'Content-Type': 'application/json',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         },
         body: JSON.stringify(data)
@@ -71,7 +71,7 @@ const getOrderById = async(orderId) => {
         method: "GET",
         headers: {
             'bypass-tunnel-reminder': 'true',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         }
     });
@@ -93,7 +93,7 @@ const updateOrderStatus = async(orderId, state) => {
         headers: {
             'bypass-tunnel-reminder': 'true',
             'Content-Type': 'application/json',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         },
         body: JSON.stringify(data)
@@ -111,7 +111,7 @@ const getOrdersForInsertReviews = async() => {
         method: "GET",
         headers: {
             'bypass-tunnel-reminder': 'true',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         }
     });
@@ -129,7 +129,7 @@ const skipFoodSupReview = async(data) => {
         headers: {
             'bypass-tunnel-reminder': 'true',
             'Content-Type': 'application/json',
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         },
         body: JSON.stringify(data)

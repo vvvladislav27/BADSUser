@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/config";
-import store from "@/store";
+import { initData } from "@/tg";
 
 
 
@@ -8,7 +8,7 @@ const getFoodSupById = async(foodSupId) => {
         method: "GET",
         headers: {
             'bypass-tunnel-reminder': 'true' ,
-            "auth": store.state.auth,
+            "auth": initData,
             "app": "user"
         },
     });
