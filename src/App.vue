@@ -5,7 +5,7 @@ import store from './store';
 const isBlocked = ref()
 
 onBeforeMount(async() => {
-  isBlocked.value = await store.dispatch("INIT_APP_DATA")
+  isBlocked.value = await store.dispatch("CHEK_USER_STATUS")
 })
 
 </script>
