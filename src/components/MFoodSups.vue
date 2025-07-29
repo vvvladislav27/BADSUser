@@ -73,6 +73,9 @@ onUnmounted(() =>{
     secondaryButton.offClick(secondaryButtonClickHandler);
     mainButton.hide();
     secondaryButton.hide();
+    if (isSearchInputActive.value) {
+        store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
+    }
 });
 
 
