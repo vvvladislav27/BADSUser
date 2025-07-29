@@ -30,7 +30,7 @@ export const GET_DATA = async({commit, state}) => {
     const [userCart, favFoodSups, foodSups, userCartItems, userCountOrders] = await Promise.all([
         getCart(),
         getFavFoodSups(),
-        searchData("food_sups", state.filters, state.type, state.sort),
+        searchData("food_sups", state.filters, state.type, state.sort, state.search),
         getCartItems(),
         getNumberOrders(),
     ])
