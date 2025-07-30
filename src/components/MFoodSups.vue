@@ -54,6 +54,7 @@ const openCabinet = async() => {
 
 onMounted(() => {
     store.dispatch("GET_AND_SET_PRODUCTS")
+    updateTgButtons(favFoodSups.value, userCartItems.value);
 });
 
 
@@ -67,6 +68,11 @@ onUnmounted(() =>{
         store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
     }
 });
+
+const openFilters = () => {
+    isFoodSupFiltersVisible.value = true
+    updateTgButtons(favFoodSups.value, userCartItems.value)
+}
 
 
 const closeFilters = () => {
@@ -195,11 +201,6 @@ const toggleContextMenuVisible = () => {
     isContextMenuVisible.value = !isContextMenuVisible.value;
 };
 
-
-const openFilters = () => {
-    isFoodSupFiltersVisible.value = true
-    updateTgButtons(favFoodSups.value, userCartItems.value)
-}
 
 
 const toogleIsSearchInputActive = () => {
