@@ -54,7 +54,9 @@ const openCabinet = async() => {
 
 onMounted(() => {
     store.dispatch("GET_AND_SET_PRODUCTS")
-    updateTgButtons(favFoodSups.value, userCartItems.value);
+    if (isVideoLoad.value) {
+        updateTgButtons(favFoodSups.value, userCartItems.value);
+    }
 });
 
 
@@ -79,6 +81,11 @@ const closeFilters = () => {
     isFoodSupFiltersVisible.value = false;
     updateTgButtons(favFoodSups.value, userCartItems.value);
 }
+
+const updateFilters = (filters) => {
+    searchFilters.value = filters
+}
+
 
 const setFilters = async() => {
     if (searchFilters.value) {
@@ -207,11 +214,6 @@ const toogleIsSearchInputActive = () => {
     if (isSearchInputActive.value) {
         store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
     }
-}
-
-
-const updateFilters = (filters) => {
-    searchFilters.value = filters
 }
 
 
