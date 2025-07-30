@@ -8,7 +8,6 @@ import MSearch from './MSearch.vue';
 import MFoodSupFilter from './MFoodSupFilter.vue';
 import MReviewContextMenu from './MReviewContextMenu.vue';
 import { getSortedNameText } from '@/utils';
-import { getOrdersForInsertReviews } from '@/api/order';
 import { insertReview } from '../api/reviews';
 import { skipFoodSupReview } from '@/api/order';
 import { showTelegramPopUp, mainButton, secondaryButton, backButton } from '@/tg';
@@ -21,6 +20,7 @@ const sort = computed(() => store.state.sort);
 const foodSups = computed(() => store.state.products);
 const userCartItems = computed(() => store.state.userCartItems);
 const favFoodSups = computed(() => store.state.favFoodSups);
+const orderItemsForReviews = computed(() => store.state.orderItemsForReviews);
 const isSearchInputActive = computed(() => store.state.isSearchInputActive);
 const isContextMenuVisible = ref(false);
 const isFoodSupFiltersVisible = ref(false);
@@ -28,9 +28,10 @@ const arrow = computed(() => (sort.value === "desc" ? "⬇" : "⬆"));
 const isVideoVisible = computed(() => store.state.isVideoVisible);
 const isVideoLoad = computed(() => store.state.isVideoLoaded);
 const isDataLoaded = computed(() => store.state.isDataLoaded);
-const isInsertReviewsContextMenuVisible = ref(false);
 
 const buttons = ["name", "price", "rating"];
+const searchFilters = ref(); 
+const review = ref();
 
 
 let mainButtonClickHandler;
@@ -50,12 +51,9 @@ const openCabinet = async() => {
 }
 
 
-const ordersForReviews = ref();
 
-onMounted(async() => {
-    ordersForReviews.value = await getOrdersForInsertReviews();
-    checkOrdersForReviews();
-    await store.dispatch("GET_AND_SET_PRODUCTS");
+onMounted(() => {
+    store.dispatch("GET_AND_SET_PRODUCTS")
 });
 
 
@@ -129,7 +127,7 @@ const updateTgButtons = (f, u) => {
         if (secondaryButton.isVisible) {
             secondaryButton.hide();
         }
-        if (ordersForReviews.value.length > 0) {
+        if (orderItemsForReviews.value.length > 0) {
             mainButton.text = "Добавить"
             mainButtonClickHandler = () => {
                 addReview()
@@ -179,6 +177,14 @@ watch([favFoodSups, userCartItems], () => {
 }, { deep: true });
 
 
+watch([isVideoLoad, isDataLoaded], () => {
+    if (isVideoLoad.value && isDataLoaded.value) {
+        store.dispatch("SET_IS_VIDEO_VISIBLE")
+        updateTgButtons(favFoodSups.value, userCartItems.value)
+    }
+});
+
+
 watch([sort, type, filters, search], () => {
     store.dispatch("GET_AND_SET_PRODUCTS")
 },  {deep: true});
@@ -196,26 +202,17 @@ const openFilters = () => {
 }
 
 
-
 const toogleIsSearchInputActive = () => {
     if (isSearchInputActive.value) {
         store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
     }
 }
 
-const searchFilters = ref(); 
 
 const updateFilters = (filters) => {
     searchFilters.value = filters
 }
 
-
-watch([isVideoLoad, isDataLoaded], ([isVideoLoadNewValue, isDataLoadedNewValue]) => {
-      if (isVideoLoad.value && isDataLoaded.value) {
-        store.dispatch("SET_IS_VIDEO_VISIBLE")
-        updateTgButtons(favFoodSups.value, userCartItems.value)
-      }
-    });
 
 
 const onVideoEnded = () => {
@@ -227,56 +224,21 @@ const setSort = (type) => {
     store.dispatch("SET_SORT", type)
 }
 
-const currentOrder = ref();
-const currentFoodItem = ref();
 
-
-const showReviewModal = (order, foodItem) => {
-    currentOrder.value = order;
-    currentFoodItem.value = foodItem;
-    isInsertReviewsContextMenuVisible.value = true;
-}
-
-
-const checkOrdersForReviews = () => {
-    let foundReviewableItem = false;
-    ordersForReviews.value.forEach(order => {
-        order.food_sups.forEach(foodItem => {
-            if (foodItem) {
-                showReviewModal(order, foodItem);
-                foundReviewableItem = true;
-            }
-        });
-    });
-    if (!foundReviewableItem) {
-        store.dispatch("GET_AND_SET_PRODUCTS")
-        if (isVideoLoad.value){
-            updateTgButtons(favFoodSups.value, userCartItems.value); 
-        }
-        isInsertReviewsContextMenuVisible.value = false;
-    }
-}
-
-const review = ref();
 
 const updateData = (data) => {
-    review.value = {
-        "mark": data.mark,
-        "text": data.text,
-        "food_sup_id": currentFoodItem.value.id,
-        "order_id": currentOrder.value.id,
-    }
+    review.value = data
 }
+
 
 const skipReview = async() => {
     const data = {
-        "order_id": currentOrder.value.id,
-        "food_sup_id": currentFoodItem.value.id,
+        "order_id": review.value.order_id,
+        "food_sup_id": review.value.food_sup_id,
         "skip_review": true
     }
     await skipFoodSupReview(data)
-    ordersForReviews.value = await getOrdersForInsertReviews();
-    checkOrdersForReviews();
+    store.dispatch("REMOVE_ORDER_ITEM_FOR_REVIEW", 0)
 }
 
 
@@ -285,8 +247,7 @@ const addReview = async() => {
         await showTelegramPopUp("Укажите оценку!")
     } else {
         await insertReview(review.value)
-        ordersForReviews.value = await getOrdersForInsertReviews();
-        checkOrdersForReviews();
+        store.dispatch("REMOVE_ORDER_ITEM_FOR_REVIEW", 0)
     }
 }
 
@@ -305,15 +266,13 @@ const addReview = async() => {
         Ваш браузер не поддерживает анимацию.
     </video>
     <m-review-context-menu
-        v-if="!isVideoVisible && isInsertReviewsContextMenuVisible"
-        :currentOrder="currentOrder"
-        :currentFoodItem="currentFoodItem"
+        v-if="!isVideoVisible && orderItemsForReviews.length > 0"
         @data="updateData">
     </m-review-context-menu>
     <div 
         class="m-food-sups-container" 
         @click="toogleIsSearchInputActive"
-        v-else-if="!isVideoVisible && !isInsertReviewsContextMenuVisible"
+        v-else-if="!isVideoVisible && orderItemsForReviews.length == 0"
         >
         <m-search 
             :what="'food_sup'"
