@@ -8,6 +8,7 @@ import {
     deleteCartItem,
     clearCart
 } from "@/api/cart";
+import { getOrdersForInsertReviews } from "@/api/order";
 import { getSelf, updateUserOrderData } from "@/api/user";
 import { getNumberOrders } from "@/api/order";
 import { showTelegramPopUp } from "@/tg";
@@ -24,20 +25,26 @@ export const GET_AND_SET_DATA = async({commit}) => {
     if (is_blocked) {
         return is_blocked
     }
-    const [cart, countOrders, favoriteFoodSup, cartItems] = await Promise.all([
+    const [cart, countOrders, favoriteFoodSup, cartItems, orderItemsforReview] = await Promise.all([
         getCart(),
         getNumberOrders(),
         getFavFoodSups(),
         getCartItems(),
+        getOrdersForInsertReviews()
     ])
     commit("SET_USER_CART", cart);
     commit("SET_COUNT_USER_ORDERS", countOrders);
     commit("SET_FAV_FOOD_SUPS", favoriteFoodSup);
     commit("SET_USER_CART_ITEMS", cartItems);
+    commit("SET_ORDERS_FOR_REVIEWS", orderItemsforReview)
     commit("SET_IS_DATA_LOADED");
     return is_blocked
 }
 
+
+export const REMOVE_ORDER_ITEM_FOR_REVIEW = ({commit}, index) => {
+    commit("REMOVE_ORDER_ITEM_FOR_REVIEW", index)
+}
 
 
 export const GET_AND_SET_USER_CART_ITEMS = async({commit}) => {

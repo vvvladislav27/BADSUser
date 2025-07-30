@@ -6,6 +6,14 @@ export const SET_PRODUCTS = (state, foodSups) => {
     state.products = foodSups
 }
 
+export const SET_ORDERS_FOR_REVIEWS = (state, items) => {
+    state.orderItemsForReviews = items
+}
+
+
+export const REMOVE_ORDER_ITEM_FOR_REVIEW = (state, index) => {
+    state.orderItemsForReviews.splice(index, 1)
+}
 
 
 export const SET_FILTERS = (state, {filters, type}) => {
