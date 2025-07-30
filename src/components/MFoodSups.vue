@@ -239,6 +239,7 @@ const skipReview = async() => {
     }
     await skipFoodSupReview(data)
     store.dispatch("REMOVE_ORDER_ITEM_FOR_REVIEW", 0)
+    updateTgButtons(favFoodSups.value, userCartItems.value);
 }
 
 
@@ -248,6 +249,7 @@ const addReview = async() => {
     } else {
         await insertReview(review.value)
         store.dispatch("REMOVE_ORDER_ITEM_FOR_REVIEW", 0)
+        updateTgButtons(favFoodSups.value, userCartItems.value);
     }
 }
 
@@ -255,7 +257,6 @@ const addReview = async() => {
 </script>
 
 <template>
-    <button style="width: 30px; height: 30px;" @click="openCabinet"></button>
    <video
         autoplay
         muted
