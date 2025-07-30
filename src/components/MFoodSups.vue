@@ -85,87 +85,73 @@ const resetFilters = () => {
     updateTgButtons();
 }
 
+
+const setupButton = (button, text, handler) => {
+    button.text = text;
+    button.onClick(handler);
+    button.show();
+};
+
+const hideButton = (button) => {
+    if (button.isVisible) {
+        button.hide();
+    }
+};
+
+
 const updateTgButtons = () => {
-    if (mainButton.isVisible) {
-            mainButton.hide();
-        };
-    if (secondaryButton.isVisible) {
-        secondaryButton.hide();
-    }
-    if (backButton.isVisible) {
-        backButton.hide();
-    }
+    hideButton(mainButton);
+    hideButton(secondaryButton);
+    hideButton(backButton);
+    mainButton.offClick(mainButtonClickHandler);
+    secondaryButton.offClick(secondaryButtonClickHandler);
+
     if (isFoodSupFiltersVisible.value) {
-        mainButton.offClick(mainButtonClickHandler);
-        secondaryButton.offClick(secondaryButtonClickHandler);
-        mainButton.text = "Применить"
-        mainButtonClickHandler = function () {
+        mainButtonClickHandler = () => {
             setFilters();
         }
-        mainButton.onClick(mainButtonClickHandler)
-        mainButton.show();
-        if (filters.value.length == 0) {
-            return
-        } else {
-            secondaryButton.text = "Сбросить"
-            secondaryButtonClickHandler = function () {
+        setupButton(mainButton, "Применить", mainButtonClickHandler);
+        if (filters.value.length > 0) {
+            secondaryButtonClickHandler = () => {
                 resetFilters();
             }
-            secondaryButton.onClick(secondaryButtonClickHandler)
-            secondaryButton.show();
-            return
+            setupButton(secondaryButton, "Сбросить", secondaryButtonClickHandler);
         }
-    } else {
-        mainButton.offClick(mainButtonClickHandler)
-        secondaryButton.offClick(secondaryButtonClickHandler)
-        if (mainButton.isVisible) {
-            mainButton.hide();
+        return;
+    } 
+    if (orderItemsForReviews.value.length > 0) {
+        mainButtonClickHandler = () => {
+            addReview()
         }
-        if (secondaryButton.isVisible) {
-            secondaryButton.hide();
+        secondaryButtonClickHandler = () => {
+            skipReview()
         }
-        if (orderItemsForReviews.value.length > 0) {
-            mainButton.text = "Добавить"
-            mainButtonClickHandler = () => {
-                addReview()
-            }
-            mainButton.onClick(mainButtonClickHandler);
-            mainButton.show()
-            secondaryButton.text = "Пропустить"
-            secondaryButtonClickHandler = () => {
-                skipReview()
-            }
-            secondaryButton.onClick(secondaryButtonClickHandler);
-            secondaryButton.show();
-            return
+        setupButton(mainButton, "Добавить", mainButtonClickHandler);
+        setupButton(secondaryButton, "Пропустить", secondaryButtonClickHandler);
+        return;
+    }
+
+    const hasFavorites = favFoodSups.value && Object.keys(favFoodSups.value).length >= 1;
+    const hasCartItems = userCartItems.value && Object.keys(userCartItems.value).length >= 1;
+    
+    if (hasFavorites) {
+        mainButtonClickHandler = () => {
+            router.push('/second-app/cabinet');
         }
-        const hasFavorites = favFoodSups.value && Object.keys(favFoodSups.value).length >= 1;
-        const hasCartItems = userCartItems.value && Object.keys(userCartItems.value).length >= 1;
-        if (hasFavorites) {
-            mainButton.text = "Кабинет";
-            mainButtonClickHandler = function() {
-                router.push('/second-app/cabinet');
-            }
-            mainButton.onClick(mainButtonClickHandler)
-            mainButton.show();
-            if (hasCartItems) {
-                secondaryButton.text = "Корзина";
-                secondaryButtonClickHandler = function() {
-                    store.dispatch("RESET_SELECTED_ITEMS")
-                    router.push("/second-app/cart");
-                };
-            secondaryButton.onClick(secondaryButtonClickHandler);
-            secondaryButton.show();
-        }
-        } else if (hasCartItems) {
-            mainButton.text = "Корзина";
-            mainButtonClickHandler = function() {
+        setupButton(mainButton, "Кабинет", mainButtonClickHandler);
+        if (hasCartItems) {
+            secondaryButtonClickHandler = function() {
                 store.dispatch("RESET_SELECTED_ITEMS")
                 router.push("/second-app/cart");
             };
-            mainButton.onClick(mainButtonClickHandler);
-            mainButton.show();
+            setupButton(secondaryButton, "Корзина", secondaryButtonClickHandler);
         }
+    } else if (hasCartItems) {
+        mainButtonClickHandler = () => {
+            store.dispatch("RESET_SELECTED_ITEMS")
+            router.push("/second-app/cart");
+        };
+        setupButton(mainButton, "Корзина", mainButtonClickHandler);
     }
 }
 
