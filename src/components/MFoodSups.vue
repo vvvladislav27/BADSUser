@@ -38,24 +38,10 @@ let mainButtonClickHandler;
 let secondaryButtonClickHandler;
 
 
-
-
-
-const openCart = () => {
-    store.dispatch("RESET_SELECTED_ITEMS")
-    router.push("/second-app/cart")
-}
-
-const openCabinet = async() => {
-    router.push('/second-app/cabinet')
-}
-
-
-
 onMounted(() => {
     store.dispatch("GET_AND_SET_PRODUCTS")
     if (isVideoLoad.value) {
-        updateTgButtons(favFoodSups.value, userCartItems.value);
+        updateTgButtons();
     }
 });
 
@@ -66,20 +52,18 @@ onUnmounted(() =>{
     secondaryButton.offClick(secondaryButtonClickHandler);
     mainButton.hide();
     secondaryButton.hide();
-    if (isSearchInputActive.value) {
-        store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
-    }
+    toogleIsSearchInputActive();
 });
 
 const openFilters = () => {
     isFoodSupFiltersVisible.value = true
-    updateTgButtons(favFoodSups.value, userCartItems.value)
+    updateTgButtons()
 }
 
 
 const closeFilters = () => {
     isFoodSupFiltersVisible.value = false;
-    updateTgButtons(favFoodSups.value, userCartItems.value);
+    updateTgButtons();
 }
 
 const updateFilters = (filters) => {
@@ -92,16 +76,16 @@ const setFilters = async() => {
         await store.dispatch("SET_FILTERS", {"filters": searchFilters.value, "type": "food_sups"});
     }
     isFoodSupFiltersVisible.value = false;
-    updateTgButtons(favFoodSups.value, userCartItems.value);
+    updateTgButtons();
 }
 
 const resetFilters = () => {
     store.dispatch("RESET_FILTERS", "food_sups")
     isFoodSupFiltersVisible.value = false;
-    updateTgButtons(favFoodSups.value, userCartItems.value);
+    updateTgButtons();
 }
 
-const updateTgButtons = (f, u) => {
+const updateTgButtons = () => {
     if (mainButton.isVisible) {
             mainButton.hide();
         };
@@ -155,19 +139,20 @@ const updateTgButtons = (f, u) => {
             secondaryButton.show();
             return
         }
-        const hasFavorites = f && Object.keys(f).length >= 1;
-        const hasCartItems = u && Object.keys(u).length >= 1;
+        const hasFavorites = favFoodSups.value && Object.keys(favFoodSups.value).length >= 1;
+        const hasCartItems = userCartItems.value && Object.keys(userCartItems.value).length >= 1;
         if (hasFavorites) {
             mainButton.text = "Кабинет";
             mainButtonClickHandler = function() {
-                openCabinet();
+                router.push('/second-app/cabinet');
             }
             mainButton.onClick(mainButtonClickHandler)
             mainButton.show();
             if (hasCartItems) {
                 secondaryButton.text = "Корзина";
                 secondaryButtonClickHandler = function() {
-                    openCart();
+                    store.dispatch("RESET_SELECTED_ITEMS")
+                    router.push("/second-app/cart");
                 };
             secondaryButton.onClick(secondaryButtonClickHandler);
             secondaryButton.show();
@@ -175,7 +160,8 @@ const updateTgButtons = (f, u) => {
         } else if (hasCartItems) {
             mainButton.text = "Корзина";
             mainButtonClickHandler = function() {
-                openCart();
+                store.dispatch("RESET_SELECTED_ITEMS")
+                router.push("/second-app/cart");
             };
             mainButton.onClick(mainButtonClickHandler);
             mainButton.show();
@@ -185,7 +171,7 @@ const updateTgButtons = (f, u) => {
 
 watch([favFoodSups, userCartItems], () => {
     if (!isVideoVisible.value) {
-        updateTgButtons(favFoodSups.value, userCartItems.value)
+        updateTgButtons()
     }
 }, { deep: true });
 
@@ -193,7 +179,7 @@ watch([favFoodSups, userCartItems], () => {
 watch([isVideoLoad, isDataLoaded], () => {
     if (isVideoLoad.value && isDataLoaded.value) {
         store.dispatch("SET_IS_VIDEO_VISIBLE")
-        updateTgButtons(favFoodSups.value, userCartItems.value)
+        updateTgButtons()
     }
 });
 
@@ -242,7 +228,7 @@ const skipReview = async() => {
     }
     await skipFoodSupReview(data)
     store.dispatch("REMOVE_ORDER_ITEM_FOR_REVIEW", 0)
-    updateTgButtons(favFoodSups.value, userCartItems.value);
+    updateTgButtons();
 }
 
 
@@ -252,7 +238,7 @@ const addReview = async() => {
     } else {
         await insertReview(review.value)
         store.dispatch("REMOVE_ORDER_ITEM_FOR_REVIEW", 0)
-        updateTgButtons(favFoodSups.value, userCartItems.value);
+        updateTgButtons();
     }
 }
 
