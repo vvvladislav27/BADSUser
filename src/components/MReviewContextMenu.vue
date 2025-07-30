@@ -1,29 +1,22 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { vibrate } from '@/utils'
 import { secondaryButton, mainButton } from '@/tg';
+import store from '@/store';
+
+const orderItemsForReviews = computed(() => store.state.orderItemsForReviews);
+const item = computed(() => orderItemsForReviews.value[0]);
+
 
 const buttons = [1, 2, 3, 4, 5]
 const isActive = ref(false);
-const emit = defineEmits(["data"])
+const emit = defineEmits(["data", "addr"])
 
 
-const props = defineProps({
-    currentOrder: {
-        type: Object,
-        required: false
-    },
-    currentFoodItem: {
-        type: Object,
-        required: false
-    }
-})
-
-
-watch(() => props.currentFoodItem, (newVal) => {
-    if (newVal) {
-        mark.value = null
-        text.value = null
+watch(item, (newItem) => {
+    if (newItem) {
+        mark.value = null;
+        text.value = null;
     }
 });
 
@@ -64,7 +57,9 @@ const removeActiveStyle = () => {
 const emitData = () => {
     const data = {
         "mark": mark.value,
-        "text": text.value
+        "text": text.value,
+        "food_sup_id": item.value.food_sup_id,
+        "order_id": item.value.order_id,
     }
     emit("data", data)
 }
@@ -75,7 +70,7 @@ const emitData = () => {
 <template>
     <div class="m-review-context-menu-container">
         <div class="m-review-context-menu-header">
-            Оставьте отзыв о {{ currentFoodItem.name }}
+            Оставьте отзыв о {{ item.food_sup.name }}
         </div>
         <div class="m-food-sup-card-filter-raiting-buttons-container">
             <div class="rating-text">Оценка</div>
