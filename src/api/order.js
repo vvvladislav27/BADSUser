@@ -107,7 +107,7 @@ const updateOrderStatus = async(orderId, state) => {
 
 
 const getOrdersForInsertReviews = async() => {
-    const response = await fetch(`${API_BASE_URL}/v0/orders/user_orders_for_insert_reviews`, {
+    const response = await fetch(`${API_BASE_URL}/v0/orders/insert_reviews`, {
         method: "GET",
         headers: {
             'bypass-tunnel-reminder': 'true',
