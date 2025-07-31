@@ -23,23 +23,6 @@ const getInvoiceLink = async(cartItemsIds) => {
 }
 
 
-const getNumberOrders = async() => {
-    const response = await fetch(`${API_BASE_URL}/v0/orders/number_of_orders`, {
-        method: "GET",
-        headers: {
-            'bypass-tunnel-reminder': 'true',
-            "auth": initData,
-            "app": "user"
-        }
-    });
-    if (response.ok) {
-        return await response.json();
-    } else {
-        return null
-    }
-}
-
-
 const getOrdersWithFilters = async(filters, type, sort, q) => {
     const data = {
         "filters": filters,
@@ -142,4 +125,4 @@ const skipFoodSupReview = async(data) => {
 }
 
 
-export {getInvoiceLink, getOrdersWithFilters, getNumberOrders, getOrderById, updateOrderStatus, getOrdersForInsertReviews, skipFoodSupReview}
+export {getInvoiceLink, getOrdersWithFilters, getOrderById, updateOrderStatus, getOrdersForInsertReviews, skipFoodSupReview}
