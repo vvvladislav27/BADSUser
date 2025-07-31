@@ -64,7 +64,6 @@ const setTgButtons = () => {
 
 onBeforeMount(async() => {
     order.value = await getOrderById(props.id);
-    setAnimationForText('.m-admin-order-item-content-name-wrapper')
     setTgButtons(order.value.state);
     backButtonClickHandler = () => {
         router.push("/second-app/orders");
@@ -76,6 +75,7 @@ onBeforeMount(async() => {
     for (let item of order.value.items) {
         await getImage(item.food_sup.photo_path)
     }
+    setAnimationForText('.m-order-item-content-name-wrapper');
 })
 
 
