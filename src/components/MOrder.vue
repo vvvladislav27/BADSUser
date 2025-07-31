@@ -136,8 +136,7 @@ onBeforeUnmount(() => {
                     <div 
                         class="m-order-item" 
                         :id="item.food_sup.id"
-                        :class="{last_item: index === order.items.length - 1}"
-                        @click="router.push(`/second-app/food_sups/${item.food_sup.id}`)">
+                        :class="{last_item: index === order.items.length - 1}">
                         <div class="m-order-item-image-wrapper">
                             <img 
                                 v-if="photos[item.food_sup.photo_path]"
