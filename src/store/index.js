@@ -22,7 +22,6 @@ const state = {
     userCartItems: {},
     userCartFoodSups: [],
     userOrderItems: {},
-    userCountOrders: 0,
     searchFiltersForOrders: [],
     searchSortForOrders: "desc",
     searchTypeForOrders: "created_date",
@@ -40,7 +39,6 @@ const state = {
       userOrderItems: state.userOrderItems,
       favFoodSups: state.favFoodSups,
       user: state.user,
-      userCountOrders: state.userCountOrders
     })
   })
   

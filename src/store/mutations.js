@@ -170,11 +170,6 @@ export const RESET_SEARCH_FILTERS = (state) => {
     state.isSearchInputActive = false
 }
 
-export const SET_COUNT_USER_ORDERS = (state, countOrders) => {  
-    state.userCountOrders = countOrders.count_orders
-}
-
-
 
 export const SET_SORT_SEARCH_TYPE_FOR_ORDERS = (state, type) => {
     if (state.searchTypeForOrders == type) {

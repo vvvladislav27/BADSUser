@@ -1,16 +1,8 @@
 import { searchData } from "@/api/search";
 import { getFavFoodSups, toggleFavFoodSup } from "@/api/fav_food_sup";
-import { 
-    getCartItems,
-    addCartItem, 
-    getCart, 
-    updateCartItem, 
-    deleteCartItem,
-    clearCart
-} from "@/api/cart";
+import { getCartItems, addCartItem, getCart, updateCartItem, deleteCartItem, clearCart } from "@/api/cart";
 import { getOrdersForInsertReviews } from "@/api/order";
 import { getSelf, updateUserOrderData } from "@/api/user";
-import { getNumberOrders } from "@/api/order";
 import { showTelegramPopUp } from "@/tg";
 
 
@@ -25,15 +17,13 @@ export const GET_AND_SET_DATA = async({commit}) => {
     if (is_blocked) {
         return is_blocked
     }
-    const [cart, countOrders, favoriteFoodSup, cartItems, orderItemsforReview] = await Promise.all([
+    const [cart, favoriteFoodSup, cartItems, orderItemsforReview] = await Promise.all([
         getCart(),
-        getNumberOrders(),
         getFavFoodSups(),
         getCartItems(),
         getOrdersForInsertReviews()
     ])
     commit("SET_USER_CART", cart);
-    commit("SET_COUNT_USER_ORDERS", countOrders);
     commit("SET_FAV_FOOD_SUPS", favoriteFoodSup);
     commit("SET_USER_CART_ITEMS", cartItems);
     commit("SET_ORDERS_FOR_REVIEWS", orderItemsforReview)
@@ -46,17 +36,6 @@ export const REMOVE_ORDER_ITEM_FOR_REVIEW = ({commit}, index) => {
     commit("REMOVE_ORDER_ITEM_FOR_REVIEW", index)
 }
 
-
-export const GET_AND_SET_USER_CART_ITEMS = async({commit}) => {
-    const user = await getSelf();
-    commit("SET_USER", user);
-    const [userCart, userCartItems] = await Promise.all([
-        getCart(),
-        getCartItems()
-    ])
-    commit("SET_USER_CART", userCart)
-    commit("SET_USER_CART_ITEMS", userCartItems)
-}
 
 export const GET_AND_SET_USER_CART_ITEMS_AFTER_PAID = async({commit}) => {
     const [userCart, userCartItems] = await Promise.all([
@@ -71,10 +50,6 @@ export const GET_AND_SET_USER_CART_ITEMS_AFTER_PAID = async({commit}) => {
 export const GET_AND_SET_PRODUCTS = async({commit, state}) => {
     const foodSups = await searchData("food_sups", state.filters, state.type, state.sort, state.search)
     commit("SET_PRODUCTS", foodSups.food_sups)
-}
-
-export const REMOVE_CART_PRODUCT = ({commit}, index) => {
-    commit("REMOVE_CART_PRODUCT", index)
 }
 
 
@@ -95,7 +70,6 @@ export const TOGGLE_SEARCH_INPUT_ACTIVE = ({commit}) => {
     commit("TOGGLE_SEARCH_INPUT_ACTIVE")
 }
 
-
 export const SET_SORT = ({commit}, type) => {
     commit("SET_SORT", type)
 }
@@ -104,7 +78,6 @@ export const TOGGLE_FAV_FOOD_SUP = async({commit}, foodSupId) => {
     const result = await toggleFavFoodSup(foodSupId)
     commit("TOGGLE_FAV_FOOD_SUP", { foodSupId, result })
 }
-
 
 
 export const INCREMENT_CART_ITEM = async ({commit, state}, foodSupId) => {
@@ -122,7 +95,6 @@ export const INCREMENT_CART_ITEM = async ({commit, state}, foodSupId) => {
         }
     }
 }
-
 
 export const DECREMENT_CART_ITEM = async ({ commit, state }, foodSupId) => {
     const item = state.userCartItems[foodSupId]
@@ -142,7 +114,6 @@ export const DECREMENT_CART_ITEM = async ({ commit, state }, foodSupId) => {
     }
 }
 
-
 export const REMOVE_CART_ITEM = async({commit, state}, foodSupId) => {
     const item = state.userCartItems[foodSupId]
     if (item) {
@@ -152,7 +123,6 @@ export const REMOVE_CART_ITEM = async({commit, state}, foodSupId) => {
         }
     }
 }
-
 
 export const CLEAR_CART_ITEMS = async({commit, state}) => {
     const sucsess = await clearCart(state.userCart.id)
@@ -196,7 +166,6 @@ export const SET_IS_VIDEO_LOADED = ({commit}) => {
 export const SET_IS_VIDEO_VISIBLE = ({commit}) => {
     commit("SET_IS_VIDEO_VISIBLE")
 }
-
 
 export const UPDATE_USER = async({ commit, state }, { data, field, action }) => {
     const user = { ...state.user };
@@ -258,7 +227,6 @@ export const RESET_SELECTED_ITEMS = ({commit}) => {
 export const RESET_SEARCH_FILTERS = ({commit}) => {
     commit("RESET_SEARCH_FILTERS")
 }
-
 
 export const SET_SORT_SEARCH_TYPE_FOR_ORDERS = ({commit}, type) => {
     commit("SET_SORT_SEARCH_TYPE_FOR_ORDERS", type)
