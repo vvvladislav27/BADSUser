@@ -92,177 +92,137 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="m-client-order-container" v-if="order">
-        <div class="m-admin-order-data">
-            <div class="m-admin-order-data-title">Информация о заказе</div>
-            <div class="m-admin-order-data-wrapper">
+    <div class="m-order-container" v-if="order">
+        <div class="m-order-data-title">Информация о заказе</div>
+        <div class="m-order-wrapper">
+            <div class="m-order-data-wrapper">
                 <div>Номер заказа</div>
-                <div class="m-admin-order-data-content"> {{ order.id }} </div>
+                <div class="m-order-data-content"> {{ order.id }} </div>
             </div>
-            <div class="m-admin-order-data-wrapper">
+            <div class="m-order-data-wrapper">
                 <div>Статус</div>
-                <div class="m-admin-order-data-content"> {{ getOrderStateTextRu(order.state) }} </div>
+                <div class="m-order-data-content"> {{ getOrderStateTextRu(order.state) }} </div>
             </div>
-            <div class="m-admin-order-data-wrapper">
+            <div class="m-order-data-wrapper">
                 <div>Дата создания</div>
-                <div class="m-admin-order-data-content"> {{ formatDateForOrder(order.created_at) }} </div>
+                <div class="m-order-data-content"> {{ formatDateForOrder(order.created_at) }} </div>
             </div>
-            <div class="m-admin-order-data-wrapper">
+            <div class="m-order-data-wrapper">
                 <div>Время создания</div>
-                <div class="m-admin-order-data-content"> {{ formatTime(order.created_at) }} </div>
+                <div class="m-order-data-content"> {{ formatTime(order.created_at) }} </div>
             </div>
-            <div class="m-admin-order-data-title" style="margin-top: 0;">Информация о получателе</div>
-            <div class="m-admin-order-data-wrapper">
+            <div class="m-order-data-title" style="margin-top: 0;">Информация о получателе</div>
+            <div class="m-order-data-wrapper">
                 <div>АДРЕСС</div>
-                <div class="m-admin-order-data-content">{{ order.delivery_address }}</div>
+                <div class="m-order-data-content">{{ order.delivery_address }}</div>
             </div>
-            <div class="m-admin-order-data-wrapper">
+            <div class="m-order-data-wrapper">
                 <div>Покупатель</div>
-                <div class="m-admin-order-data-content">{{ order.full_name? order.full_name: "Не указан"}} </div>
+                <div class="m-order-data-content">{{ order.full_name? order.full_name: "Не указан"}} </div>
             </div>
-            <div class="m-admin-order-data-wrapper">
+            <div class="m-order-data-wrapper">
                 <div>Номер телефона</div>
-                <div class="m-admin-order-data-content">{{ order.phone? order.phone: "Не указан"}}</div>
+                <div class="m-order-data-content">{{ order.phone? order.phone: "Не указан"}}</div>
             </div>
-            <div class="m-admin-order-data-wrapper">
+            <div class="m-order-data-wrapper">
                 <div>Email</div>
-                <div class="m-admin-order-data-content"> {{order.email? order.email: "Не указан" }}  </div>
+                <div class="m-order-data-content"> {{order.email? order.email: "Не указан" }}  </div>
             </div>
-        </div>
-        <div class="m-admin-order-data-title">Содержимое заказа</div>
-        <div class="m-order-container">
-        <div class="m-admin-order-type-wrapper">
-            <div class="m-admin-order-type-name">БАД</div>
-        </div>
-        <div class="m-admin-order-items-wrapper" 
-            v-for="item in order.items"
-            @click="router.push(`/first-app/food_sups/${item.food_sup.id}`)">
-            <div 
-                class="m-admin-order-item" 
-                :id="item?.food_sup.id">
-                <div class="m-order-item-image-wrapper">
-                    <img 
-                        v-if="photos[item.food_sup.photo_path]"
-                        :src="photos[item.food_sup.photo_path]"
-                        class="m-order-item-image"/>
-                </div>
-                <div class="m-admin-order-item-content-wrapper">
+            <div class="m-order-data-title">Содержимое заказа</div>
+            <div class="m-order-container">
+                <div class="m-order-type-name">БАД</div>
+                <div class="m-order-items-wrapper"
+                    v-for="(item, index) in order.items">
                     <div 
-                        class="m-admin-order-item-content-name-wrapper"
-                        :id="item.id"
-                        >
-                        <div class="m-admin-order-item-content-name">{{ item.food_sup.name }} {{ item.food_sup.barcode }}</div>
-                    </div>
-                    <div class="m-admin-order-item-content-price">
-                        {{ item.count }} шт.
-                        {{ formatAmount(item.count * item.food_sup.price) }} Руб
+                        class="m-order-item" 
+                        :id="item.food_sup.id"
+                        :class="{last_item: index === order.items.length - 1}"
+                        @click="router.push(`/second-app/food_sups/${item.food_sup.id}`)">
+                        <div class="m-order-item-image-wrapper">
+                            <img 
+                                v-if="photos[item.food_sup.photo_path]"
+                                :src="photos[item.food_sup.photo_path]"
+                                class="m-order-item-image"/>
+                        </div>
+                        <div class="m-order-item-content-wrapper">
+                            <div 
+                                class="m-order-item-content-name-wrapper"
+                                :id="item.id">
+                                <div class="m-order-item-content-name">{{ item.food_sup.name }} {{ item.food_sup.barcode }}</div>
+                            </div>
+                            <div class="m-order-item-content-price">
+                                {{ item.count }} шт.
+                                {{ formatAmount(item.count * item.food_sup.price) }} Руб
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="m-admin-order-item-bottom-border"></div>
         </div>
-    </div>
     </div>
 </template>
 
 <style scoped>
 
 
-.m-client-order-container{
-    width: 100%;
-    height: 100vh;
-    padding: 15px 10px 10px 10px;
+.m-order-container{
     color: black;
 }
 
-.m-admin-order-data{
-    display: flex;
-    flex-direction: column;
-}
-
-.m-admin-order-data-title{
-    margin: 11px 0px 8px 0px;
-    width: 100%;
+.m-order-data-title{
+    margin: 15px 0px;
     text-align: center;
     font-weight: 700;
 }
 
+.m-order-wrapper{
+    padding: 0px 20px;
+}
 
 
-.m-admin-order-data-wrapper, .m-client-order-header-shipping-cost{
-    margin: 0px 20px 0px 20px;
+.m-order-data-wrapper{
+    font-size: 14px;
+    margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-
-.m-admin-order-data-wrapper{
-    font-size: 14px;
-    margin-bottom: 15px;
-}
-
-.m-client-order-header-shipping-cost{
-    font-size: 12px;
-    padding-bottom: 15px;
-}
-
-.m-admin-order-data-content{
-    cursor: pointer;
-    width: 65%;
+.m-order-data-content{
     text-align: right;
 }
 
 
-
-.m-order-container{
-    width: 100%;
-    padding: 0px 20px 10px 0px;
-    display: flex;
-    flex-direction: column;
-    color: black;
-    background-color: white;
-}
-
-
-.m-admin-order-type-wrapper{
-    margin: 0px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    line-height: 1;
-}
-
-.m-admin-order-type-name{
-    width: 95%;
-    margin-left: 15.5px;
+.m-order-type-name{
     font-weight: 700;
 }
 
-.m-order-list-header-sort{
-    cursor: pointer;
-}
-
-.m-admin-order-items-wrapper{
+.m-order-items-wrapper{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 
-.m-admin-order-items-wrapper:first-child{
+.m-order-items-wrapper:first-child{
     margin-top: 20px;
 }
 
-.m-admin-order-item{
-    position: relative;
+.m-order-item{
     margin-top: 10px;
     height: 100px;
-    width: 95%;
+    width: 100%;
     display: flex;
     align-items: center;
+    border-bottom: 1px solid black;
     cursor: pointer;
 }
+
+
+.last_item{
+    border-bottom: none;
+}
+
 
 
 .m-order-item-image-wrapper{
@@ -280,7 +240,7 @@ onBeforeUnmount(() => {
 }
 
 
-.m-admin-order-item-content-wrapper{
+.m-order-item-content-wrapper{
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -292,27 +252,20 @@ onBeforeUnmount(() => {
     position: relative;
 }
 
-.m-admin-order-item-content-name-wrapper{
+
+.m-order-item-content-name-wrapper{
     width: 100%;
 }
 
-.m-admin-order-item-content-name{
+.m-order-item-content-name{
     margin-right: 4px;
     display: inline-block;
     font-weight: 700;
     font-size: 18px;
 }
 
-
-.m-admin-order-item-content-price{
+.m-order-item-content-price{
     font-size: 14px;
-}
-
-
-.m-admin-order-item-bottom-border{
-    border-bottom: 1px solid black;
-    width: 95%;
-    margin-left: 13.4px;
 }
 
 
