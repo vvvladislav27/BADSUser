@@ -1,12 +1,11 @@
 <script setup>
-import { computed, onMounted, onBeforeUnmount } from 'vue';
+import { computed, onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import store from '@/store';
 import { router } from '@/router';
+import { getByUserId } from '@/api/user';
 import { mainButton, secondaryButton, backButton, showTelegramPopUp } from '@/tg';
 
 const user = computed(() => store.state.user)
-const favoriteFoodSups = computed(() => store.state.favFoodSups);
-const countUserOrders = computed(() => store.state.userCountOrders)
 
 
 mainButton.text = "Написать продавцу"
@@ -14,8 +13,17 @@ secondaryButton.text = "Удаление профиля"
 
 let backButtonClickHandler;
 
+const userData = ref();
 
-onMounted(async() => {
+
+const getUser = async() => {
+    const data = await getByUserId(user.value.telegram_id);
+    userData.value = data;
+}
+
+
+onBeforeMount(async() => {
+    await getUser()
     await store.dispatch("RESET_SEARCH_FILTERS")
     backButtonClickHandler = () => {
         router.push("/second-app/")
@@ -37,7 +45,7 @@ onBeforeUnmount(() => {
 
 
 const openFavoriteFoodSups = async() => {
-    if (Object.keys(favoriteFoodSups.value).length == 0) {
+    if (userData.value.count_fav_food_sups == 0) {
         await showTelegramPopUp("Нет избранных товаров")
         return
     } else {
@@ -47,7 +55,7 @@ const openFavoriteFoodSups = async() => {
 
 
 const openOrders = async() => {
-    if (countUserOrders.value == 0) {
+    if (userData.value.count_orders == 0) {
         await showTelegramPopUp("Нет заказов")
         return
     } else {
@@ -60,26 +68,24 @@ const openOrders = async() => {
 </script>
 
 <template>
-    <div class="m-cabinet-container">
+    <div class="m-cabinet-container" v-if="userData">
         <img
-            v-if="!user.photo_url" 
+            v-if="!userData.photo_url" 
             src="/base-user.png" 
             class="m-cabinet-image"/>
         <img
             v-else
-            :src="user.photo_url" 
+            :src="userData.photo_url" 
             class="m-cabinet-image"/>
         <div class="m-cabinet-header">
             <div class="m-cabinet-header-hello">Здравствуйте,
-                <p>{{ user.first_name }} !</p>
+                <p>{{ userData.first_name }} !</p>
             </div>
             <div class="m-cabinet-header-bonus">Бонусов · 0</div>
         </div>
         <div class="m-cabinet-body">
-            <div @click="openOrders">{{countUserOrders > 0? `Заказов · ${countUserOrders}`: "Нет заказов"}}</div>
-            <div @click="openFavoriteFoodSups">
-                {{ Object.keys(favoriteFoodSups).length > 0? `Избранное · ${Object.keys(favoriteFoodSups).length}`: "Нет избранного" }}
-            </div>
+            <div @click="openOrders">{{userData.count_orders > 0? `Заказов · ${userData.count_orders}`: "Нет заказов"}}</div>
+            <div @click="openFavoriteFoodSups">{{ userData.count_fav_food_sups > 0? `Избранное · ${userData.count_fav_food_sups}`: "Нет избранного" }}</div>
             <div>Нет обращений</div>
         </div>
     </div>
