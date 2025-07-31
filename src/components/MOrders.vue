@@ -25,7 +25,7 @@ const isSearchInputActive = computed(() => store.state.isSearchInputActive);
 const arrow = computed(() => (sort.value === "desc" ? "⬇" : "⬆"));
 const isContextMenuVisible = ref(false);
 const isOrderFiltersVisible = ref(false);
-const searchFilters = ref(); 
+const searchFilters = ref([]); 
 const buttons = ["created_date", "cost", "item_count", "unique_item_count"];
 
 let mainButtonClickHandler;
