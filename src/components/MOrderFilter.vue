@@ -2,10 +2,11 @@
 
 import { ref, computed, watch } from 'vue';
 import store from '@/store';
-import { getOrderStateEn, formatDateForPicker } from '@/utils';
+import { getOrderStateEn } from '@/utils';
 import '@vuepic/vue-datepicker/dist/main.css';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import MContextMenu from './MContextMenu.vue';
+const format = "dd.MM.yyyy"
 
 
 const filters = computed(() => store.state.searchFiltersForOrders);
@@ -121,7 +122,7 @@ const setCurrentValue = (data) => {
                         cancelText="отменить" 
                         selectText="выбрать"
                         :enable-time-picker="false"
-                        :format="formatDateForPicker(fromDate)"
+                        :format="format"
                         v-model="fromDate"
                     />
                 </div>
@@ -133,7 +134,7 @@ const setCurrentValue = (data) => {
                         cancelText="отменить" 
                         selectText="выбрать"
                         :enable-time-picker="false"
-                        :format="formatDateForPicker(toDate)"
+                        :format="format"
                         v-model="toDate"
                     />
                 </div>
