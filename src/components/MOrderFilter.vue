@@ -60,8 +60,7 @@ const emitFilters = () => {
         to_date: toDate.value
     };
     const filtersToEmit = [];
-    
-    if (filterValues.state !== null && filterValues.state !== "Все") {
+    if (filterValues.state !== null && filterValues.state !== "all") {
         filtersToEmit.push({
             name: "Состояние заказа",
             state: filterValues.state,
@@ -78,7 +77,6 @@ const emitFilters = () => {
             to_date: typeof filterValues.to_date === 'string' ? filterValues.to_date : filterValues.to_date ? filterValues.to_date.toISOString().split('T')[0] : null 
         });
     }
-    
     emit("filter-updated", filtersToEmit);
 };
 
