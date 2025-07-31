@@ -7,15 +7,13 @@ import { showTelegramPopUp } from "@/tg";
 
 
 export const GET_AND_SET_DATA = async({commit}) => {
-    let is_blocked = false;
     const user = await getSelf();
     if (user.is_blocked) {
         await showTelegramPopUp("Вы заблокированы администратором приложения");
-        is_blocked = true;
     }
     commit("SET_USER", user);
-    if (is_blocked) {
-        return is_blocked
+    if (user.is_blocked) {
+        return true
     }
     const [cart, favoriteFoodSup, cartItems, orderItemsforReview] = await Promise.all([
         getCart(),
@@ -28,7 +26,7 @@ export const GET_AND_SET_DATA = async({commit}) => {
     commit("SET_USER_CART_ITEMS", cartItems);
     commit("SET_ORDERS_FOR_REVIEWS", orderItemsforReview)
     commit("SET_IS_DATA_LOADED");
-    return is_blocked
+    return false
 }
 
 
