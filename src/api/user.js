@@ -20,6 +20,24 @@ const getSelf = async() => {
 }
 
 
+const getByUserId = async(userId) => {
+    const response = await fetch(`${API_BASE_URL}/v0/users/${userId}`, {
+        method: "GET",
+        headers: {
+            'bypass-tunnel-reminder': 'true',
+            "auth": initData,
+            "app": "user"
+        }
+    });
+    if (response.ok) {
+        return await response.json();
+    } else {
+        return null
+    }
+}
+
+
+
 const getFullAddress = async(address) => {
     const data = {
         "address": address
@@ -84,4 +102,4 @@ const updateAddresses = async(address, remove) => {
     }
 }
 
-export { getSelf, updateAddresses, getFullAddress, updateUserOrderData}
+export { getSelf, updateAddresses, getFullAddress, updateUserOrderData, getByUserId}
