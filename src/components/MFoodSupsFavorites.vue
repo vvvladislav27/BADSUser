@@ -9,7 +9,7 @@ import { searchData } from '@/api/search';
 
 import { getSortedNameText, getImage, formatAmount } from '@/utils';
 import { router } from '@/router';
-import { mainButton, secondaryButton, backButton } from '@/tg';
+import { mainButton, secondaryButton, backButton, hideButton, setupButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 
@@ -100,29 +100,18 @@ const openFilters = () => {
 const updateTgButtons = () => {
     mainButton.offClick(mainButtonClickHandler);
     secondaryButton.offClick(secondaryButtonClickHandler);
-    if (mainButton.isVisible) {
-            mainButton.hide();
-        };
-    if (secondaryButton.isVisible) {
-        secondaryButton.hide()
-    }
+    hideButton(mainButton);
+    hideButton(secondaryButton);
     if (isFoodSupFiltersVisible.value) {
-        mainButton.text = "Применить"
-        mainButtonClickHandler = function () {
+        mainButtonClickHandler = () => {
             setFilters();
         }
-        mainButton.onClick(mainButtonClickHandler)
-        mainButton.show();
-        if (filters.value.length == 0) {
-            return
-        } else {
-            secondaryButton.text = "Сбросить"
-            secondaryButtonClickHandler = function () {
+        setupButton(mainButton, "Применить", mainButtonClickHandler);
+        if (filters.value.length > 0) {
+            secondaryButtonClickHandler = () => {
                 resetFilters();
             }
-            secondaryButton.onClick(secondaryButtonClickHandler)
-            secondaryButton.show();
-            return
+            setupButton(secondaryButton, "Сбросить", secondaryButtonClickHandler);
         }
     }
 }
