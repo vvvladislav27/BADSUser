@@ -63,9 +63,7 @@ const getTextForMainButton = () => {
 
 onMounted(async() => {
     for (let item of Object.values(cartFoodSups.value) ) {
-        if (item) {
-            await getImage(item.food_sup.photo_path)
-        }
+        await getImage(item.food_sup.photo_path)
     }
     initButtons();
     updateText();
