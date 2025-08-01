@@ -6,7 +6,7 @@ import { searchData } from '@/api/search';
 import MSearch from './MSearch.vue';
 import MContextMenu from './MContextMenu.vue';
 import MOrderFilter from './MOrderFilter.vue';
-import { mainButton, secondaryButton, backButton} from '@/tg';
+import { mainButton, secondaryButton, backButton, hideButton, setupButton} from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 
@@ -64,28 +64,18 @@ onBeforeUnmount(() =>{
 const updateTgButtons = () => {
     mainButton.offClick(mainButtonClickHandler);
     secondaryButton.offClick(secondaryButtonClickHandler);
-    if (mainButton.isVisible) {
-            mainButton.hide();
-        };
-    if (secondaryButton.isVisible) {
-        secondaryButton.hide()
-    }
+    hideButton(mainButton)
+    hideButton(secondaryButton)
     if (isOrderFiltersVisible.value) {
-        mainButton.text = "Применить"
-        mainButtonClickHandler = function () {
+        mainButtonClickHandler = () => {
             setFilters();
         }
-        mainButton.onClick(mainButtonClickHandler)
-        mainButton.show();
-        if (filters.value.length == 0) {
-            return
-        } else {
-            secondaryButton.text = "Сбросить"
-            secondaryButtonClickHandler = function () {
+        setupButton(mainButton, "Применить", mainButtonClickHandler);
+        if(filters.value.length > 0) {
+            secondaryButtonClickHandler = () => {
                 resetFilters();
             }
-            secondaryButton.onClick(secondaryButtonClickHandler)
-            secondaryButton.show();
+            setupButton(secondaryButton, "Сбросить", secondaryButtonClickHandler);
         }
     }
 }
@@ -173,12 +163,6 @@ const setSort = (type) => {
     store.dispatch("SET_SORT_SEARCH_TYPE_FOR_ORDERS", type)
 }
 
-
-const openOrder = (id) => {
-    router.push(`/second-app/orders/${id}`)
-}
-
-
 </script>
 
 <template>
@@ -198,7 +182,7 @@ const openOrder = (id) => {
                 v-for="(order, index) in orders"
                 class="m-order-item"
                 :class="{last_item_order: index === orders.length - 1}"
-                @click=openOrder(order.id)>
+                @click="router.push(`/second-app/orders/${order.id}`)">
                 <div class="m-order-item-image-wrapper">
                     <img
                         v-if="photos[order.items[0].food_sup.photo_path]"
