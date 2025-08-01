@@ -195,7 +195,7 @@ const setSort = (type) => {
                 v-for="(foodSup, index) in foodSups"
                 class="m-food-sups-favorites-item"
                 :class="{last_item: index === foodSups.length - 1}" 
-                @click="router.push(`/second-app/food_sups/${foodSup.id}`)">
+                @click="router.push(`/second-app/favorite_food_sups/${foodSup.id}`)">
                 <div class="m-food-sups-favorites-item-image-wrapper">
                     <img 
                         v-if="photos[foodSup.photo_path]"
