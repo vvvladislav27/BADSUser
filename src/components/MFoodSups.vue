@@ -10,7 +10,7 @@ import MReviewContextMenu from './MReviewContextMenu.vue';
 import { getSortedNameText } from '@/utils';
 import { insertReview } from '../api/reviews';
 import { skipFoodSupReview } from '@/api/order';
-import { showTelegramPopUp, mainButton, secondaryButton, backButton } from '@/tg';
+import { showTelegramPopUp, mainButton, secondaryButton, backButton, setupButton, hideButton } from '@/tg';
 
 
 const filters = computed(() => store.state.filters);
@@ -84,19 +84,6 @@ const resetFilters = () => {
     isFoodSupFiltersVisible.value = false;
     updateTgButtons();
 }
-
-
-const setupButton = (button, text, handler) => {
-    button.text = text;
-    button.onClick(handler);
-    button.show();
-};
-
-const hideButton = (button) => {
-    if (button.isVisible) {
-        button.hide();
-    }
-};
 
 
 const updateTgButtons = () => {
