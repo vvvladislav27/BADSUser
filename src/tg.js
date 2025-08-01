@@ -64,6 +64,19 @@ const copyTextAndShowPopUp = async(text) => {
 }
 
 
+const setupButton = (button, text, handler) => {
+    button.text = text;
+    button.onClick(handler);
+    button.show();
+};
+
+const hideButton = (button) => {
+    if (button.isVisible) {
+        button.hide();
+    }
+};
+
+
 export {
     showTelegramPopUp,
     showTelegramPopUpWithKeyboard, 
@@ -71,5 +84,7 @@ export {
     secondaryButton, 
     backButton, 
     initData, 
-    copyTextAndShowPopUp
+    copyTextAndShowPopUp,
+    setupButton,
+    hideButton
 }
