@@ -87,7 +87,11 @@ onBeforeMount(async() => {
     setTgButtons();
     backButtonClickHandler = () => {
         if (lastRoute.name == "Cart") {
-            router.push("/second-app/")
+            if (router.currentRoute.value.name == "FavoriteFoodSup") {
+                router.push("/second-app/food_sups/favorites")
+            } else {
+                router.push("/second-app/")
+            }
         } else {
             router.back();
         }
