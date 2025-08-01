@@ -175,7 +175,7 @@ export const UPDATE_USER = async({ commit, state }, { data, field, action }) => 
         array.unshift(item);
     };
     if (action === "insert") {
-        if (field === "address") {
+        if (field === "addresses") {
             if (!user.addresses.includes(data)) {
                 user.addresses.unshift(data);
             } else {
@@ -201,7 +201,7 @@ export const UPDATE_USER = async({ commit, state }, { data, field, action }) => 
             }
         }
     } else {
-        if (field === "address") {
+        if (field === "addresses") {
             user.addresses = user.addresses.filter(address => address !== data);
         } else if (field === "full_names") {
             user.full_names = user.full_names.filter(name => name !== data);
