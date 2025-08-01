@@ -4,7 +4,7 @@ import { getOrderById, updateOrderStatus } from '@/api/order';
 import { formatAmount, formatTime, formatDateForOrder, getOrderStateTextRu, getImage } from '@/utils';
 import store from '@/store';
 import { router } from '@/router';
-import { showTelegramPopUpWithKeyboard, mainButton, backButton } from '@/tg';
+import { showTelegramPopUpWithKeyboard, mainButton, backButton, hideButton, setupButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 const photos = computed(() => store.state.foodSupsPhotos);
@@ -31,10 +31,8 @@ watch(order, () => {
 const setTgButtons = () => {
     let buttonText;
     let newOrderState;
-    if (mainButton.isVisible) {
-        mainButton.hide();
-    }
     mainButton.offClick(mainButtonClickHandler)
+    hideButton(mainButton)
     if (order.value.state == "send") {
         buttonText = "Получен"
         newOrderState = "received"

@@ -6,7 +6,7 @@ import { getFoodSupById } from '@/api/food_sup';
 import { router, lastRoute } from '@/router';
 import { getReviews } from '@/api/reviews';
 import MReview from './MReview.vue';
-import { showTelegramPopUpWithKeyboard, mainButton, secondaryButton, backButton, copyTextAndShowPopUp } from '@/tg';
+import { showTelegramPopUpWithKeyboard, mainButton, secondaryButton, backButton, copyTextAndShowPopUp, hideButton, setupButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 const cartFoodSups = computed(() => store.state.userCartItems);
@@ -46,35 +46,27 @@ watch(cartFoodSups, () => {
 
 const setTgButtons = () => {
     mainButton.offClick(mainButtonClickHandler)
-    if (mainButton.isVisible) {
-        mainButton.hide();
-    }
+    hideButton(mainButton);
     if (secondaryButton.isVisible) {
-        secondaryButton.hide();
         secondaryButton.offClick(secondaryButtonClickHandler);
+        hideButton(secondaryButton)
     }
     const item = cartFoodSups.value[props.id];
     if (item) {
-        mainButton.text = `В корзине - ${item.count}`
         mainButtonClickHandler = () => {
             router.push("/second-app/cart")
         }
-        mainButton.onClick(mainButtonClickHandler)
-        mainButton.show();
-        secondaryButton.text = "Удалить из корзины"
+        setupButton(mainButton, `В корзине - ${item.count}`, mainButtonClickHandler)
         secondaryButtonClickHandler = async() => {
             await removeCartItem(props.id)
         }
-        secondaryButton.onClick(secondaryButtonClickHandler)
-        secondaryButton.show();
+        setupButton(secondaryButton, "Удалить из корзины", secondaryButtonClickHandler)
         return
     } else {
-        mainButton.text = `Добавить в корзину`
         mainButtonClickHandler = async() => {
             await store.dispatch("INCREMENT_CART_ITEM", props.id);
         }
-        mainButton.onClick(mainButtonClickHandler)
-        mainButton.show();
+        setupButton(mainButton, `Добавить в корзину`, mainButtonClickHandler)
     }
 }
 
