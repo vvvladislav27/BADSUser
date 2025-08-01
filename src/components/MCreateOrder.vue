@@ -87,10 +87,12 @@ const handleClickMainButton = async() => {
 
 const calculateTotalPriceAndSetMainButton = () => {
     let totalPrice = 0;
+    const uniqueOrderItemsIds = new Set();
     for (let item of orderItems.value) {
-        orderItemsIds.value.push(item.id);
+        uniqueOrderItemsIds.add(item.id);
         totalPrice += item.count * item.food_sup.price;
-    };
+    }
+    orderItemsIds.value = Array.from(uniqueOrderItemsIds);
     mainButtonClickHandler = () => {
         handleClickMainButton();
     }
