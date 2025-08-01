@@ -68,6 +68,27 @@ onBeforeUnmount(() =>{
 
 
 
+const updateTgButtons = () => {
+    mainButton.offClick(mainButtonClickHandler);
+    secondaryButton.offClick(secondaryButtonClickHandler);
+    hideButton(mainButton);
+    hideButton(secondaryButton);
+    if (isFoodSupFiltersVisible.value) {
+        mainButtonClickHandler = () => {
+            setFilters();
+        }
+        setupButton(mainButton, "Применить", mainButtonClickHandler);
+        if (filters.value.length > 0) {
+            secondaryButtonClickHandler = () => {
+                resetFilters();
+            }
+            setupButton(secondaryButton, "Сбросить", secondaryButtonClickHandler);
+        }
+    }
+}
+
+
+
 const setFilters = async() => {
     if (searchFilters.value) {
         await store.dispatch("SET_FILTERS", {"filters": searchFilters, "type": "food_sups"});
@@ -95,26 +116,6 @@ const openFilters = () => {
     updateTgButtons()
 }
 
-
-
-const updateTgButtons = () => {
-    mainButton.offClick(mainButtonClickHandler);
-    secondaryButton.offClick(secondaryButtonClickHandler);
-    hideButton(mainButton);
-    hideButton(secondaryButton);
-    if (isFoodSupFiltersVisible.value) {
-        mainButtonClickHandler = () => {
-            setFilters();
-        }
-        setupButton(mainButton, "Применить", mainButtonClickHandler);
-        if (filters.value.length > 0) {
-            secondaryButtonClickHandler = () => {
-                resetFilters();
-            }
-            setupButton(secondaryButton, "Сбросить", secondaryButtonClickHandler);
-        }
-    }
-}
 
 
 watch([sort, type, filters, search], async() => {
@@ -173,9 +174,6 @@ const setSort = (type) => {
     store.dispatch("SET_SORT", type)
 }
 
-const openFoodSup = (id) => {
-    router.push(`/second-app/food_sups/${id}`)
-}
 
 </script>
 
@@ -197,7 +195,7 @@ const openFoodSup = (id) => {
                 v-for="(foodSup, index) in foodSups"
                 class="m-food-sups-favorites-item"
                 :class="{last_item: index === foodSups.length - 1}" 
-                @click="openFoodSup(foodSup.id)">
+                @click="router.push(`/second-app/food_sups/${foodSup.id}`)">
                 <div class="m-food-sups-favorites-item-image-wrapper">
                     <img 
                         v-if="photos[foodSup.photo_path]"
