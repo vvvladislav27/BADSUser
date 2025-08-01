@@ -4,7 +4,7 @@ import store from '@/store';
 import { router } from '@/router';
 import { formatAmount, getImage } from '@/utils';
 import { getInvoiceLink } from '@/api/order';
-import { showTelegramPopUp, mainButton, backButton } from '@/tg';
+import { showTelegramPopUp, mainButton, backButton, setupButton, tg } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 const user = computed(() => store.state.user);
@@ -12,22 +12,47 @@ const photos = computed(() => store.state.foodSupsPhotos);
 const orderItems = computed(() => Object.values(store.state.userOrderItems));
 const orderItemsIds = ref([]);
 
+let backButtonClickHandler;
+let mainButtonClickHandler;
 
-const tg = window.Telegram.WebApp
+
+onBeforeMount(async() => {
+    for (let item of orderItems.value) {
+        await getImage(item.food_sup.photo_path)
+    }
+    setAnimationForText(".m-create-order-item-content-name-wrapper");
+})
+
+
+onMounted(() => {
+    tg.onEvent("invoiceClosed", handleInvoiceClosed)
+    calculateTotalPriceAndSetMainButton();
+    backButtonClickHandler = async() => {
+        await store.dispatch("RESET_SELECTED_ITEMS")
+        router.push("/second-app/cart")
+    }
+    backButton.onClick(backButtonClickHandler);
+})
+
+
+onBeforeUnmount(() => {
+    tg.offEvent("invoiceClosed", handleInvoiceClosed)
+    backButton.offClick(backButtonClickHandler);
+    mainButton.offClick(mainButtonClickHandler);
+    mainButton.hide();
+})
 
 
 
 const handleInvoiceClosed = async(event) => {
     if (event.status == "paid") {
         await showTelegramPopUp("Заказ оплачен")
+        await store.dispatch("GET_AND_SET_USER_CART_ITEMS_AFTER_PAID")
+        router.push("/second-app/")
     }
-    await store.dispatch("GET_AND_SET_USER_CART_ITEMS_AFTER_PAID")
-    router.push("/second-app/")
 }
 
 
-let backButtonClickHandler;
-let mainButtonClickHandler;
 
 
 const handleClickMainButton = async() => {
@@ -67,40 +92,9 @@ const calculateTotalPriceAndSetMainButton = () => {
     mainButtonClickHandler = () => {
         handleClickMainButton();
     }
-    mainButton.onClick(mainButtonClickHandler);
-    mainButton.text = `Оплатить - ${formatAmount(totalPrice)} руб`;
-    mainButton.show();
+    setupButton(mainButton, `Оплатить - ${formatAmount(totalPrice)} руб`, mainButtonClickHandler)
 };
 
-
-onBeforeMount(async() => {
-    setAnimationForText(".m-create-order-item-content-name-wrapper");
-    for (let item of orderItems.value) {
-        await getImage(item.food_sup.photo_path)
-    }
-})
-
-
-onMounted(() => {
-    tg.onEvent("invoiceClosed", handleInvoiceClosed)
-    calculateTotalPriceAndSetMainButton();
-    backButtonClickHandler = async() => {
-        await store.dispatch("RESET_SELECTED_ITEMS")
-        router.push("/second-app/cart")
-    }
-    backButton.onClick(backButtonClickHandler);
-    if (!backButton.isVisible) {
-        backButton.show()
-    }
-})
-
-
-onBeforeUnmount(() => {
-    tg.offEvent("invoiceClosed", handleInvoiceClosed)
-    backButton.offClick(backButtonClickHandler);
-    mainButton.offClick(mainButtonClickHandler);
-    mainButton.hide();
-})
 
 
 
