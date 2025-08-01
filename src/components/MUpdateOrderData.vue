@@ -90,7 +90,7 @@ const removeDataFromList = async(data) => {
     }
     const result = await showTelegramPopUpWithKeyboard(message)
     if (result == "confirm") {
-        await store.dispatch("UPDATE_USER", {"data":data, "field": props.dataType, "action": "remove"})
+        await store.dispatch("UPDATE_USER", {"data": data, "field": props.dataType, "action": "remove"})
     }
 }
 
@@ -100,7 +100,6 @@ onBeforeMount(async() => {
         router.push("/second-app/create_order");
     }
     backButton.onClick(backButtonClickHandler);
-    backButton.show();
     mainButton.text = "Добавить";
     mainButtonClickHandler = () => {
         insertNewData();
@@ -113,7 +112,6 @@ onBeforeMount(async() => {
 onBeforeUnmount(() => {
     backButton.offClick(backButtonClickHandler);
     mainButton.offClick(mainButtonClickHandler);
-    mainButton.hide();
 })
 
 
