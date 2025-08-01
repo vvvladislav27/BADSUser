@@ -20,6 +20,7 @@ const routes = [
     {path: "/second-app/cabinet", name: "Cabinet", component: MCabinet},
     {path: "/second-app/food_sups/favorites", name: "FoodSupsFavorites", component: MFoodSupsFavorites},
     {path: "/second-app/food_sups/:id", name: "FoodSup", component: MFoodSup, props: true},
+    {path: "/second-app/favorite_food_sups/:id", name: "FavoriteFoodSup", component: MFoodSup, props: true},
     {path: "/second-app/orders", name: "Orders", component: MOrders},
     {path: "/second-app/orders/:id", name: "Order", component: MOrder, props: true},
     {path: "/second-app/create_order", name: "CreateOrder", component: MCreateOrder},
