@@ -4,7 +4,7 @@ import store from '@/store';
 import { router } from '@/router';
 import { formatAmount, getImage } from '@/utils';
 import { getInvoiceLink } from '@/api/order';
-import { showTelegramPopUp, mainButton, backButton, setupButton, tg } from '@/tg';
+import { showTelegramPopUp, mainButton, backButton, setupButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 const user = computed(() => store.state.user);
@@ -14,6 +14,8 @@ const orderItemsIds = ref([]);
 
 let backButtonClickHandler;
 let mainButtonClickHandler;
+
+const tg = window.Telegram.WebApp
 
 
 onBeforeMount(async() => {
