@@ -179,3 +179,8 @@ export const SET_SORT_SEARCH_TYPE_FOR_ORDERS = (state, type) => {
     }
     state.searchTypeForOrders = type
 }
+
+
+export const RESET_VIDEO_LOADED = (state) => {
+    state.isVideoVisible = false;
+}

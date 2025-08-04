@@ -229,3 +229,7 @@ export const RESET_SEARCH_FILTERS = ({commit}) => {
 export const SET_SORT_SEARCH_TYPE_FOR_ORDERS = ({commit}, type) => {
     commit("SET_SORT_SEARCH_TYPE_FOR_ORDERS", type)
 }
+
+export const RESET_VIDEO_LOADED = ({commit}) => {
+    commit("RESET_VIDEO_LOADED")
+}
