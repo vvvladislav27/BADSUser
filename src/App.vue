@@ -7,12 +7,8 @@ const isBlocked = ref()
 
 onBeforeMount(async() => {
   isBlocked.value = await store.dispatch("GET_AND_SET_DATA")
-  tg.onEvent("deactivated", eventHandler)
 })
 
-const eventHandler = () => {
-  store.dispatch("RESET_VIDEO_LOADED")
-}
 
 </script>
 
