@@ -31,8 +31,10 @@ const state = {
 
   const vuexLocal = new VuexPersistence({
     key: 'reload-data',
-    storage: window.localStorage,
+    storage: window.sessionStorage,
     reducer: (state) => ({
+      isVideoVisible: state.isVideoVisible,
+      isVideoLoaded: state.isVideoLoaded,
       userCart: state.userCart,
       userCartItems: state.userCartItems,
       userCartFoodSups: state.userCartFoodSups,
