@@ -115,7 +115,7 @@ onBeforeUnmount(() => {
                 <div class="m-order-data-content">{{ order.delivery_address }}</div>
             </div>
             <div class="m-order-data-wrapper">
-                <div>Покупатель</div>
+                <div>Получатель</div>
                 <div class="m-order-data-content">{{ order.full_name? order.full_name: "Не указан"}} </div>
             </div>
             <div class="m-order-data-wrapper">
