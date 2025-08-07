@@ -120,6 +120,7 @@ const openFilters = () => {
 
 watch([sort, type, filters, search], async() => {
     await getFoodSups();
+    setAnimationForText(".m-food-sups-favorites-item-name-wrapper");
 },  {deep: true});
 
 
