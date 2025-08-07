@@ -2,7 +2,7 @@
 import { onBeforeMount, ref } from 'vue';
 import store from './store';
 
-const tg = window.Telegram.WebApp
+
 const isBlocked = ref()
 
 onBeforeMount(async() => {
