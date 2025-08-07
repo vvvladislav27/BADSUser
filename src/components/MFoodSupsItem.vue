@@ -1,11 +1,10 @@
 <script setup>
 
-import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import { formatAmount, vibrate, getReviewText, getQuantityText, getImage } from '@/utils';
 import store from '@/store';
 import { router } from '@/router';
 import { showTelegramPopUpWithKeyboard } from '@/tg';
-import { setAnimationForText } from '@/animation';
 
 
 
@@ -28,7 +27,6 @@ const props = defineProps({
 
 onBeforeMount(async() => {
     await getImage(props.foodSup.photo_path)
-    setAnimationForText(".m-food-sups-item-data-name-wrapper")
 })
 
 
