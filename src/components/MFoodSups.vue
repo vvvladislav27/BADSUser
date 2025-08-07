@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { router } from '@/router';
 import store from '@/store';
 import MContextMenu from './MContextMenu.vue';
@@ -13,7 +13,6 @@ import { skipFoodSupReview } from '@/api/order';
 import { showTelegramPopUp, mainButton, secondaryButton, backButton, setupButton, hideButton } from '@/tg';
 
 
-import { setAnimationForText } from '@/animation';
 const filters = computed(() => store.state.filters);
 const search = computed(() => store.state.search);
 const type = computed(() => store.state.type);
@@ -163,10 +162,6 @@ watch([sort, type, filters, search], () => {
 },  {deep: true});
 
 
-watch(foodSups, async() => {
-    await nextTick();
-    setAnimationForText(".m-food-sups-item-data-name-wrapper")
-})
 
 const toggleContextMenuVisible = () => {
     isContextMenuVisible.value = !isContextMenuVisible.value;
