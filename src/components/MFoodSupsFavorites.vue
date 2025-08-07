@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, computed, onMounted, watch, onBeforeUnmount, onBeforeMount} from 'vue';
+import { ref, computed, onMounted, watch, onBeforeUnmount, onBeforeMount, nextTick} from 'vue';
 import store from '@/store';
 import MContextMenu from './MContextMenu.vue';
 import MFoodSupFilter from './MFoodSupFilter.vue';
@@ -44,7 +44,6 @@ const getFoodSups = async() => {
 
 onBeforeMount(async() => {
     await getFoodSups()
-    setAnimationForText(".m-food-sups-favorites-item-name-wrapper");
     for (let food_sup of foodSups.value) {
         await getImage(food_sup.photo_path)
     }
@@ -120,8 +119,13 @@ const openFilters = () => {
 
 watch([sort, type, filters, search], async() => {
     await getFoodSups();
-    setAnimationForText(".m-food-sups-favorites-item-name-wrapper");
 },  {deep: true});
+
+
+watch(foodSups, async() => {
+    await nextTick();
+    setAnimationForText(".m-food-sups-favorites-item-name-wrapper");
+});
 
 
 const setBackButtonClickHandler = () => {

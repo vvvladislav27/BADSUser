@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, watch, onBeforeMount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch, onBeforeMount, nextTick } from 'vue';
 
 import {getSortedNameText, formatAmount, getOrderStateTextRu, getImage } from '@/utils';
 import { searchData } from '@/api/search';
@@ -41,7 +41,6 @@ const getOrders = async() => {
 
 onBeforeMount(async() => {
     await getOrders()
-    setAnimationForText(".m-order-item-content-name-wrapper");
     for (let order of orders.value) {
         await getImage(order.items[0].food_sup.photo_path)
     }
@@ -113,8 +112,13 @@ const openFilters = () => {
 
 watch([sort, type, filters, search], async() => {
     await getOrders();
-    setAnimationForText(".m-order-item-content-name-wrapper");
 },  {deep: true});
+
+
+watch(orders, async() => {
+    await nextTick();
+    setAnimationForText(".m-order-item-content-name-wrapper");
+});
 
 
 const setBackButtonClickHandler = () => {
