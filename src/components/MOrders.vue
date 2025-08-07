@@ -113,6 +113,7 @@ const openFilters = () => {
 
 watch([sort, type, filters, search], async() => {
     await getOrders();
+    setAnimationForText(".m-order-item-content-name-wrapper");
 },  {deep: true});
 
 
