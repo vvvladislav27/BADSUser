@@ -124,7 +124,7 @@ const setCurrentValue = (data) => {
     top: 0;
     left: 0;
     width: 100%;
-    height: 80vh;
+    height: 100vh;
     background-color: rgba(0, 0, 0, 1);
     color: white;
     display: flex;
