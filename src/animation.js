@@ -16,7 +16,6 @@ const setAnimationForText = (customClass) => {
         const animationDuration = Math.max(5, (textWidth / 100) * 5);
         if (textOverflow <= 0) return;
         const uniqueClass = `animate-name-${item.id}`;
-        console.log(uniqueClass)
         item.classList.add(uniqueClass);
         item.parentElement.style.overflow = 'hidden';
         cssRules += 
