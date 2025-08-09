@@ -227,7 +227,6 @@ const setSort = (type) => {
                 </div>
             </div>
         </div>
-        <button style="width: 30px; height: 30px; position: absolute; bottom: 0;" @click="setFilters"></button>
     </div>
     <m-context-menu 
         v-if="isContextMenuVisible"
