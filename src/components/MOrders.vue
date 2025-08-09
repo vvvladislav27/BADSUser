@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, watch, onBeforeMount, nextTick } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch, onBeforeMount, nextTick, useTemplateRef } from 'vue';
 
 import {getSortedNameText, formatAmount, getOrderStateTextRu, getImage } from '@/utils';
 import { searchData } from '@/api/search';
@@ -27,6 +27,8 @@ const isContextMenuVisible = ref(false);
 const isOrderFiltersVisible = ref(false);
 const searchFilters = ref([]); 
 const buttons = ["created_date", "cost", "item_count", "unique_item_count"];
+
+const filterRef = useTemplateRef('filter')
 
 let mainButtonClickHandler;
 let secondaryButtonClickHandler;
@@ -80,13 +82,39 @@ const updateTgButtons = () => {
 }
 
 
-
 const setFilters = async() => {
-    await store.dispatch("SET_FILTERS", {"filters": searchFilters, "type": "orders"});
+    const filterData = []
+    const data = {
+        state: filterRef.value.currentState || null,
+        from_date: filterRef.value.fromDate || null,
+        to_date: filterRef.value.toDate || null
+    };
+    const addFilter = (name, state, from_date, to_date) => {
+        filterData.push({
+            name: name,
+            state: state,
+            from_date: from_date,
+            to_date: to_date
+        });
+    };
+    if (data.state && data.state !== "all") {
+        addFilter("Состояние заказа", data.state, null, null)
+    }
+    if (data.from_date || data.to_date) {
+        addFilter(
+            "Дата",
+             null,
+             typeof data.from_date === 'string' ? data.from_date : data.from_date ? data.from_date.toISOString().split('T')[0] : null,
+             typeof data.to_date === 'string' ? data.to_date : data.to_date ? data.to_date.toISOString().split('T')[0] : null 
+        )
+    }
+    searchFilters.value = filterData
+    if (searchFilters.value) {
+        await store.dispatch("SET_FILTERS", {"filters": searchFilters.value, "type": "orders"});
+    }
     isOrderFiltersVisible.value = false;
     updateTgButtons();
 }
-
 
 const resetFilters = () => {
     store.dispatch("RESET_FILTERS", "orders")
@@ -160,9 +188,6 @@ const toogleIsSearchInputActive = () => {
     }
 }
 
-const updateFilters = (filters) => {
-    searchFilters.value = filters
-}
 
 const setSort = (type) => {
     store.dispatch("SET_SORT_SEARCH_TYPE_FOR_ORDERS", type)
@@ -202,6 +227,7 @@ const setSort = (type) => {
                 </div>
             </div>
         </div>
+        <button style="width: 30px; height: 30px; position: absolute; bottom: 0;" @click="setFilters"></button>
     </div>
     <m-context-menu 
         v-if="isContextMenuVisible"
@@ -213,9 +239,8 @@ const setSort = (type) => {
         @type="setSort">
     </m-context-menu>
     <m-order-filter
-        v-if=isOrderFiltersVisible
-        @filter-updated="updateFilters"
-        @set-filters="setFilters">
+        ref="filter"
+        v-if=isOrderFiltersVisible>
     </m-order-filter>
 </template>
 
