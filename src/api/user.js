@@ -79,27 +79,4 @@ const updateUserOrderData = async(data) => {
 }
 
 
-
-const updateAddresses = async(address, remove) => {
-    const data = {
-        "address": address, 
-        "remove": remove
-    }
-    const response = await fetch(`${API_BASE_URL}/v0/users/addresses`, {
-        method: "PUT",
-        headers: {
-            'Content-Type': 'application/json',
-            'bypass-tunnel-reminder': 'true',
-            "auth": initData,
-            "app": "user"
-        },
-        body: JSON.stringify(data)
-    });
-    if (response.ok) {
-        return await response.json();
-    } else {
-        return null
-    }
-}
-
-export { getSelf, updateAddresses, getFullAddress, updateUserOrderData, getByUserId}
+export { getSelf, getFullAddress, updateUserOrderData, getByUserId}
