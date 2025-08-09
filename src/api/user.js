@@ -7,7 +7,6 @@ const getSelf = async() => {
     const response = await fetch(`${API_BASE_URL}/v0/users/self`, {
         method: "GET",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         }
@@ -24,7 +23,6 @@ const getByUserId = async(userId) => {
     const response = await fetch(`${API_BASE_URL}/v0/users/${userId}`, {
         method: "GET",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         }
@@ -46,7 +44,6 @@ const getFullAddress = async(address) => {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         },
@@ -65,7 +62,6 @@ const updateUserOrderData = async(data) => {
         method: "PATCH",
         headers: {
             'Content-Type': 'application/json',
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         },

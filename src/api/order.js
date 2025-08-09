@@ -9,7 +9,6 @@ const getInvoiceLink = async(cartItemsIds) => {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         },
@@ -34,7 +33,6 @@ const getOrdersWithFilters = async(filters, type, sort, q) => {
     const response = await fetch(`${API_BASE_URL}/v0/orders/search_user_orders`, {
         method: "POST",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             'Content-Type': 'application/json',
             "auth": initData,
             "app": "user"
@@ -53,7 +51,6 @@ const getOrderById = async(orderId) => {
     const response = await fetch(`${API_BASE_URL}/v0/orders/${orderId}`, {
         method: "GET",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         }
@@ -74,7 +71,6 @@ const updateOrderStatus = async(orderId, state) => {
     const response = await fetch(`${API_BASE_URL}/v0/orders/change_state`, {
         method: "PATCH",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             'Content-Type': 'application/json',
             "auth": initData,
             "app": "user"
@@ -93,7 +89,6 @@ const getOrdersForInsertReviews = async() => {
     const response = await fetch(`${API_BASE_URL}/v0/orders/insert_reviews`, {
         method: "GET",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         }
@@ -110,7 +105,6 @@ const skipFoodSupReview = async(data) => {
     const response = await fetch(`${API_BASE_URL}/v0/orders/item/skip_review`, {
         method: "PATCH",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             'Content-Type': 'application/json',
             "auth": initData,
             "app": "user"

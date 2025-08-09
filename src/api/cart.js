@@ -6,7 +6,6 @@ const getCart = async () => {
     const response = await fetch(`${API_BASE_URL}/v0/carts/`, {
         method: "GET",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         },
@@ -22,7 +21,6 @@ const getCartItems = async() => {
     const response = await fetch(`${API_BASE_URL}/v0/carts/items`, {
         method: "GET",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         },
@@ -46,7 +44,6 @@ const addCartItem = async (cartId, foodSupId, count) => {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         },
@@ -71,7 +68,6 @@ const updateCartItem = async (cartItemId, cartId, foodSupId, count) => {
         method: "PUT",
         headers: {
             'Content-Type': 'application/json',
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         },
@@ -88,7 +84,6 @@ const deleteCartItem = async(itemId) => {
     const response = await fetch(`${API_BASE_URL}/v0/carts/items/${itemId}`, {
         method: "DELETE",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         },
@@ -105,7 +100,6 @@ const clearCart = async(cartId) => {
     const response = await fetch(`${API_BASE_URL}/v0/carts/clear_cart/${cartId}`, {
         method: "DELETE",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         }

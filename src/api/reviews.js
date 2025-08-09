@@ -8,7 +8,6 @@ const getReviews = async(foodSupId, page) => {
     const response = await fetch(`${API_BASE_URL}/v0/reviews/items/${foodSupId}?page=${page}`, {
         method: "GET",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         }
@@ -25,7 +24,6 @@ const insertReview = async(review) => {
     const response = await fetch(`${API_BASE_URL}/v0/reviews/`, {
         method: "POST",
         headers: {
-            'bypass-tunnel-reminder': 'true' ,
             'Content-Type': 'application/json',
             "auth": initData,
             "app": "user"

@@ -6,7 +6,6 @@ const getFavFoodSups = async() => {
     const response = await fetch(`${API_BASE_URL}/v0/fav_food_sups/items`, {
         method: "GET",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             "auth": initData,
             "app": "user"
         }
@@ -26,7 +25,6 @@ const toggleFavFoodSup = async(foodSupId) => {
     const response = await fetch(`${API_BASE_URL}/v0/fav_food_sups/toggle_item`, {
         method: "POST",
         headers: {
-            'bypass-tunnel-reminder': 'true',
             'Content-Type': 'application/json',
             "auth": initData,
             "app": "user"

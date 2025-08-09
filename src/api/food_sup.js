@@ -7,7 +7,6 @@ const getFoodSupById = async(foodSupId) => {
     const response = await fetch(`${API_BASE_URL}/v0/food_sups/${foodSupId}`, {
         method: "GET",
         headers: {
-            'bypass-tunnel-reminder': 'true' ,
             "auth": initData,
             "app": "user"
         },
