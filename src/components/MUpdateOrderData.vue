@@ -128,7 +128,7 @@ const setCurrentAddress = async(data) => {
     }
     if (addr) {
         router.push("/second-app/create_order")
-        await store.dispatch("UPDATE_USER", {"data":addr, "field": "address", "action": "insert"})
+        await store.dispatch("UPDATE_USER", {"data": addr, "field": "addresses", "action": "insert"})
     } else {
         await showTelegramPopUp("Не удалось распознать адрес")
         return
