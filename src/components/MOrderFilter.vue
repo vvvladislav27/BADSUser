@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 import store from '@/store';
 import { getOrderStateEn } from '@/utils';
 import '@vuepic/vue-datepicker/dist/main.css';
@@ -13,7 +13,6 @@ const filters = computed(() => store.state.searchFiltersForOrders);
 
 const isContextMenuStateVisible = ref(false);
 
-const emit = defineEmits(["filter-updated", "set-filters"])
 
 const buttons = ["all", "created", "packed", "send", "received", "finished", "canceled"]
 
@@ -42,43 +41,12 @@ const fromDate = ref(initialValueFromDate.value);
 const toDate = ref(initialValueToDate.value);
 
 
+defineExpose({
+    currentState,
+    fromDate,
+    toDate
+})
 
-
-
-watch([fromDate, toDate], () => {
-    emitFilters();
-},  {deep: true});
-
-
-
-
-
-const emitFilters = () => {
-    const filterValues = {
-        state: currentState.value,
-        from_date: fromDate.value,
-        to_date: toDate.value
-    };
-    const filtersToEmit = [];
-    if (filterValues.state !== null && filterValues.state !== "all") {
-        filtersToEmit.push({
-            name: "Состояние заказа",
-            state: filterValues.state,
-            from_date: null,
-            to_date: null 
-        });
-    }
-    
-    if (filterValues.from_date || filterValues.to_date) {
-        filtersToEmit.push({
-            name: "Дата",
-            state: null,
-            from_date: typeof filterValues.from_date === 'string' ? filterValues.from_date : filterValues.from_date ? filterValues.from_date.toISOString().split('T')[0] : null,
-            to_date: typeof filterValues.to_date === 'string' ? filterValues.to_date : filterValues.to_date ? filterValues.to_date.toISOString().split('T')[0] : null 
-        });
-    }
-    emit("filter-updated", filtersToEmit);
-};
 
 const toogleIsContextMenuStateVisible = () => {
     isContextMenuStateVisible.value = !isContextMenuStateVisible.value
@@ -88,7 +56,6 @@ const toogleIsContextMenuStateVisible = () => {
 
 const setCurrentValue = (data) => {
     currentState.value = data;
-    emitFilters();
     toogleIsContextMenuStateVisible();
 }
 
@@ -157,7 +124,7 @@ const setCurrentValue = (data) => {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 80vh;
     background-color: rgba(0, 0, 0, 1);
     color: white;
     display: flex;

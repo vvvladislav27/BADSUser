@@ -8,7 +8,6 @@ const activeInput = ref()
 const filters = computed(() => store.state.filters);
 const buttons = [1, 2, 3, 4, 5]
 
-const emit = defineEmits(["close", "filter-updated"])
 let backButtonClickHandler
 
 const closeWindow = () => {
@@ -37,7 +36,6 @@ const setFilterRating = (value_) => {
         vibrate()
         rating.value = value_
     }
-    emitFilters();
 }
 
 const setFilterPackageItemCount = (value_) => {
@@ -47,17 +45,14 @@ const setFilterPackageItemCount = (value_) => {
         vibrate()
         package_item_count.value = value_
     }
-    emitFilters();
 }
 
 const updatePriceFrom = () => {
     priceFrom.value = Math.max(0, priceFrom.value)
-    emitFilters();
 }
 
 const updatePriceTo = () => {
     priceTo.value = Math.max(0, priceTo.value);
-    emitFilters();
 }
 
 
@@ -83,49 +78,17 @@ const package_item_count = ref(initialPackageItemCount.value);
 const priceFrom = ref(initialPrice.value.price_from || 0);
 const priceTo = ref(initialPrice.value.price_to || 0);
 
+defineExpose({
+    rating,
+    package_item_count,
+    priceFrom,
+    priceTo
+
+})
+
 const setActiveInput = (field) => {
     activeInput.value = field
 }
-
-
-const emitFilters = () => {
-    const filterValues = {
-        rating: rating.value || null,
-        priceFrom: priceFrom.value || null,
-        priceTo: priceTo.value || null,
-        packageItemCount: package_item_count.value || null
-    };
-    const filtersToEmit = [];
-    if (filterValues.rating) {
-        filtersToEmit.push({
-            name: "Рейтинг",
-            rating: filterValues.rating,
-            package_item_count: null,
-            price_from: null,
-            price_to: null
-        });
-    }
-    if (filterValues.priceFrom || filterValues.priceTo) {
-        filtersToEmit.push({
-            name: "Цена",
-            rating: null,
-            package_item_count: null,
-            price_from: filterValues.priceFrom,
-            price_to: filterValues.priceTo
-        });
-    }
-    if (filterValues.packageItemCount) {
-        filtersToEmit.push({
-            name: "Количество",
-            rating: null,
-            package_item_count: filterValues.packageItemCount,
-            price_from: null,
-            price_to: null
-        });
-    }
-    emit("filter-updated", filtersToEmit);
-};
-
 
 </script>
 
