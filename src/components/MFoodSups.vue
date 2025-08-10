@@ -39,6 +39,7 @@ const review = ref();
 
 let mainButtonClickHandler;
 let secondaryButtonClickHandler;
+let backButtonClickHandler;
 
 
 onMounted(() => {
@@ -187,6 +188,19 @@ watch([sort, type, filters, search], () => {
     store.dispatch("GET_AND_SET_PRODUCTS")
 },  {deep: true});
 
+
+
+watch(isContextMenuVisible, () => {
+    backButton.offClick(backButtonClickHandler);
+    if(!isContextMenuVisible.value) {
+        backButton.hide();
+    } else {
+        backButtonClickHandler = () => {
+            isContextMenuVisible.value = false;
+        };
+        backButton.onClick(backButtonClickHandler);
+    }
+})
 
 
 const toggleContextMenuVisible = () => {
