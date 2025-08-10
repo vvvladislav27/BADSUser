@@ -197,6 +197,8 @@ watch(isContextMenuVisible, () => {
         };
         backButton.onClick(backButtonClickHandler);
         backButton.show();
+        hideButton(mainButton);
+        hideButton(secondaryButton);
     } else {
         backButton.hide();
     }
