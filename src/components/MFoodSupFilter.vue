@@ -1,9 +1,9 @@
 <script setup>
-import { ref, computed, onUnmounted, onBeforeMount } from 'vue';
+import { ref, computed, onBeforeUnmount, onBeforeMount } from 'vue';
 
 import store from '@/store';
 import { vibrate } from '@/utils';
-import { backButton, mainButton, secondaryButton, setupButton } from '@/tg';
+import { backButton, mainButton, secondaryButton, setupButton, hideButton } from '@/tg';
 
 const activeInput = ref()
 const filters = computed(() => store.state.filters);
@@ -47,12 +47,18 @@ const setFilters = async() => {
     if (filtersList.value) {
         await store.dispatch("SET_FILTERS", {"filters": filtersList.value, "type": "food_sups"});
     };
-    emit("close");
+    close();
 }
 
 
 const resetFilters = () => {
     store.dispatch("RESET_FILTERS", "food_sups");
+    close();
+}
+
+const close = () => {
+    hideButton(mainButton)
+    hideButton(secondaryButton)
     emit("close");
 }
 
@@ -69,18 +75,14 @@ onBeforeMount(() => {
         setupButton(secondaryButton, "Сбросить", secondaryButtonClickHandler);
     }
     backButtonClickHandler = () => {
-        emit("close");
+        close();
     };
     backButton.onClick(backButtonClickHandler);
     backButton.show();
 })
 
 
-onUnmounted(() => {
-    mainButton.offClick(mainButtonClickHandler);
-    secondaryButton.offClick(secondaryButtonClickHandler);
-    mainButton.hide();
-    secondaryButton.hide();
+onBeforeUnmount(() => {
     backButton.offClick(backButtonClickHandler);
 })
 
