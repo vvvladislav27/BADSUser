@@ -259,7 +259,7 @@ const addReview = async() => {
 
 
 const toogleIsFilterFisible = () => {
-    isFoodSupFiltersVisible.value = !isContextMenuVisible.value
+    isFoodSupFiltersVisible.value = !isFoodSupFiltersVisible.value
 }
 
 </script>
