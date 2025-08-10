@@ -198,14 +198,7 @@ watch(isContextMenuVisible, () => {
 })
 
 watch(isFoodSupFiltersVisible, () => {
-     if (isFoodSupFiltersVisible.value) {
-        backButtonClickHandler = () => {
-            isFoodSupFiltersVisible.value = false;
-        }
-        backButton.onClick(backButtonClickHandler);
-        backButton.show();
-    } else {
-        backButton.offClick(backButtonClickHandler);
+    if (!isFoodSupFiltersVisible.value) {
         backButton.hide();
     }
     updateTgButtons();
@@ -265,6 +258,10 @@ const addReview = async() => {
 }
 
 
+const toogleIsFilterFisible = () => {
+    isFoodSupFiltersVisible.value = !isContextMenuVisible.value
+}
+
 </script>
 
 <template>
@@ -315,6 +312,7 @@ const addReview = async() => {
     </m-context-menu>
     <m-food-sup-filter 
         ref="filter"
+        @close="toogleIsFilterFisible"
         v-if="isFoodSupFiltersVisible">
     </m-food-sup-filter>
 </template>
