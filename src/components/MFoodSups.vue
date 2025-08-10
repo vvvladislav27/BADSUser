@@ -116,7 +116,6 @@ const resetFilters = () => {
 const updateTgButtons = () => {
     hideButton(mainButton);
     hideButton(secondaryButton);
-    hideButton(backButton);
     mainButton.offClick(mainButtonClickHandler);
     secondaryButton.offClick(secondaryButtonClickHandler);
 
@@ -191,13 +190,15 @@ watch([sort, type, filters, search], () => {
 
 
 watch(isContextMenuVisible, () => {
+    backButton.offClick(backButtonClickHandler);
     if (isContextMenuVisible.value) {
-        backButton.offClick(backButtonClickHandler);
         backButtonClickHandler = () => {
             isContextMenuVisible.value = false;
         };
         backButton.onClick(backButtonClickHandler);
-        backButton.show()
+        backButton.show();
+    } else {
+        backButton.hide();
     }
 })
 
