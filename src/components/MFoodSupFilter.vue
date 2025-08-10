@@ -1,18 +1,73 @@
 <script setup>
-import { ref, computed, onUnmounted, onMounted, onBeforeMount } from 'vue';
+import { ref, computed, onUnmounted, onBeforeMount } from 'vue';
+
 import store from '@/store';
 import { vibrate } from '@/utils';
-import { backButton } from '@/tg';
+import { backButton, mainButton, secondaryButton, setupButton } from '@/tg';
 
 const activeInput = ref()
 const filters = computed(() => store.state.filters);
 const buttons = [1, 2, 3, 4, 5]
+const filtersList = ref([]); 
 
+let mainButtonClickHandler;
+let secondaryButtonClickHandler;
 let backButtonClickHandler
 
 const emit = defineEmits(["close"])
 
+
+const setFilters = async() => {
+    const filterData = [];
+    const data = {
+        rating: filterRef.value.rating || null,
+        priceFrom: filterRef.value.priceFrom || null,
+        priceTo: filterRef.value.priceTo || null,
+        package_item_count: filterRef.value.package_item_count || null
+    };
+    const addFilter = (name, rating, priceFrom, priceTo, package_item_count) => {
+        filterData.push({
+            name: name,
+            rating: rating,
+            package_item_count: package_item_count,
+            price_from: priceFrom,
+            price_to: priceTo
+        });
+    };
+    if (data.rating) {
+        addFilter('Рейтинг', data.rating, null, null, null);
+    };
+    if (data.priceFrom || data.priceTo) {
+        addFilter("Цена", null, data.priceFrom, data.priceTo, null);
+    };
+    if (data.package_item_count) {
+        addFilter("Количество", null, null, null, data.package_item_count);
+    };
+    filtersList.value = filterData;
+    if (filtersList.value) {
+        await store.dispatch("SET_FILTERS", {"filters": filtersList.value, "type": "food_sups"});
+    };
+    emit("close");
+}
+
+
+const resetFilters = () => {
+    store.dispatch("RESET_FILTERS", "food_sups");
+    emit("close");
+}
+
+
 onBeforeMount(() => {
+    mainButtonClickHandler = () => {
+        setFilters();
+    }
+    setupButton(mainButton, "Применить", mainButtonClickHandler);
+    if (filters.value.length > 0) {
+        secondaryButtonClickHandler = () => {
+            resetFilters();
+        }
+        setupButton(secondaryButton, "Сбросить", secondaryButtonClickHandler);
+    }
     backButtonClickHandler = () => {
         emit("close");
     };
@@ -20,7 +75,12 @@ onBeforeMount(() => {
     backButton.show();
 })
 
+
 onUnmounted(() => {
+    mainButton.offClick(mainButtonClickHandler);
+    secondaryButton.offClick(secondaryButtonClickHandler);
+    mainButton.hide();
+    secondaryButton.hide();
     backButton.offClick(backButtonClickHandler);
 })
 
@@ -74,13 +134,6 @@ const package_item_count = ref(initialPackageItemCount.value);
 const priceFrom = ref(initialPrice.value.price_from || 0);
 const priceTo = ref(initialPrice.value.price_to || 0);
 
-defineExpose({
-    rating,
-    package_item_count,
-    priceFrom,
-    priceTo
-
-})
 
 const setActiveInput = (field) => {
     activeInput.value = field

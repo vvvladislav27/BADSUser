@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch, useTemplateRef } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { router } from '@/router';
 import store from '@/store';
 import MContextMenu from './MContextMenu.vue';
@@ -30,10 +30,6 @@ const isVideoLoad = computed(() => store.state.isVideoLoaded);
 const isDataLoaded = computed(() => store.state.isDataLoaded);
 
 const buttons = ["name", "price", "rating"];
-
-const filterRef = useTemplateRef('filter')
-
-const searchFilters = ref([]); 
 const review = ref();
 
 
@@ -60,70 +56,21 @@ onUnmounted(() =>{
 });
 
 
-const openFilters = () => {
-    isFoodSupFiltersVisible.value = true;
-};
+watch(isFoodSupFiltersVisible, () => {
+    if (!isFoodSupFiltersVisible.value) {
+        backButton.hide();
+        updateTgButtons();
+    } else {
+        hideButton(mainButton);
+        hideButton(secondaryButton);
+        mainButton.offClick(mainButtonClickHandler);
+        secondaryButton.offClick(secondaryButtonClickHandler);  
+    }
+})
 
-
-const setFilters = async() => {
-    const filterData = []
-    const data = {
-        rating: filterRef.value.rating || null,
-        priceFrom: filterRef.value.priceFrom || null,
-        priceTo: filterRef.value.priceTo || null,
-        package_item_count: filterRef.value.package_item_count || null
-    }
-    const addFilter = (name, rating, priceFrom, priceTo, package_item_count) => {
-        filterData.push({
-            name: name,
-            rating: rating,
-            package_item_count: package_item_count,
-            price_from: priceFrom,
-            price_to: priceTo
-        });
-    };
-    if (data.rating) {
-        addFilter('Рейтинг', data.rating, null, null, null)
-    }
-    if (data.priceFrom || data.priceTo) {
-        addFilter("Цена", null, data.priceFrom, data.priceTo, null)
-    }
-    if (data.package_item_count) {
-        addFilter("Количество", null, null, null, data.package_item_count)
-    }
-    searchFilters.value = filterData
-    if (searchFilters.value) {
-        await store.dispatch("SET_FILTERS", {"filters": searchFilters.value, "type": "food_sups"});;
-    }
-    isFoodSupFiltersVisible.value = false;
-}
-
-
-const resetFilters = () => {
-    store.dispatch("RESET_FILTERS", "food_sups")
-    isFoodSupFiltersVisible.value = false;
-}
 
 
 const updateTgButtons = () => {
-    hideButton(mainButton);
-    hideButton(secondaryButton);
-    mainButton.offClick(mainButtonClickHandler);
-    secondaryButton.offClick(secondaryButtonClickHandler);
-
-    if (isFoodSupFiltersVisible.value) {
-        mainButtonClickHandler = () => {
-            setFilters();
-        }
-        setupButton(mainButton, "Применить", mainButtonClickHandler);
-        if (filters.value.length > 0) {
-            secondaryButtonClickHandler = () => {
-                resetFilters();
-            }
-            setupButton(secondaryButton, "Сбросить", secondaryButtonClickHandler);
-        }
-        return;
-    } 
     if (orderItemsForReviews.value.length > 0) {
         mainButtonClickHandler = () => {
             addReview()
@@ -197,12 +144,6 @@ watch(isContextMenuVisible, () => {
     }
 })
 
-watch(isFoodSupFiltersVisible, () => {
-    if (!isFoodSupFiltersVisible.value) {
-        backButton.hide();
-    }
-    updateTgButtons();
-})
 
 
 const toggleContextMenuVisible = () => {
@@ -285,7 +226,7 @@ const toogleIsFilterFisible = () => {
         >
         <m-search 
             :what="'food_sup'"
-            @openFilters="openFilters">
+            @openFilters="toogleIsFilterFisible">
         </m-search>
         <div class="m-food-sups-header">
             <div class="m-food-sups-header-name">БАД</div>
@@ -311,7 +252,6 @@ const toogleIsFilterFisible = () => {
         >
     </m-context-menu>
     <m-food-sup-filter 
-        ref="filter"
         @close="toogleIsFilterFisible"
         v-if="isFoodSupFiltersVisible">
     </m-food-sup-filter>
