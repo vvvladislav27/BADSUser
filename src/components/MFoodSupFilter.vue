@@ -90,7 +90,6 @@ const setActiveInput = (field) => {
 
 <template>
     <div class="m-food-sup-card-filter-container">
-        <button style="width: 30px; height: 30px;" @click="backButtonClickHandler"></button>
         <div class="m-food-sup-card-filter-content">
             <div class="m-food-sup-card-filter-title">Мин. рейтинг</div>
             <div class="m-food-sup-card-filter-raiting-buttons">
