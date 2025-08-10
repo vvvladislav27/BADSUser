@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onUnmounted, onMounted } from 'vue';
+import { ref, computed, onUnmounted, onMounted, onBeforeMount } from 'vue';
 import store from '@/store';
 import { vibrate } from '@/utils';
 import { backButton } from '@/tg';
@@ -10,23 +10,18 @@ const buttons = [1, 2, 3, 4, 5]
 
 let backButtonClickHandler
 
-const closeWindow = () => {
-    emit("close")
-};
 
-onMounted(() => {
+onBeforeMount(() => {
     backButton.show();
-    backButtonClickHandler = function() {
-        closeWindow();
+    backButtonClickHandler = () => {
+        emit("close");
     };
     backButton.onClick(backButtonClickHandler);
-});
-
-
-onUnmounted(() => {
-    backButton.offClick(backButtonClickHandler)
 })
 
+onUnmounted(() => {
+    backButton.offClick(backButtonClickHandler);
+})
 
 
 const setFilterRating = (value_) => {
