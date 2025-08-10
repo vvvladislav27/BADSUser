@@ -201,6 +201,7 @@ watch(isContextMenuVisible, () => {
         hideButton(secondaryButton);
     } else {
         backButton.hide();
+        updateTgButtons();
     }
 })
 
