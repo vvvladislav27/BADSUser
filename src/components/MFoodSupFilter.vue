@@ -10,13 +10,14 @@ const buttons = [1, 2, 3, 4, 5]
 
 let backButtonClickHandler
 
+const emit = defineEmits(["close"])
 
 onBeforeMount(() => {
-    backButton.show();
     backButtonClickHandler = () => {
         emit("close");
     };
     backButton.onClick(backButtonClickHandler);
+    backButton.show();
 })
 
 onUnmounted(() => {
@@ -89,6 +90,7 @@ const setActiveInput = (field) => {
 
 <template>
     <div class="m-food-sup-card-filter-container">
+        <button style="width: 30px; height: 30px;" @click="backButtonClickHandler"></button>
         <div class="m-food-sup-card-filter-content">
             <div class="m-food-sup-card-filter-title">Мин. рейтинг</div>
             <div class="m-food-sup-card-filter-raiting-buttons">
