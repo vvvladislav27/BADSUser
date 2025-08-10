@@ -20,10 +20,10 @@ const emit = defineEmits(["close"])
 const setFilters = async() => {
     const filterData = [];
     const data = {
-        rating: filterRef.value.rating || null,
-        priceFrom: filterRef.value.priceFrom || null,
-        priceTo: filterRef.value.priceTo || null,
-        package_item_count: filterRef.value.package_item_count || null
+        rating: rating.value || null,
+        priceFrom: priceFrom.value || null,
+        priceTo: priceTo.value || null,
+        package_item_count: package_item_count.value || null
     };
     const addFilter = (name, rating, priceFrom, priceTo, package_item_count) => {
         filterData.push({
@@ -143,6 +143,7 @@ const setActiveInput = (field) => {
 
 <template>
     <div class="m-food-sup-card-filter-container">
+        <button style="width: 30px; height: 30px;" @click="setFilters"></button>
         <div class="m-food-sup-card-filter-content">
             <div class="m-food-sup-card-filter-title">Мин. рейтинг</div>
             <div class="m-food-sup-card-filter-raiting-buttons">
