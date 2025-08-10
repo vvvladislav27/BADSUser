@@ -64,6 +64,7 @@ const close = () => {
 
 
 onBeforeMount(() => {
+    filtersList.value = [];
     mainButtonClickHandler = () => {
         setFilters();
     }
