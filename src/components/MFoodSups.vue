@@ -199,7 +199,7 @@ const addReview = async() => {
 }
 
 
-const toogleIsFilterFisible = () => {
+const toogleIsFilterVisible = () => {
     isFoodSupFiltersVisible.value = !isFoodSupFiltersVisible.value
 }
 
@@ -226,7 +226,7 @@ const toogleIsFilterFisible = () => {
         >
         <m-search 
             :what="'food_sup'"
-            @openFilters="toogleIsFilterFisible">
+            @openFilters="toogleIsFilterVisible">
         </m-search>
         <div class="m-food-sups-header">
             <div class="m-food-sups-header-name">БАД</div>
@@ -252,7 +252,7 @@ const toogleIsFilterFisible = () => {
         >
     </m-context-menu>
     <m-food-sup-filter 
-        @close="toogleIsFilterFisible"
+        @close="toogleIsFilterVisible"
         v-if="isFoodSupFiltersVisible">
     </m-food-sup-filter>
 </template>
