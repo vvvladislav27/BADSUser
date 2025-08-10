@@ -200,6 +200,7 @@ watch(isContextMenuVisible, () => {
         };
         backButton.onClick(backButtonClickHandler);
     }
+    updateTgButtons()
 })
 
 
