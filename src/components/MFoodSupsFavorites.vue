@@ -90,7 +90,7 @@ const updateTgButtons = () => {
 
 const setFilters = async() => {
     if (searchFilters.value) {
-        await store.dispatch("SET_FILTERS", {"filters": searchFilters, "type": "food_sups"});
+        await store.dispatch("SET_FILTERS", {"filters": searchFilters.value, "type": "food_sups"});
     }
     isFoodSupFiltersVisible.value = false;
     updateTgButtons();
