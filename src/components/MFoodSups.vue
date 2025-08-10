@@ -92,7 +92,7 @@ const updateTgButtons = () => {
         }
         setupButton(mainButton, "Кабинет", mainButtonClickHandler);
         if (hasCartItems) {
-            secondaryButtonClickHandler = function() {
+            secondaryButtonClickHandler = () => {
                 store.dispatch("RESET_SELECTED_ITEMS")
                 router.push("/second-app/cart");
             };
