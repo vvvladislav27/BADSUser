@@ -24,7 +24,6 @@ const isSearchInputActive = computed(() => store.state.isSearchInputActive);
 const arrow = computed(() => (sort.value === "desc" ? "⬇" : "⬆"));
 const isContextMenuVisible = ref(false);
 const isFoodSupFiltersVisible = ref(false);
-const searchFilters = ref(); 
 const buttons = ["name", "price", "rating"];
 
 
@@ -52,8 +51,6 @@ onBeforeMount(async() => {
 
 onMounted(() => {
     setBackButtonClickHandler();
-    backButton.show();
-    updateTgButtons();
 });
 
 
@@ -66,55 +63,18 @@ onBeforeUnmount(() =>{
 });
 
 
-
-const updateTgButtons = () => {
-    mainButton.offClick(mainButtonClickHandler);
-    secondaryButton.offClick(secondaryButtonClickHandler);
-    hideButton(mainButton);
-    hideButton(secondaryButton);
-    if (isFoodSupFiltersVisible.value) {
-        mainButtonClickHandler = () => {
-            setFilters();
-        }
-        setupButton(mainButton, "Применить", mainButtonClickHandler);
-        if (filters.value.length > 0) {
-            secondaryButtonClickHandler = () => {
-                resetFilters();
-            }
-            setupButton(secondaryButton, "Сбросить", secondaryButtonClickHandler);
-        }
+watch(isFoodSupFiltersVisible, () => {
+    if(!isFoodSupFiltersVisible.value) {
+        hideButton(mainButton);
+        hideButton(secondaryButton);
+        mainButton.offClick(mainButtonClickHandler);
+        secondaryButton.offClick(secondaryButtonClickHandler);
     }
+})
+
+const toogleIsFilterVisible = () => {
+    isFoodSupFiltersVisible.value = !isFoodSupFiltersVisible.value
 }
-
-
-
-const setFilters = async() => {
-    if (searchFilters.value) {
-        await store.dispatch("SET_FILTERS", {"filters": searchFilters.value, "type": "food_sups"});
-    }
-    isFoodSupFiltersVisible.value = false;
-    updateTgButtons();
-}
-
-const resetFilters = () => {
-    store.dispatch("RESET_FILTERS", "food_sups")
-    isFoodSupFiltersVisible.value = false;
-    updateTgButtons();
-}
-
-
-const openFilters = () => {
-    isFoodSupFiltersVisible.value = true
-    if (isFoodSupFiltersVisible.value) {
-        backButton.offClick(backButtonClickHandler)
-        backButtonClickHandler = () => {
-            isFoodSupFiltersVisible.value = false;
-        }
-        backButton.onClick(backButtonClickHandler)
-    }
-    updateTgButtons()
-}
-
 
 
 watch([sort, type, filters, search], async() => {
@@ -138,7 +98,6 @@ const setBackButtonClickHandler = () => {
 watch(isFoodSupFiltersVisible, () => {
     if(!isFoodSupFiltersVisible.value) {
         setBackButtonClickHandler();
-        updateTgButtons();
     }
 })
 
@@ -170,11 +129,6 @@ const toogleIsSearchInputActive = () => {
 }
 
 
-const updateFilters = (filters) => {
-    searchFilters.value = filters
-}
-
-
 const setSort = (type) => {
     store.dispatch("SET_SORT", type)
 }
@@ -188,7 +142,7 @@ const setSort = (type) => {
         @click="toogleIsSearchInputActive"
         >
         <m-search 
-            @openFilters="openFilters"
+            @openFilters="toogleIsFilterVisible"
             :what="'food_sup'">
         </m-search>
         <div class="m-food-sups-favorites-header">
@@ -227,9 +181,8 @@ const setSort = (type) => {
         >
     </m-context-menu>
     <m-food-sup-filter 
-        v-if="isFoodSupFiltersVisible"
-        @filter-updated="updateFilters"
-        @set_filter="setFilters">
+        @close="toogleIsFilterVisible"
+        v-if="isFoodSupFiltersVisible">
     </m-food-sup-filter>
 </template>
 
