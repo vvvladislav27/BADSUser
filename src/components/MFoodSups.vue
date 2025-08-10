@@ -191,16 +191,14 @@ watch([sort, type, filters, search], () => {
 
 
 watch(isContextMenuVisible, () => {
-    backButton.offClick(backButtonClickHandler);
-    if(!isContextMenuVisible.value) {
-        backButton.hide();
-    } else {
+    if (isContextMenuVisible.value) {
+        backButton.offClick(backButtonClickHandler);
         backButtonClickHandler = () => {
             isContextMenuVisible.value = false;
         };
         backButton.onClick(backButtonClickHandler);
+        backButton.show()
     }
-    updateTgButtons()
 })
 
 
