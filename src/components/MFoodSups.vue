@@ -190,7 +190,6 @@ watch([sort, type, filters, search], () => {
 
 
 watch(isContextMenuVisible, () => {
-    backButton.offClick(backButtonClickHandler);
     if (isContextMenuVisible.value) {
         backButtonClickHandler = () => {
             isContextMenuVisible.value = false;
@@ -200,9 +199,24 @@ watch(isContextMenuVisible, () => {
         hideButton(mainButton);
         hideButton(secondaryButton);
     } else {
+        backButton.offClick(backButtonClickHandler);
         backButton.hide();
         updateTgButtons();
     }
+})
+
+watch(isFoodSupFiltersVisible, () => {
+     if (isFoodSupFiltersVisible.value) {
+        backButtonClickHandler = () => {
+            isFoodSupFiltersVisible.value = false;
+        }
+        backButton.onClick(backButtonClickHandler);
+        backButton.show();
+    } else {
+        backButton.offClick(backButtonClickHandler);
+        backButton.hide();
+    }
+    updateTgButtons();
 })
 
 
