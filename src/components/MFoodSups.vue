@@ -102,7 +102,6 @@ const setFilters = async() => {
 const resetFilters = () => {
     store.dispatch("RESET_FILTERS", "food_sups")
     isFoodSupFiltersVisible.value = false;
-    updateTgButtons();
 }
 
 
