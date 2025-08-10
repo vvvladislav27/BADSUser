@@ -96,7 +96,6 @@ const setFilters = async() => {
         await store.dispatch("SET_FILTERS", {"filters": searchFilters.value, "type": "food_sups"});;
     }
     isFoodSupFiltersVisible.value = false;
-    updateTgButtons();
 }
 
 
