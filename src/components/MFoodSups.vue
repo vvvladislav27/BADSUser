@@ -59,16 +59,10 @@ onUnmounted(() =>{
     toogleIsSearchInputActive();
 });
 
+
 const openFilters = () => {
-    isFoodSupFiltersVisible.value = true
-    updateTgButtons()
-}
-
-
-const closeFilters = () => {
-    isFoodSupFiltersVisible.value = false;
-    updateTgButtons();
-}
+    isFoodSupFiltersVisible.value = true;
+};
 
 
 const setFilters = async() => {
