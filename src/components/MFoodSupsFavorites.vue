@@ -9,7 +9,7 @@ import { searchData } from '@/api/search';
 
 import { getSortedNameText, getImage, formatAmount } from '@/utils';
 import { router } from '@/router';
-import { mainButton, secondaryButton, backButton, hideButton, setupButton } from '@/tg';
+import { backButton} from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 
@@ -27,8 +27,6 @@ const isFoodSupFiltersVisible = ref(false);
 const buttons = ["name", "price", "rating"];
 
 
-let mainButtonClickHandler;
-let secondaryButtonClickHandler;
 let backButtonClickHandler;
 
 
@@ -55,22 +53,9 @@ onMounted(() => {
 
 
 onBeforeUnmount(() =>{
-    mainButton.offClick(mainButtonClickHandler);
-    secondaryButton.offClick(secondaryButtonClickHandler);
-    mainButton.hide();
-    secondaryButton.hide();
     backButton.offClick(backButtonClickHandler);
 });
 
-
-watch(isFoodSupFiltersVisible, () => {
-    if(!isFoodSupFiltersVisible.value) {
-        hideButton(mainButton);
-        hideButton(secondaryButton);
-        mainButton.offClick(mainButtonClickHandler);
-        secondaryButton.offClick(secondaryButtonClickHandler);
-    }
-})
 
 const toogleIsFilterVisible = () => {
     isFoodSupFiltersVisible.value = !isFoodSupFiltersVisible.value
