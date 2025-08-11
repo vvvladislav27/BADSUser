@@ -57,8 +57,10 @@ const resetFilters = () => {
 }
 
 const close = () => {
-    hideButton(mainButton)
-    hideButton(secondaryButton)
+    mainButton.offClick(mainButtonClickHandler);
+    secondaryButton.offClick(secondaryButtonClickHandler);
+    hideButton(mainButton);
+    hideButton(secondaryButton);
     emit("close");
 }
 
