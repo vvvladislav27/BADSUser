@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onBeforeMount, onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeMount, onBeforeUnmount, ref, onMounted } from 'vue';
 import store from '@/store';
 import { router } from '@/router';
 import { getByUserId } from '@/api/user';
@@ -29,13 +29,12 @@ onBeforeMount(async() => {
         router.push("/second-app/")
     }
     backButton.onClick(backButtonClickHandler);
-    if (!backButton.isVisible) {
-        backButton.show();
-    }
+})
+
+onMounted(() => {
     mainButton.show();
     secondaryButton.show();
 })
-
 
 onBeforeUnmount(() => {
     backButton.offClick(backButtonClickHandler)
