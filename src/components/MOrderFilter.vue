@@ -25,7 +25,7 @@ const emit = defineEmits(["close"])
 const setFilters = async() => {
     const filterData = []
     const data = {
-        state: state.value || null,
+        state: currentState.value || null,
         from_date: fromDate.value || null,
         to_date: toDate.value || null
     };
