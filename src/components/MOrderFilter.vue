@@ -1,20 +1,102 @@
 <script setup>
 
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeMount, onBeforeUnmount } from 'vue';
 import store from '@/store';
 import { getOrderStateEn } from '@/utils';
 import '@vuepic/vue-datepicker/dist/main.css';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import MContextMenu from './MContextMenu.vue';
+import { mainButton, secondaryButton, hideButton } from '@/tg';
 const format = "dd.MM.yyyy"
 
-
+const filterList = ref([]);
+const buttons = ["all", "created", "packed", "send", "received", "finished", "canceled"]
 const filters = computed(() => store.state.searchFiltersForOrders);
 
 const isContextMenuStateVisible = ref(false);
 
+let mainButtonClickHandler;
+let secondaryButtonClickHandler;
+let backButtonClickHandler
 
-const buttons = ["all", "created", "packed", "send", "received", "finished", "canceled"]
+const emit = defineEmits(["close"])
+
+
+const setFilters = async() => {
+    const filterData = []
+    const data = {
+        state: state.value || null,
+        from_date: fromDate.value || null,
+        to_date: toDate.value || null
+    };
+    const addFilter = (name, state, from_date, to_date) => {
+        filterData.push({
+            name: name,
+            state: state,
+            from_date: from_date,
+            to_date: to_date
+        });
+    };
+    if (data.state && data.state !== "all") {
+        addFilter("Состояние заказа", data.state, null, null)
+    }
+    if (data.from_date || data.to_date) {
+        addFilter(
+            "Дата",
+             null,
+             typeof data.from_date === 'string' ? data.from_date : data.from_date ? data.from_date.toISOString().split('T')[0] : null,
+             typeof data.to_date === 'string' ? data.to_date : data.to_date ? data.to_date.toISOString().split('T')[0] : null 
+        )
+    }
+    filterList.value = filterData
+    if (filterList.value) {
+        await store.dispatch("SET_FILTERS", {"filters": filterList.value, "type": "orders"});
+    }
+    close();
+}
+
+const resetFilters = () => {
+    store.dispatch("RESET_FILTERS", "orders")
+    close();
+}
+
+const close = () => {
+    mainButton.offClick(mainButtonClickHandler);
+    secondaryButton.offClick(secondaryButtonClickHandler);
+    hideButton(mainButton);
+    hideButton(secondaryButton);
+    emit("close");
+}
+
+
+onBeforeMount(() => {
+    mainButtonClickHandler = () => {
+        setFilters();
+    }
+    setupButton(mainButton, "Применить", mainButtonClickHandler);
+    if (filters.value.length > 0) {
+        secondaryButtonClickHandler = () => {
+            resetFilters();
+        }
+        setupButton(secondaryButton, "Сбросить", secondaryButtonClickHandler);
+    }
+    backButtonClickHandler = () => {
+        close();
+    };
+    backButton.onClick(backButtonClickHandler);
+    backButton.show();
+})
+
+onBeforeUnmount(() => {
+    backButton.offClick(backButtonClickHandler);
+})
+
+
+const setCurrentValue = (data) => {
+    currentState.value = data;
+    toogleIsContextMenuStateVisible();
+}
+
 
 
 const initialValueStateOrder = computed(() => {
@@ -41,26 +123,11 @@ const fromDate = ref(initialValueFromDate.value);
 const toDate = ref(initialValueToDate.value);
 
 
-defineExpose({
-    currentState,
-    fromDate,
-    toDate
-})
 
 
 const toogleIsContextMenuStateVisible = () => {
     isContextMenuStateVisible.value = !isContextMenuStateVisible.value
 }
-
-
-
-const setCurrentValue = (data) => {
-    currentState.value = data;
-    toogleIsContextMenuStateVisible();
-}
-
-
-
 
 
 </script>

@@ -1,12 +1,12 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, watch, onBeforeMount, nextTick, useTemplateRef } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch, onBeforeMount, nextTick } from 'vue';
 
 import {getSortedNameText, formatAmount, getOrderStateTextRu, getImage } from '@/utils';
 import { searchData } from '@/api/search';
 import MSearch from './MSearch.vue';
 import MContextMenu from './MContextMenu.vue';
 import MOrderFilter from './MOrderFilter.vue';
-import { mainButton, secondaryButton, backButton, hideButton, setupButton} from '@/tg';
+import { backButton} from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 
@@ -25,13 +25,9 @@ const isSearchInputActive = computed(() => store.state.isSearchInputActive);
 const arrow = computed(() => (sort.value === "desc" ? "⬇" : "⬆"));
 const isContextMenuVisible = ref(false);
 const isOrderFiltersVisible = ref(false);
-const searchFilters = ref([]); 
 const buttons = ["created_date", "cost", "item_count", "unique_item_count"];
 
-const filterRef = useTemplateRef('filter')
 
-let mainButtonClickHandler;
-let secondaryButtonClickHandler;
 let backButtonClickHandler;
 
 const orders = ref();
@@ -51,91 +47,18 @@ onBeforeMount(async() => {
 
 onMounted(() => {
     setBackButtonClickHandler();
-    backButton.show();
 });
 
 
 onBeforeUnmount(() =>{
-    mainButton.offClick(mainButtonClickHandler);
-    mainButton.hide();
     backButton.offClick(backButtonClickHandler);
 });
 
 
-const updateTgButtons = () => {
-    mainButton.offClick(mainButtonClickHandler);
-    secondaryButton.offClick(secondaryButtonClickHandler);
-    hideButton(mainButton)
-    hideButton(secondaryButton)
-    if (isOrderFiltersVisible.value) {
-        mainButtonClickHandler = () => {
-            setFilters();
-        }
-        setupButton(mainButton, "Применить", mainButtonClickHandler);
-        if(filters.value.length > 0) {
-            secondaryButtonClickHandler = () => {
-                resetFilters();
-            }
-            setupButton(secondaryButton, "Сбросить", secondaryButtonClickHandler);
-        }
-    }
+
+const toogleIsFilterVisible = () => {
+    isOrderFiltersVisible.value = !isContextMenuVisible.value
 }
-
-
-const setFilters = async() => {
-    const filterData = []
-    const data = {
-        state: filterRef.value.currentState || null,
-        from_date: filterRef.value.fromDate || null,
-        to_date: filterRef.value.toDate || null
-    };
-    const addFilter = (name, state, from_date, to_date) => {
-        filterData.push({
-            name: name,
-            state: state,
-            from_date: from_date,
-            to_date: to_date
-        });
-    };
-    if (data.state && data.state !== "all") {
-        addFilter("Состояние заказа", data.state, null, null)
-    }
-    if (data.from_date || data.to_date) {
-        addFilter(
-            "Дата",
-             null,
-             typeof data.from_date === 'string' ? data.from_date : data.from_date ? data.from_date.toISOString().split('T')[0] : null,
-             typeof data.to_date === 'string' ? data.to_date : data.to_date ? data.to_date.toISOString().split('T')[0] : null 
-        )
-    }
-    searchFilters.value = filterData
-    if (searchFilters.value) {
-        await store.dispatch("SET_FILTERS", {"filters": searchFilters.value, "type": "orders"});
-    }
-    isOrderFiltersVisible.value = false;
-    updateTgButtons();
-}
-
-const resetFilters = () => {
-    store.dispatch("RESET_FILTERS", "orders")
-    isOrderFiltersVisible.value = false;
-    updateTgButtons();
-}
-
-
-
-const openFilters = () => {
-    isOrderFiltersVisible.value = true
-    if (isOrderFiltersVisible.value) {
-        backButton.offClick(backButtonClickHandler)
-        backButtonClickHandler = () => {
-            isOrderFiltersVisible.value = false;
-        }
-        backButton.onClick(backButtonClickHandler)
-    }
-    updateTgButtons()
-}
-
 
 
 watch([sort, type, filters, search], async() => {
@@ -160,7 +83,8 @@ const setBackButtonClickHandler = () => {
 watch(isOrderFiltersVisible, () => {
     if(!isOrderFiltersVisible.value) {
         setBackButtonClickHandler();
-        updateTgButtons();
+    } else {
+        backButton.offClick(backButtonClickHandler);
     }
 })
 
@@ -202,7 +126,7 @@ const setSort = (type) => {
         >
         <m-search 
             :what="'orders'"
-            @openFilters="openFilters">
+            @openFilters="toogleIsFilterVisible">
         </m-search>
         <div class="m-orders-header">
             <div @click="toggleContextMenuVisible">{{ getSortedNameText(type) }} {{ arrow }}</div>
@@ -238,7 +162,7 @@ const setSort = (type) => {
         @type="setSort">
     </m-context-menu>
     <m-order-filter
-        ref="filter"
+        @close="toogleIsFilterVisible"
         v-if=isOrderFiltersVisible>
     </m-order-filter>
 </template>
