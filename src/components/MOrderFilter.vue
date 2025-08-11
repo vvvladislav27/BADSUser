@@ -6,7 +6,7 @@ import { getOrderStateEn } from '@/utils';
 import '@vuepic/vue-datepicker/dist/main.css';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import MContextMenu from './MContextMenu.vue';
-import { mainButton, secondaryButton, hideButton } from '@/tg';
+import { mainButton, secondaryButton, hideButton, setupButton } from '@/tg';
 const format = "dd.MM.yyyy"
 
 const filterList = ref([]);
