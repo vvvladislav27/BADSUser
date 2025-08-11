@@ -39,6 +39,9 @@ let backButtonClickHandler;
 
 
 onMounted(() => {
+    if (backButton.isVisible) {
+        backButton.hide();
+    }
     store.dispatch("GET_AND_SET_PRODUCTS")
     if (isVideoLoad.value) {
         updateTgButtons();
