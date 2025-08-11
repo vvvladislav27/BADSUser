@@ -33,6 +33,7 @@ onBeforeMount(async() => {
 
 onMounted(() => {
     mainButton.show();
+    mainButton.show();
     secondaryButton.show();
 })
 
