@@ -57,7 +57,7 @@ onBeforeUnmount(() =>{
 
 
 const toogleIsFilterVisible = () => {
-    isOrderFiltersVisible.value = !isContextMenuVisible.value
+    isOrderFiltersVisible.value = !isOrderFiltersVisible.value
 }
 
 
