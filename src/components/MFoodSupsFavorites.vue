@@ -89,7 +89,7 @@ watch(foodSups, async() => {
 
 
 const setBackButtonClickHandler = () => {
-    backButtonClickHandler = async() => {
+    backButtonClickHandler = () => {
         router.push("/second-app/cabinet")
     }
     backButton.onClick(backButtonClickHandler)
@@ -98,6 +98,8 @@ const setBackButtonClickHandler = () => {
 watch(isFoodSupFiltersVisible, () => {
     if(!isFoodSupFiltersVisible.value) {
         setBackButtonClickHandler();
+    } else {
+        backButton.offClick(backButtonClickHandler);
     }
 })
 
