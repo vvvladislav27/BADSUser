@@ -96,13 +96,6 @@ watch(isContextMenuVisible, () => {
 
 const toggleContextMenuVisible = () => {
     isContextMenuVisible.value = !isContextMenuVisible.value;
-    if (isContextMenuVisible.value) {
-        backButton.offClick(backButtonClickHandler)
-        backButtonClickHandler = () => {
-            isContextMenuVisible.value = false;
-        }
-        backButton.onClick(backButtonClickHandler)
-    }
 };
 
 
@@ -154,7 +147,7 @@ const setSort = (type) => {
     </div>
     <m-context-menu 
         v-if="isContextMenuVisible"
-        @close="toggleContextMenuVisible()"
+        @close="toggleContextMenuVisible"
         :arrow="arrow"
         :buttons="buttons"
         :cuurentValue="type"
