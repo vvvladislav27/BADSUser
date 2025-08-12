@@ -24,7 +24,7 @@ const initButtons = () => {
     if (!backButton.isVisible) {
         backButton.show();
     }
-    backButtonClickHandler = function() {
+    backButtonClickHandler = () => {
         if (lastRoute.name == "FoodSups" || !lastRoute.name || lastRoute.name == "CreateOrder") {
             router.push('/second-app/');
         } else {
@@ -35,11 +35,11 @@ const initButtons = () => {
     const text = getTextForMainButton();
     mainButton.text = text;
     mainButton.show();
-    mainButtonClickHandler = function() {
+    mainButtonClickHandler = () => {
         createOrder();
     };
     mainButton.onClick(mainButtonClickHandler);
-    secondaryButtonClickHandler = function() {
+    secondaryButtonClickHandler = () => {
         clearCartItems();
     };
     secondaryButton.onClick(secondaryButtonClickHandler);
