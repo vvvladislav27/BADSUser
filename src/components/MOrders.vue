@@ -91,6 +91,8 @@ watch(isOrderFiltersVisible, () => {
 watch(isContextMenuVisible, () => {
     if(!isContextMenuVisible.value) {
         setBackButtonClickHandler();
+    } else {
+        backButton.offClick(backButtonClickHandler);
     }
 })
 
