@@ -77,7 +77,7 @@ const isItemInCart = (id) => {
 
 const toggleFavoriteFoodSup = async(id) => {
     vibrate();
-    store.dispatch("TOGGLE_FAV_FOOD_SUP", id)
+    await store.dispatch("TOGGLE_FAV_FOOD_SUP", id)
 };
 
 
