@@ -1,7 +1,9 @@
 <script setup>
-
+import { onBeforeMount, onBeforeUnmount } from 'vue';
 
 import { getSortedNameText } from '@/utils';
+
+let backButtonClickHandler
 
 const props = defineProps({
     arrow: {
@@ -21,6 +23,18 @@ const props = defineProps({
         required: true
     }
 })
+
+onBeforeMount(() => {
+    backButtonClickHandler = () => {
+        close();
+    };
+    backButton.onClick(backButtonClickHandler);
+})
+
+onBeforeUnmount(() => {
+    backButton.offClick(backButtonClickHandler);
+})
+
 
 const emit = defineEmits(["close", "type"]);
 
