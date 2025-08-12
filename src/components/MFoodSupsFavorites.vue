@@ -92,6 +92,8 @@ watch(isFoodSupFiltersVisible, () => {
 watch(isContextMenuVisible, () => {
     if(!isContextMenuVisible.value) {
         setBackButtonClickHandler();
+    } else {
+        backButton.offClick(backButtonClickHandler);
     }
 })
 
@@ -99,13 +101,6 @@ watch(isContextMenuVisible, () => {
 
 const toggleContextMenuVisible = () => {
     isContextMenuVisible.value = !isContextMenuVisible.value;
-    if (isContextMenuVisible.value) {
-        backButton.offClick(backButtonClickHandler)
-        backButtonClickHandler = () => {
-            isContextMenuVisible.value = false;
-        }
-        backButton.onClick(backButtonClickHandler)
-    }
 };
 
 
