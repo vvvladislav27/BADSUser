@@ -142,8 +142,10 @@ export const UPDATE_ORDER_ITEM = (state, userOrderItem) => {
 export const UPDATE_SEARCH_VALUE = (state, { search, type }) => {
     if (type == "food_sup") {
         state.search = search
+    } if (type == "favorite_food_sup") {
+        state.favoriteFoodSupsSearch = search;
     } else {
-        state.searchQueryForOrders = search
+        state.searchQueryForOrders = search;
     }
 }
 
