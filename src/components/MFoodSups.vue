@@ -132,18 +132,14 @@ watch([sort, type, filters, search], () => {
 
 
 watch(isContextMenuVisible, () => {
-    if (isContextMenuVisible.value) {
-        backButtonClickHandler = () => {
-            isContextMenuVisible.value = false;
-        };
-        backButton.onClick(backButtonClickHandler);
-        backButton.show();
-        hideButton(mainButton);
-        hideButton(secondaryButton);
-    } else {
+    if (!isContextMenuVisible.value) {
         backButton.offClick(backButtonClickHandler);
         backButton.hide();
         updateTgButtons();
+    } else {
+        backButton.show();
+        hideButton(mainButton);
+        hideButton(secondaryButton);
     }
 })
 
@@ -246,7 +242,7 @@ const toogleIsFilterVisible = () => {
     </div>
     <m-context-menu 
         v-if="isContextMenuVisible"
-        @close="toggleContextMenuVisible()"
+        @close="toggleContextMenuVisible"
         :arrow="arrow"
         :buttons="buttons"
         :cuurentValue="type"
