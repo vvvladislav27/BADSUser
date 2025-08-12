@@ -95,7 +95,7 @@ const removeDataFromList = async(data) => {
 }
 
 
-onBeforeMount(async() => {
+onBeforeMount(() => {
     backButtonClickHandler = () => {
         router.push("/second-app/create_order");
     }
