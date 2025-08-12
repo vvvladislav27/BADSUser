@@ -13,10 +13,10 @@ import { backButton} from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 
-const filters = computed(() => store.state.filters);
-const search = computed(() => store.state.search);
-const type = computed(() => store.state.type);
-const sort = computed(() => store.state.sort);
+const filters = computed(() => store.state.favoriteFoodSupsFilters);
+const search = computed(() => store.state.favoriteFoodSupsSearch);
+const type = computed(() => store.state.favoriteFoodSupsType);
+const sort = computed(() => store.state.favoriteFoodSupsSort);
 const photos = computed(() => store.state.foodSupsPhotos);
 
 
@@ -125,7 +125,7 @@ const setSort = (type) => {
         >
         <m-search 
             @openFilters="toogleIsFilterVisible"
-            :what="'food_sup'">
+            :what="'favorite_food_sup'">
         </m-search>
         <div class="m-food-sups-favorites-header">
             <div class="m-food-sups-favorites-header-name">БАД</div>
