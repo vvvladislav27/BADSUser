@@ -10,7 +10,17 @@ import MReviewContextMenu from './MReviewContextMenu.vue';
 import { getSortedNameText } from '@/utils';
 import { insertReview } from '../api/reviews';
 import { skipFoodSupReview } from '@/api/order';
-import { showTelegramPopUp, mainButton, secondaryButton, backButton, setupButton, hideButton } from '@/tg';
+import { 
+    showTelegramPopUp, 
+    mainButton, 
+    secondaryButton, 
+    backButton, 
+    setupButton, 
+    hideButton,
+    mainButtonClickHandler,
+    secondaryButtonClickHandler,
+    backButtonClickHandler
+ } from '@/tg';
 
 
 const filters = computed(() => store.state.filters);
@@ -33,9 +43,6 @@ const buttons = ["name", "price", "rating"];
 const review = ref();
 
 
-let mainButtonClickHandler;
-let secondaryButtonClickHandler;
-let backButtonClickHandler;
 
 
 onMounted(() => {
