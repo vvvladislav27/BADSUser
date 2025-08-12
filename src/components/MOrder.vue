@@ -67,9 +67,6 @@ onBeforeMount(async() => {
         router.push("/second-app/orders");
     };
     backButton.onClick(backButtonClickHandler);
-    if (!backButton.isVisible) {
-        backButton.show();
-    }
     for (let item of order.value.items) {
         await getImage(item.food_sup.photo_path)
     }
