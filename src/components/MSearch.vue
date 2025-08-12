@@ -98,7 +98,7 @@ const onSearchInput = () => {
                 <p>{{ getFilterButtonName(filter) }}</p>
             </div>
             <button 
-                v-if="filters.length < 3 && typeSearch == 'food_sup'"
+                v-if="filters.length < 3 && typeSearch == 'food_sup' || filters.length < 3 && typeSearch == 'favorite_food_sup'"
                 type="button"
                 class="m-search-filters-item-add"
                 @click="emit('openFilters')">
