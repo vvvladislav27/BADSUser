@@ -5,8 +5,10 @@ import store from '@/store';
 import { vibrate } from '@/utils';
 import { backButton, mainButton, secondaryButton, setupButton, hideButton } from '@/tg';
 
+const currentType = computed(() => router.currentRoute.value.name == "FoodSups"? "food_sups": "favorite_food_sup")
+
 const activeInput = ref()
-const filters = computed(() => store.state.filters);
+const filters = computed(() => currentType == "food_sups"? store.state.filters: store.state.favoriteFoodSupsFilters);
 const buttons = [1, 2, 3, 4, 5]
 const filtersList = ref([]); 
 
@@ -15,9 +17,6 @@ let secondaryButtonClickHandler;
 let backButtonClickHandler
 
 const emit = defineEmits(["close"])
-
-
-const currentType = computed(() => router.currentRoute.value.name == "FoodSups"? "food_sups": "favorite_food_sup")
 
 
 const setFilters = async() => {
