@@ -2,6 +2,7 @@
 import { onBeforeMount, onBeforeUnmount } from 'vue';
 
 import { getSortedNameText } from '@/utils';
+import { backButton } from '@/tg';
 
 let backButtonClickHandler
 
