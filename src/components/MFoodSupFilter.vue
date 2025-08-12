@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onBeforeUnmount, onBeforeMount } from 'vue';
-
+import { router } from '@/router';
 import store from '@/store';
 import { vibrate } from '@/utils';
 import { backButton, mainButton, secondaryButton, setupButton, hideButton } from '@/tg';
@@ -15,6 +15,9 @@ let secondaryButtonClickHandler;
 let backButtonClickHandler
 
 const emit = defineEmits(["close"])
+
+
+const currentType = computed(() => router.currentRoute.value.name == "FoodSups"? "food_sups": "favorite_food_sup")
 
 
 const setFilters = async() => {
@@ -45,14 +48,14 @@ const setFilters = async() => {
     };
     filtersList.value = filterData;
     if (filtersList.value) {
-        await store.dispatch("SET_FILTERS", {"filters": filtersList.value, "type": "food_sups"});
+        await store.dispatch("SET_FILTERS", {"filters": filtersList.value, "type": currentType.value});
     };
     close();
 }
 
 
 const resetFilters = () => {
-    store.dispatch("RESET_FILTERS", "food_sups");
+    store.dispatch("RESET_FILTERS", currentType.value);
     close();
 }
 
