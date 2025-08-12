@@ -24,7 +24,6 @@ const getUser = async() => {
 
 onBeforeMount(async() => {
     await getUser()
-    await store.dispatch("RESET_SEARCH_FILTERS")
     backButtonClickHandler = () => {
         router.push("/second-app/")
     }
