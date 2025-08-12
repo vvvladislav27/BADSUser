@@ -102,7 +102,7 @@ const createOrder = async() => {
 const clearCartItems = async() => {
     const result = await showTelegramPopUpWithKeyboard(`Очистить содержимое корзины?`)
     if (result == "confirm") {
-        store.dispatch("CLEAR_CART_ITEMS");
+        await store.dispatch("CLEAR_CART_ITEMS");
         router.push('/second-app/');
     }
 };
