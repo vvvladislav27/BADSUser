@@ -23,6 +23,8 @@ const search = computed(() => {
         return store.state.search;
     } else if (typeSearch.value === "orders") {
         return store.state.searchQueryForOrders;
+    } else if (typeSearch.value == "favorite_food_sup") {
+        return store.state.favoriteFoodSupsSearch
     } else {
         return null;
     }
@@ -37,6 +39,8 @@ const filters = computed(() => {
         return store.state.filters;
     } else if (typeSearch.value === "orders") {
         return store.state.searchFiltersForOrders;
+    } else if (typeSearch.value == "favorite_food_sup") {
+        return store.state.favoriteFoodSupsFilters
     } else {
         return null;
     }
