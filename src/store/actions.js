@@ -222,9 +222,6 @@ export const RESET_SELECTED_ITEMS = ({commit}) => {
     commit("RESET_SELECTED_ITEMS")
 }
 
-export const RESET_SEARCH_FILTERS = ({commit}) => {
-    commit("RESET_SEARCH_FILTERS")
-}
 
 export const SET_SORT_SEARCH_TYPE_FOR_ORDERS = ({commit}, type) => {
     commit("SET_SORT_SEARCH_TYPE_FOR_ORDERS", type)

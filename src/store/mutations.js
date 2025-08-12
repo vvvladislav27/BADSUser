@@ -19,6 +19,8 @@ export const REMOVE_ORDER_ITEM_FOR_REVIEW = (state, index) => {
 export const SET_FILTERS = (state, {filters, type}) => {
     if (type == "food_sups") {
         state.filters = filters
+    } else if (type == "favorite_food_sup") {
+        state.favoriteFoodSupsFilters = filters
     } else {
         state.searchFiltersForOrders = filters
     }
@@ -28,6 +30,8 @@ export const SET_FILTERS = (state, {filters, type}) => {
 export const RESET_FILTERS = (state, type) => {
     if (type == "food_sups") {
         state.filters = []
+    } else if (type == "favorite_food_sup") {
+        state.favoriteFoodSupsFilters = []
     } else {
         state.searchFiltersForOrders = []
     }
@@ -38,6 +42,10 @@ export const REMOVE_FILTER = (state,  {index, type}) => {
     if (type == "food_sup") {
         if (index >= 0 && index < state.filters.length) {
             state.filters.splice(index, 1);
+        }
+    } else if (type == "favorite_food_sup") {
+        if (index >=0 && index < state.favoriteFoodSupsFilters.length) {
+            state.favoriteFoodSupsFilters.splice(index, 1)
         }
     } else {
         if (index >= 0 && index < state.searchFiltersForOrders.length) {
@@ -160,14 +168,6 @@ export const REMOVE_USER_CART_ITEM = (state, foodSupId) => {
 
 export const RESET_SELECTED_ITEMS = (state) => {
     state.userOrderItems = []
-}
-
-export const RESET_SEARCH_FILTERS = (state) => {
-    state.search = ""
-    state.filters = []
-    state.sort = "desc"
-    state.type = "rating"
-    state.isSearchInputActive = false
 }
 
 

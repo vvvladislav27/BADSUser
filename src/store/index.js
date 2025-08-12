@@ -26,7 +26,11 @@ const state = {
     searchSortForOrders: "desc",
     searchTypeForOrders: "created_date",
     searchQueryForOrders: "",
-    orderItemsForReviews: []
+    orderItemsForReviews: [],
+    favoriteFoodSupsFilters: [],
+    favoriteFoodSupsSort: "desc",
+    favoriteFoodSupsType: "rating",
+    favoriteFoodSupsSearch: ""
   }
 
   const vuexLocal = new VuexPersistence({
