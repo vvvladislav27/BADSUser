@@ -17,9 +17,6 @@ import {
     backButton, 
     setupButton, 
     hideButton,
-    mainButtonClickHandler,
-    secondaryButtonClickHandler,
-    backButtonClickHandler
  } from '@/tg';
 
 
@@ -43,7 +40,9 @@ const buttons = ["name", "price", "rating"];
 const review = ref();
 
 
-
+let mainButtonClickHandler;
+let secondaryButtonClickHandler;
+let backButtonClickHandler;
 
 onMounted(() => {
     if (backButton.isVisible) {
