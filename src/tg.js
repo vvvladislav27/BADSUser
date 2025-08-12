@@ -15,10 +15,6 @@ const backButton = tg.BackButton;
 
 const initData = !DEBUG? tg.initData: FAKE_WEB_APP_DATA;
 
-let mainButtonClickHandler;
-let secondaryButtonClickHandler;
-let backButtonClickHandler;
-
 
 const showTelegramPopUp = async(message) => {
     try{
@@ -91,7 +87,4 @@ export {
     copyTextAndShowPopUp,
     setupButton,
     hideButton,
-    mainButtonClickHandler,
-    backButtonClickHandler,
-    secondaryButtonClickHandler
 }
