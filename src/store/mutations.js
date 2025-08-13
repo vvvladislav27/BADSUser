@@ -11,8 +11,8 @@ export const SET_ORDERS_FOR_REVIEWS = (state, items) => {
 }
 
 
-export const REMOVE_ORDER_ITEM_FOR_REVIEW = (state, index) => {
-    state.orderItemsForReviews.splice(index, 1)
+export const REMOVE_ORDER_ITEM_FOR_REVIEW = (state) => {
+    state.orderItemsForReviews.splice(0, 1)
 }
 
 
