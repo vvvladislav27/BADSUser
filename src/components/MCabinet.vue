@@ -17,8 +17,7 @@ const userData = ref();
 
 
 const getUser = async() => {
-    const data = await getByUserId(user.value.telegram_id);
-    userData.value = data;
+    userData.value = await getByUserId(user.value.telegram_id);
 }
 
 
