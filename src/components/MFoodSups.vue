@@ -82,6 +82,8 @@ watch(isFoodSupFiltersVisible, () => {
 const updateTgButtons = () => {
     hideButton(secondaryButton)
     hideButton(mainButton)
+    mainButton.offClick(mainButtonClickHandler);
+    secondaryButton.offClick(secondaryButtonClickHandler);
     if (orderItemsForReviews.value.length > 0) {
         mainButtonClickHandler = () => {
             addReview()
