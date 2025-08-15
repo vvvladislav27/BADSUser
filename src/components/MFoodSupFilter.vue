@@ -119,7 +119,7 @@ const updatePriceTo = () => {
 
 
 const initialRating = computed(() => {
-    const filter = store.state.filters.find(filter => filter.name === "Рейтинг");
+    const filter = filters.value.find(filter => filter.name === "Рейтинг");
     return filter ? filter.rating : null;
 });
 
