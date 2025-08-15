@@ -80,6 +80,8 @@ watch(isFoodSupFiltersVisible, () => {
 
 
 const updateTgButtons = () => {
+    hideButton(secondaryButton)
+    hideButton(mainButton)
     if (orderItemsForReviews.value.length > 0) {
         mainButtonClickHandler = () => {
             addReview()
@@ -107,8 +109,6 @@ const updateTgButtons = () => {
             };
             setupButton(secondaryButton, "Корзина", secondaryButtonClickHandler);
         }
-    } else if (!hasFavorites) {
-        hideButton(mainButton)
     } else if (hasCartItems) {
         mainButtonClickHandler = () => {
             store.dispatch("RESET_SELECTED_ITEMS")
