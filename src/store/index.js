@@ -39,11 +39,6 @@ const state = {
     reducer: (state) => ({
       isVideoVisible: state.isVideoVisible,
       isVideoLoaded: state.isVideoLoaded,
-      userCart: state.userCart,
-      userCartItems: state.userCartItems,
-      userCartFoodSups: state.userCartFoodSups,
-      userOrderItems: state.userOrderItems,
-      favFoodSups: state.favFoodSups,
       user: state.user,
     })
   })
