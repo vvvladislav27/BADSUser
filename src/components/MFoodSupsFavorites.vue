@@ -112,7 +112,7 @@ const toogleIsSearchInputActive = () => {
 
 
 const setSort = (type) => {
-    store.dispatch("SET_SORT", type)
+    store.dispatch("SET_SORT_FOR_FAVORITES_FOOD_SUPS", type)
 }
 
 
