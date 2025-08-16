@@ -40,6 +40,7 @@ const state = {
       isVideoVisible: state.isVideoVisible,
       isVideoLoaded: state.isVideoLoaded,
       user: state.user,
+      userCartItems: state.userCartItems
     })
   })
   
