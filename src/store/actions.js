@@ -227,6 +227,10 @@ export const SET_SORT_SEARCH_TYPE_FOR_ORDERS = ({commit}, type) => {
     commit("SET_SORT_SEARCH_TYPE_FOR_ORDERS", type)
 }
 
+export const SET_SORT_FOR_FAVORITES_FOOD_SUPS = ({commit}, type) => {
+    commit("SET_SORT_FOR_FAVORITES_FOOD_SUPS", type)
+}
+
 export const RESET_VIDEO_LOADED = ({commit}) => {
     commit("RESET_VIDEO_LOADED")
 }

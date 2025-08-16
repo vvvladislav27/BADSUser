@@ -183,6 +183,16 @@ export const SET_SORT_SEARCH_TYPE_FOR_ORDERS = (state, type) => {
 }
 
 
+export const SET_SORT_FOR_FAVORITES_FOOD_SUPS = (state, type) => {
+    if (state.favoriteFoodSupsType == type) {
+        state.favoriteFoodSupsSort = state.favoriteFoodSupsSort === "desc"? "asc": "desc";
+    } else {
+        state.favoriteFoodSupsSort = "desc"
+    }
+    state.favoriteFoodSupsType = type
+}
+
+
 export const RESET_VIDEO_LOADED = (state) => {
     state.isVideoVisible = false;
 }
