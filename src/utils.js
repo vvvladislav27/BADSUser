@@ -99,7 +99,6 @@ const getStockItemCountText = (foodSup) => {
     }
 }
 
-//сделать кэш как в админ приложении
 const getImage = async(photo_path) => {
     let photo;
     photo = store.state.foodSupsPhotos[photo_path];
