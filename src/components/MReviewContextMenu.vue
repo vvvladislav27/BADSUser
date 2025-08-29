@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted, onBeforeMount } from 'vue'
 import { vibrate } from '@/utils'
 import { secondaryButton, mainButton } from '@/tg';
 import store from '@/store';
@@ -12,6 +12,14 @@ const buttons = [1, 2, 3, 4, 5]
 const isActive = ref(false);
 const emit = defineEmits(["data", "addr"])
 
+onMounted(() => {
+    window.addEventListener('popstate', removeActiveStyle);
+})
+
+
+onBeforeMount(() => {
+    window.removeEventListener('popstate', removeActiveStyle);
+})
 
 watch(item, (newItem) => {
     if (newItem) {
