@@ -74,5 +74,21 @@ const updateUserOrderData = async(data) => {
     }
 }
 
+const updateUserShowInstruction = async() => {
+    const response = await fetch(`${API_BASE_URL}/v0/users/show_instruction`, {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json',
+            "auth": initData,
+            "app": "user"
+        }
+    });
+    if (response.ok) {
+        return await response.json();
+    } else {
+        return null
+    }
+}
 
-export { getSelf, getFullAddress, updateUserOrderData, getByUserId}
+
+export { getSelf, getFullAddress, updateUserOrderData, getByUserId, updateUserShowInstruction}
