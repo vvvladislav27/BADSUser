@@ -2,7 +2,7 @@ import { searchData } from "@/api/search";
 import { getFavFoodSups, toggleFavFoodSup } from "@/api/fav_food_sup";
 import { getCartItems, addCartItem, getCart, updateCartItem, deleteCartItem, clearCart } from "@/api/cart";
 import { getOrdersForInsertReviews } from "@/api/order";
-import { getSelf, updateUserOrderData } from "@/api/user";
+import { getSelf, updateUserOrderData, updateUserShowInstruction } from "@/api/user";
 import { showTelegramPopUp } from "@/tg";
 
 
@@ -215,6 +215,13 @@ export const UPDATE_USER = async({ commit, state }, { data, field, action }) => 
     const response = await updateUserOrderData(user);
     if (response) {
         commit("SET_USER", response);
+    }
+}
+
+export const UPDATE_USER_SHOW_INSTRUCTION = async({commit}) => {
+    const user = await updateUserShowInstruction()
+    if (user) {
+        commit("SET_USER", user);
     }
 }
 
