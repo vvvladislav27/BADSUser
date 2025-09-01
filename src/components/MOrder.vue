@@ -33,10 +33,7 @@ const setTgButtons = () => {
     let newOrderState;
     mainButton.offClick(mainButtonClickHandler)
     hideButton(mainButton)
-    if (order.value.state == "send") {
-        buttonText = "Получен"
-        newOrderState = "received"
-    } else if (order.value.state == "created" || order.value.state == "packed") {
+    if (order.value.state == "created" || order.value.state == "packed") {
         buttonText = "Отменить"
         newOrderState = "canceled"
     }
@@ -52,7 +49,7 @@ const setTgButtons = () => {
             order.value = await updateOrderStatus(order.value.id, newOrderState);
         }
     };
-    if (order.value.state == "created" || order.value.state == "packed" || order.value.state == "send") {
+    if (order.value.state == "created" || order.value.state == "packed") {
         mainButton.onClick(mainButtonClickHandler);
         mainButton.show();
     }
