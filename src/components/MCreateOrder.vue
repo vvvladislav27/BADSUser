@@ -26,7 +26,12 @@ onBeforeMount(async() => {
 })
 
 
-onMounted(() => {
+onMounted(async() => {
+    if (!user.value.show_instruction) {
+        const message = "Доставка товаров осуществляется на ближайший к указанному адресу пункт выдачи СДЭК"
+        await showTelegramPopUp(message)
+        await store.dispatch("UPDATE_USER_SHOW_INSTRUCTION")
+    }
     tg.onEvent("invoiceClosed", handleInvoiceClosed)
     calculateTotalPriceAndSetMainButton();
     backButtonClickHandler = async() => {
