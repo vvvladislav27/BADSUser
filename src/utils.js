@@ -131,6 +131,8 @@ const formatDate = (dateString) => {
         text = "Полученный"
     } else if (orderState == "finished") {
         text = "Завершённый"
+    } else if (orderState == "arrived") {
+        text = "Прибыл"
     } else {
         text = "Отменённый"
     }
