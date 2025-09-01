@@ -36,6 +36,12 @@ const setTgButtons = () => {
     if (order.value.state == "created" || order.value.state == "packed") {
         buttonText = "Отменить"
         newOrderState = "canceled"
+    } else if (order.value.state == "arrived") {
+        buttonText = "Заказ получен"
+        newOrderState = "received"
+    } else if (order.value.state == "received") {
+        buttonText = "Завершить"
+        newOrderState = "finished"
     }
     mainButton.text = buttonText;
     mainButtonClickHandler = async() => {
@@ -49,7 +55,7 @@ const setTgButtons = () => {
             order.value = await updateOrderStatus(order.value.id, newOrderState);
         }
     };
-    if (order.value.state == "created" || order.value.state == "packed") {
+    if (order.value.state == "created" || order.value.state == "packed" || order.value.state == "arrived" || order.value.state == "received") {
         mainButton.onClick(mainButtonClickHandler);
         mainButton.show();
     }
