@@ -67,6 +67,8 @@ const getSortedNameText = (b) => {
         text = "Завершённые"
     } else if (b == "canceled") {
         text = "Отменённые"
+    } else if (b == "arrived") {
+        text = "Прибывшие"
     }
     return text
 }
