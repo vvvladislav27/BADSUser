@@ -140,27 +140,6 @@ const formatDate = (dateString) => {
 }
 
 
-const getOrderState = (orderState) => {
-    let state;
-    if (orderState == "Созданные") {
-        state = "created"
-    } else if (orderState == "Упакованные") {
-        state = "packed"
-    } else if (orderState == "Отправленные") {
-        state = "send"
-    } else if (orderState == "Полученные") {
-        state = "received"
-    } else if (orderState == "Завершённые") {
-        state = "finished"
-    } else if (orderState == "Отменённые") {
-        state = "canceled"
-    } else {
-        state = null
-    }
-    return state
-}
-
-
 const getOrderStateEn = (orderState) => {
     let state;
     if (orderState == "created") {
@@ -175,6 +154,8 @@ const getOrderStateEn = (orderState) => {
         state = "Завершённые"
     } else if (orderState == "canceled") {
         state = "Отменённые"
+    } else if (orderState == "arrived"){
+        state = "Прибывшие"
     } else {
         state = "Все"
     }
@@ -276,7 +257,6 @@ export {
     getImage,
     formatDate,
     getOrderStateTextRu,
-    getOrderState,
     getOrderStateEn,
     formatDateForOrder,
     getFormatDate,
