@@ -63,10 +63,11 @@ const getOrderById = async(orderId) => {
 }
 
 
-const updateOrderStatus = async(orderId, state) => {
+const updateOrder = async(orderId, state, address) => {
     const data = {
         "order_id": orderId,
         "state": state,
+        "address": address
     }
     const response = await fetch(`${API_BASE_URL}/v0/orders/change_state`, {
         method: "PATCH",
@@ -119,4 +120,4 @@ const skipFoodSupReview = async(data) => {
 }
 
 
-export {getInvoiceLink, getOrdersWithFilters, getOrderById, updateOrderStatus, getOrdersForInsertReviews, skipFoodSupReview}
+export {getInvoiceLink, getOrdersWithFilters, getOrderById, updateOrder, getOrdersForInsertReviews, skipFoodSupReview}
