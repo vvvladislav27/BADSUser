@@ -113,8 +113,15 @@ onBeforeUnmount(() => {
             </div>
             <div class="m-order-data-title" style="margin-top: 0;">Информация о получателе</div>
             <div class="m-order-data-wrapper">
-                <div>АДРЕСС</div>
+                <div>АДРЕС</div>
                 <div class="m-order-data-content">{{ order.delivery_address }}</div>
+            </div>
+            <div class="m-order-data-wrapper" v-if="addressPickUpPoint">
+                <div>Адрес пункта выдачи CDEK</div>
+                <div 
+                    class="m-order-data-content">
+                    {{ addressPickUpPoint }}
+                </div>
             </div>
             <div class="m-order-data-wrapper">
                 <div>Получатель</div>
