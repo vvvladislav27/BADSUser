@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeUnmount, ref, computed, watch, onBeforeMount } from 'vue';
-import { getOrderById, updateOrderStatus } from '@/api/order';
+import { getOrderById, updateOrder } from '@/api/order';
 import { formatAmount, formatTime, formatDateForOrder, getOrderStateTextRu, getImage } from '@/utils';
 import store from '@/store';
 import { router } from '@/router';
@@ -9,6 +9,7 @@ import { setAnimationForText } from '@/animation';
 
 const photos = computed(() => store.state.foodSupsPhotos);
 const order = ref();
+const addressPickUpPoint = ref("");
 
 let mainButtonClickHandler;
 let backButtonClickHandler;
@@ -48,11 +49,11 @@ const setTgButtons = () => {
         if (newOrderState === "canceled") {
             const result = await showTelegramPopUpWithKeyboard("Хотите отменить заказ?")
             if (result === "confirm") {
-                order.value = await updateOrderStatus(order.value.id, newOrderState);
+                order.value = await updateOrder(order.value.id, newOrderState, addressPickUpPoint.value);
             }
             return
         } else {
-            order.value = await updateOrderStatus(order.value.id, newOrderState);
+            order.value = await updateOrder(order.value.id, newOrderState, addressPickUpPoint.value);
         }
     };
     if (order.value.state == "created" || order.value.state == "packed" || order.value.state == "arrived" || order.value.state == "received") {
@@ -65,6 +66,7 @@ const setTgButtons = () => {
 
 onBeforeMount(async() => {
     order.value = await getOrderById(props.id);
+    addressPickUpPoint.value = order.value.address_pick_up_point;
     setTgButtons(order.value.state);
     backButtonClickHandler = () => {
         router.push("/second-app/orders");
