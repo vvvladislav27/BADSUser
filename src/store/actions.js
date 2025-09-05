@@ -2,7 +2,7 @@ import { searchData } from "@/api/search";
 import { getFavFoodSups, toggleFavFoodSup } from "@/api/fav_food_sup";
 import { getCartItems, addCartItem, getCart, updateCartItem, deleteCartItem, clearCart } from "@/api/cart";
 import { getOrdersForInsertReviews } from "@/api/order";
-import { getSelf, updateUserOrderData, updateUserShowInstruction } from "@/api/user";
+import { getSelf, updateUser } from "@/api/user";
 import { showTelegramPopUp } from "@/tg";
 
 
@@ -165,64 +165,22 @@ export const SET_IS_VIDEO_VISIBLE = ({commit}) => {
     commit("SET_IS_VIDEO_VISIBLE")
 }
 
-export const UPDATE_USER = async({ commit, state }, { data, field, action }) => {
-    const user = { ...state.user };
-    const moveItemToFront = (array, item) => {
-        const index = array.indexOf(item);
-        if (index > -1) {
-            array.splice(index, 1);
-        }
-        array.unshift(item);
-    };
-    if (action === "insert") {
-        if (field === "addresses") {
-            if (!user.addresses.includes(data)) {
-                user.addresses.unshift(data);
-            } else {
-                moveItemToFront(user.addresses, data);
-            }
-        } else if (field === "full_names") {
-            if (!user.full_names.includes(data)) {
-                user.full_names.unshift(data);
-            } else {
-                moveItemToFront(user.full_names, data);
-            }
-        } else if (field === "phones") {
-            if (!user.phones.includes(data)) {
-                user.phones.unshift(data);
-            } else {
-                moveItemToFront(user.phones, data);
-            }
-        } else {
-            if (!user.emails.includes(data)) {
-                user.emails.unshift(data);
-            } else {
-                moveItemToFront(user.emails, data);
-            }
-        }
-    } else {
-        if (field === "addresses") {
-            user.addresses = user.addresses.filter(address => address !== data);
-        } else if (field === "full_names") {
-            user.full_names = user.full_names.filter(name => name !== data);
-        } else if (field === "phones") {
-            user.phones = user.phones.filter(phone => phone !== data);
-        } else {
-            user.emails = user.emails.filter(email => email !== data);
-        }
-    }
-
-    const response = await updateUserOrderData(user);
-    if (response) {
-        commit("SET_USER", response);
-    }
-}
-
-export const UPDATE_USER_SHOW_INSTRUCTION = async({commit}) => {
-    const user = await updateUserShowInstruction()
+export const UPDATE_USER_SHOW_INSTRUCTION = async({commit, state}) => {
+    const u = state.user;
+    u.show_instruction = true;
+    const user = await updateUser(u)
     if (user) {
         commit("SET_USER", user);
     }
+}
+
+export const UPDATE_USER_DELIVERY_DATA = async({commit}, user) => {
+    const u = await updateUser(user);
+    if (u) {
+        commit("SET_USER", user);
+        return u;
+    }
+
 }
 
 export const RESET_SELECTED_ITEMS = ({commit}) => {
