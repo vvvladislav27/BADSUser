@@ -4,6 +4,7 @@ import store from '@/store';
 import { router } from '@/router';
 import { formatAmount, getImage } from '@/utils';
 import { getInvoiceLink } from '@/api/order';
+import { getDeliveryData } from '@/api/delivery';
 import { showTelegramPopUp, mainButton, backButton, setupButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
@@ -11,6 +12,7 @@ const user = computed(() => store.state.user);
 const photos = computed(() => store.state.foodSupsPhotos);
 const orderItems = computed(() => Object.values(store.state.userOrderItems));
 const orderItemsIds = ref([]);
+const deliveryData = ref();
 
 let backButtonClickHandler;
 let mainButtonClickHandler;
@@ -19,6 +21,7 @@ const tg = window.Telegram.WebApp
 
 
 onBeforeMount(async() => {
+    deliveryData.value = await getDeliveryData(user.value.telegram_id)
     for (let item of orderItems.value) {
         await getImage(item.food_sup.photo_path)
     }
@@ -65,12 +68,15 @@ const handleInvoiceClosed = async(event) => {
 
 const handleClickMainButton = async() => {
     let message = "Для оформления заказа необходимо указать";
-    if (user.value.addresses.length == 0) {
-        message += " адрес"
-    } else if (user.value.full_names.length == 0) {
-        message += " ФИО"
+    let insertData = false;
+    if (!user.value.address_id) {
+        message += " адрес";
+        insertData = true;
+    } else if (!user.value.full_name_id) {
+        message += " ФИО";
+        insertData = true;
     }
-    if (user.value.addresses.length == 0 || user.value.full_names.length == 0) {
+    if (insertData) {
         await showTelegramPopUp(message)
         return
     }
@@ -112,39 +118,39 @@ const calculateTotalPriceAndSetMainButton = () => {
 </script>
 
 <template>
-    <div class="m-create-order-container">
+    <div class="m-create-order-container" v-if="deliveryData">
         <div class="m-create-order-header">
             <div class="m-create-order-header-shipping-information">Информация о доставке</div>
             <div class="m-create-order-header-shipping-information-item">
-                <div>АДРЕСС</div>
+                <div>АДРЕС</div>
                 <div 
                     class="m-create-order-header-shipping-information-item-text"
-                    @click="router.push({name: 'UpdateOrderData', params: { dataType: 'addresses' }})">
-                    {{ user.addresses.length > 0 ? user.addresses[0] : 'Не указан'}}
+                    @click="router.push({name: 'UpdateOrderData', params: { dataType: 'address' }})">
+                    {{ deliveryData.address? deliveryData.address : 'Не указан'}}
                 </div>
             </div>
             <div class="m-create-order-header-shipping-information-item">
                 <div>ФИО</div>
                 <div 
                     class="m-create-order-header-shipping-information-item-text"
-                    @click="router.push({name: 'UpdateOrderData', params: { dataType: 'full_names' }})">
-                    {{ user.full_names.length > 0 ? user.full_names[0] : 'Не указано'}}
+                    @click="router.push({name: 'UpdateOrderData', params: { dataType: 'full_name' }})">
+                    {{ deliveryData.full_name? deliveryData.full_name : 'Не указано'}}
                 </div>
             </div>
             <div class="m-create-order-header-shipping-information-item">
                 <div>Номер телефона</div>
                 <div 
                     class="m-create-order-header-shipping-information-item-text"
-                    @click="router.push({name: 'UpdateOrderData', params: { dataType: 'phones' }})">
-                    {{ user.phones.length > 0 ? user.phones[0] : 'Не указан'}}
+                    @click="router.push({name: 'UpdateOrderData', params: { dataType: 'phone' }})">
+                    {{ deliveryData.phone? deliveryData.phone : 'Не указан'}}
                 </div>
             </div>
             <div class="m-create-order-header-shipping-information-item">
                 <div>Email</div>
                 <div 
                     class="m-create-order-header-shipping-information-item-text"
-                    @click="router.push({name: 'UpdateOrderData', params: { dataType: 'emails' }})">
-                    {{ user.emails.length > 0 ? user.emails[0] : 'Не указан'}}
+                    @click="router.push({name: 'UpdateOrderData', params: { dataType: 'email' }})">
+                    {{ deliveryData.email? deliveryData.email : 'Не указан'}}
                 </div>
             </div>
         </div>
