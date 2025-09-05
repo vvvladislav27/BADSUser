@@ -2,13 +2,26 @@
 import { computed, ref, onBeforeMount, onBeforeUnmount } from 'vue';
 import store from '@/store';
 import { router } from '@/router';
-import { getFullAddress } from '@/api/user';
+import { 
+    getListAddress, 
+    getListEmails, 
+    getListFullNames, 
+    getListPhones, 
+    deleteEntity,
+    createEntity
+} from '@/api/delivery';
 import { useTelInput } from 'vue3-headless-tel-input';
 import { showTelegramPopUp, showTelegramPopUpWithKeyboard, mainButton, backButton } from '@/tg';
+
 
 const user = computed(() => store.state.user);
 const inputData = ref();
 const inputText = ref("")
+const items = ref([]);
+const getItems = ref(false);
+const { inputRef } = useTelInput(inputData)
+const isCreateOrderDataInputVisible = ref();
+const fieldId = ref();
 
 
 let backButtonClickHandler;
@@ -23,79 +36,9 @@ const props = defineProps({
 })
 
 
-const { inputRef } = useTelInput(inputData)
-
-
-const items = computed(() => {
-    if (props.dataType == "addresses") {
-        inputText.value = "Введите адрес"
-        return user.value.addresses
-    } else if (props.dataType == "full_names") {
-        inputText.value = "Введите ФИО"
-        return user.value.full_names 
-    } else if (props.dataType == "phones") {
-        inputText.value = "Введите номер телефона"
-        return user.value.phones
-    } else {
-        inputText.value = "Введите email"
-        return user.value.emails
-    }
-})
-
-
-const isCreateOrderDataInputVisible = ref(items.value.length == 0 ? true: false)
-
-
-
-
-const insertNewData = async() => {
-    if (!isCreateOrderDataInputVisible.value) {
-        isCreateOrderDataInputVisible.value = true;
-        return
-    };
-    if (props.dataType === 'phones') {
-        const number = inputRef.value.value.replace(/[\s_]+/g, '').trim(); 
-        inputData.value = '+7' + number;
-        if (inputData.value.length < 12) {
-            inputText.value = "Введите корректный номер телефона"
-            inputData.value = null
-        }
-    }
-    if (props.dataType === "emails") {
-        const email = inputData.value.trim();
-        const emailRegex = /^[^s@]+@[^s@]+.[^s@]+$/;
-        if (!emailRegex.test(email)) {
-            inputText.value = "Введите корректный email";
-            inputData.value = null;
-        }
-    }
-    if (!inputData.value) {
-        await showTelegramPopUp(inputText.value)
-        return
-    } else {
-        updateUserOrderData(inputData.value);
-    }
-}
-
-const removeDataFromList = async(data) => {
-    let message;
-    if (props.dataType == 'addresses') {
-        message = "Удалить адрес?"
-    } else if (props.dataType == "full_names") {
-        message = "Удалить ФИО?"
-    } else if (props.dataType == "phones") {
-        message = "Удалить телефон?"
-    } else {
-        message = "Удалить email?"
-    }
-    const result = await showTelegramPopUpWithKeyboard(message)
-    if (result == "confirm") {
-        await store.dispatch("UPDATE_USER", {"data": data, "field": props.dataType, "action": "remove"})
-    }
-}
-
-
-onBeforeMount(() => {
+onBeforeMount(async() => {
+    await getData();
+    isCreateOrderDataInputVisible.value = (items.value.length > 0? false: true);
     backButtonClickHandler = () => {
         router.push("/second-app/create_order");
     }
@@ -115,66 +58,120 @@ onBeforeUnmount(() => {
 })
 
 
-const setCurrentAddress = async(data) => {
-    let addr;
-    let result;
-    if (user.value.addresses.includes(data)) {
-        addr = data
+const getData = async() => {
+    if (props.dataType == "address") {
+        inputText.value = "Введите адрес"
+        fieldId.value = user.value.address_id;
+        items.value = await getListAddress(user.value.telegram_id);
+    } else if (props.dataType == "full_name") {
+        inputText.value = "Введите ФИО"
+        fieldId.value = user.value.full_name_id;
+        items.value = await getListFullNames(user.value.telegram_id);
+    } else if (props.dataType == "phone") {
+        inputText.value = "Введите номер телефона"
+        fieldId.value = user.value.phone_id;
+        items.value = await getListPhones(user.value.telegram_id);
     } else {
-        result = await getFullAddress(data)
-        if (result) {
-            addr = result.address
+        inputText.value = "Введите email"
+        fieldId.value = user.value.email_id;
+        items.value = await getListEmails(user.value.telegram_id);
+    }
+    getItems.value = true;
+}
+
+
+
+const insertNewData = async() => {
+    if (!isCreateOrderDataInputVisible.value) {
+        isCreateOrderDataInputVisible.value = true;
+        return
+    };
+    if (props.dataType === 'phone') {
+        const number = inputRef.value.value.replace(/[\s_]+/g, '').trim(); 
+        inputData.value = '+7' + number;
+        if (inputData.value.length < 12) {
+            await showTelegramPopUp("Введите корректный номер телефона")
+            inputData.value = null
+            return
+        }
+    } else if (props.dataType === "email") {
+        if (inputData.value) {
+            const email = inputData.value.trim();
+            const emailRegex = /^[^s@]+@[^s@]+.[^s@]+$/;
+            if (!emailRegex.test(email)) {
+                await showTelegramPopUp("Введите корректный email")
+                inputData.value = null;
+                return
+            }
+        } else {
+            await showTelegramPopUp("Введите корректный email")
         }
     }
-    if (addr) {
-        router.push("/second-app/create_order")
-        await store.dispatch("UPDATE_USER", {"data": addr, "field": "addresses", "action": "insert"})
-    } else {
-        await showTelegramPopUp("Не удалось распознать адрес")
-        return
+    if (inputData.value) {
+        const result = await createEntity(inputData.value, props.dataType)
+        if (result) {
+            updateUserDeliveryData(result.id);
+        }
     }
 }
 
 
-const updateUserField = async (data, field) => {
-    router.push("/second-app/create_order");
-    await store.dispatch("UPDATE_USER", { "data": data, "field": field, "action": "insert" });
+const removeDataFromList = async (itemId) => {
+    const messages = {
+        'address': "Удалить адрес?",
+        'full_name': "Удалить ФИО?",
+        'phone': "Удалить телефон?",
+        'email': "Удалить email?"
+    };
+    const message = messages[props.dataType] || "Удалить данные?";
+    const result = await showTelegramPopUpWithKeyboard(message);
+    if (result === "confirm") {
+        await deleteEntity(itemId, props.dataType);
+        router.push("/second-app/create_order");
+    }
+}
+
+const updateUserDeliveryData = async (id) => {
+    const u = user.value;
+    const fieldMapping = {
+        address: 'address_id',
+        phone: 'phone_id',
+        email: 'email_id',
+        full_name: 'full_name_id'
+    };
+    const field = fieldMapping[props.dataType];
+    if (field) {
+        u[field] = id;
+        const result = await store.dispatch("UPDATE_USER_DELIVERY_DATA", u)
+        if (result) {
+            router.push("/second-app/create_order");
+        }
+        
+    }
 };
-
-
-
-const updateUserOrderData = (data) => {
-    if (props.dataType == "addresses") {
-        setCurrentAddress(data)
-    } else if (props.dataType == "full_names") {
-        updateUserField(data, "full_names")
-    } else if (props.dataType == "phones") {
-        updateUserField(data, "phones")
-    } else {
-        updateUserField(data, "emails")
-    }
-}
 
 
 </script>
 
 <template>
-    <div class="m-update-order-data-container">
+    <div class="m-update-order-data-container" v-if="getItems">
         <div
             v-if="!isCreateOrderDataInputVisible"
             v-for="item in items"
             :key="item"
             class="m-update-order-data-wrapper">
             <button
-                @click="updateUserOrderData(item)"
-                :class="['m-update-order-data-item', {active: item == items[0]}]">
-                {{ item }}
+                @click="updateUserDeliveryData(item.id)"
+                :class="['m-update-order-data-item', {active: item.id === fieldId}]">
+                <p v-if="dataType == 'address'">{{ item.full_address }}</p>
+                <p v-else-if="dataType == 'full_name' || dataType == 'email'"> {{ item.name }}</p>
+                <p v-else-if="dataType == 'phone'"> {{ item.number }}</p>
             </button>
             <div 
                 v-if="items.length > 1"
                 class="m-update-order-data-remove-btn"
-                :style="{ visibility: item === items[0] ? 'hidden' : 'visible' }" 
-                @click="removeDataFromList(item)">
+                :style="{ visibility: item.id === fieldId ? 'hidden' : 'visible' }" 
+                @click="removeDataFromList(item.id)">
                 X
             </div>
         </div>
@@ -184,14 +181,14 @@ const updateUserOrderData = (data) => {
             {{ inputText }}
         </div>
         <input 
-            v-if="isCreateOrderDataInputVisible && dataType != 'phones'"
+            v-if="isCreateOrderDataInputVisible && dataType != 'phone'"
             required
             type="text"
             v-model="inputData"
             class="m-update-order-data-input"/>
         <div 
             class="m-update-order-data-phone"
-            v-if="isCreateOrderDataInputVisible && dataType == 'phones'">
+            v-if="isCreateOrderDataInputVisible && dataType == 'phone'">
                 <span>+7</span>
                 <input ref="inputRef"/>
         </div>
