@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "@/config";
 import { initData } from "@/tg";
+import { showTelegramPopUp } from "@/tg";
 
 
 
@@ -36,12 +37,9 @@ const getByUserId = async(userId) => {
 
 
 
-const getFullAddress = async(address) => {
-    const data = {
-        "address": address
-    }
-    const response = await fetch(`${API_BASE_URL}/v0/users/full_address`, {
-        method: "POST",
+const updateUser = async(data) => {
+    const response = await fetch(`${API_BASE_URL}/v0/users/update`, {
+        method: "PUT",
         headers: {
             'Content-Type': 'application/json',
             "auth": initData,
@@ -52,43 +50,9 @@ const getFullAddress = async(address) => {
     if (response.ok) {
         return await response.json();
     } else {
-        return null
+        await showTelegramPopUp("Не удалось обновить данные")
     }
 }
 
 
-const updateUserOrderData = async(data) => {
-    const response = await fetch(`${API_BASE_URL}/v0/users/update_user_order_data`, {
-        method: "PATCH",
-        headers: {
-            'Content-Type': 'application/json',
-            "auth": initData,
-            "app": "user"
-        },
-        body: JSON.stringify(data)
-    });
-    if (response.ok) {
-        return await response.json();
-    } else {
-        return null
-    }
-}
-
-const updateUserShowInstruction = async() => {
-    const response = await fetch(`${API_BASE_URL}/v0/users/show_instruction`, {
-        method: "PATCH",
-        headers: {
-            'Content-Type': 'application/json',
-            "auth": initData,
-            "app": "user"
-        }
-    });
-    if (response.ok) {
-        return await response.json();
-    } else {
-        return null
-    }
-}
-
-
-export { getSelf, getFullAddress, updateUserOrderData, getByUserId, updateUserShowInstruction}
+export { getSelf, getByUserId, updateUser}
