@@ -95,7 +95,7 @@ const handleClickMainButton = async() => {
         const payment = await getInvoiceLink(order.id)
         if (payment) {
             const checkout = new window.YooMoneyCheckoutWidget({
-            confirmation_token: payment.confirmation.confirmation_url,
+            confirmation_token: payment.confirmation.confirmation_token,
             return_url: 'https://example.com',
             customization: {
                 modal: true
