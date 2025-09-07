@@ -1,25 +1,5 @@
 import { API_BASE_URL } from "@/config";
-import { initData } from "@/tg";
-
-const getInvoiceLink = async(cartItemsIds) => {
-    const data = {
-        "items_ids": cartItemsIds
-    }
-    const response = await fetch(`${API_BASE_URL}/v0/orders/create_invoice_link`, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-            "auth": initData,
-            "app": "user"
-        },
-        body: JSON.stringify(data)
-    });
-    if (response.ok) {
-        return await response.json()
-    } else {
-        return null
-    }
-}
+import { initData, showTelegramPopUp } from "@/tg";
 
 
 const getOrdersWithFilters = async(filters, type, sort, q) => {
@@ -59,6 +39,25 @@ const getOrderById = async(orderId) => {
         return await response.json();
     } else {
         console.error("Не удалось получить заказ")
+    }
+}
+
+
+const createOrder = async(data) => {
+    const response = await fetch(`${API_BASE_URL}/v0/orders/create_order`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            "auth": initData,
+            "app": "user"
+        },
+        body: JSON.stringify(data)
+    });
+    if (response.ok) {
+        return await response.json()
+    } else {
+        showTelegramPopUp("Не удалось создать заказ, проверьте корзину!");
+        return null;
     }
 }
 
@@ -120,4 +119,4 @@ const skipFoodSupReview = async(data) => {
 }
 
 
-export {getInvoiceLink, getOrdersWithFilters, getOrderById, updateOrder, getOrdersForInsertReviews, skipFoodSupReview}
+export {getOrdersWithFilters, getOrderById, updateOrder, getOrdersForInsertReviews, skipFoodSupReview, createOrder}
