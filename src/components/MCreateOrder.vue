@@ -3,7 +3,8 @@ import {ref, onMounted, onBeforeUnmount, computed, onBeforeMount } from 'vue';
 import store from '@/store';
 import { router } from '@/router';
 import { formatAmount, getImage } from '@/utils';
-import { getInvoiceLink } from '@/api/order';
+import { createOrder } from '@/api/order';
+import { getInvoiceLink } from '@/api/yookassa';
 import { getDeliveryData } from '@/api/delivery';
 import { showTelegramPopUp, mainButton, backButton, setupButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
@@ -17,7 +18,6 @@ const deliveryData = ref();
 let backButtonClickHandler;
 let mainButtonClickHandler;
 
-const tg = window.Telegram.WebApp
 
 
 onBeforeMount(async() => {
@@ -35,7 +35,6 @@ onMounted(async() => {
         await showTelegramPopUp(message)
         await store.dispatch("UPDATE_USER_SHOW_INSTRUCTION")
     }
-    tg.onEvent("invoiceClosed", handleInvoiceClosed)
     calculateTotalPriceAndSetMainButton();
     backButtonClickHandler = async() => {
         await store.dispatch("RESET_SELECTED_ITEMS")
@@ -46,7 +45,6 @@ onMounted(async() => {
 
 
 onBeforeUnmount(() => {
-    tg.offEvent("invoiceClosed", handleInvoiceClosed)
     backButton.offClick(backButtonClickHandler);
     mainButton.offClick(mainButtonClickHandler);
     mainButton.hide();
@@ -75,25 +73,40 @@ const handleClickMainButton = async() => {
     } else if (!user.value.full_name_id) {
         message += " ФИО";
         insertData = true;
+    } else if (!user.value.email_id) {
+        message += " email"
+        insertData = true;
     }
     if (insertData) {
         await showTelegramPopUp(message)
         return
     }
     mainButton.showProgress()
-    const result = await getInvoiceLink(orderItemsIds.value)
+    const data = {
+        "address": deliveryData.value.address,
+        "full_name": deliveryData.value.full_name,
+        "email": deliveryData.value.email,
+        "phone": deliveryData.value.phone,
+        "city": deliveryData.value.city,
+        "cart_items_ids": orderItemsIds.value
+    }
+    const order = await createOrder(data)
+    if (order) {
+        const payment = await getInvoiceLink(order.id)
+        if (payment) {
+            const checkout = new window.YooMoneyCheckoutWidget({
+            confirmation_token: payment.confirmation.confirmation_url,
+            return_url: 'https://example.com',
+            customization: {
+                modal: true
+            },
+            error_callback: function(error) {
+            }
+        });
+        checkout.render()
+        }
+    }
     mainButton.hideProgress()
-    if (result) {
-        try {
-            tg.openInvoice(result.invoice_link)
-        }
-        catch{
-            console.log("Методы телеграмм не поддерживаются в браузере")
-        }
-    }
-    else {
-        await showTelegramPopUp("Не удалось получить ссылку для оплаты")
-    }
 }
 
 
