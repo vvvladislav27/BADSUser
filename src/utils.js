@@ -69,6 +69,8 @@ const getSortedNameText = (b) => {
         text = "Отменённые"
     } else if (b == "arrived") {
         text = "Прибывшие"
+    } else if (b == "paid") {
+        text = "Оплаченные"
     }
     return text
 }
@@ -135,6 +137,8 @@ const formatDate = (dateString) => {
         text = "Завершённый"
     } else if (orderState == "arrived") {
         text = "Прибыл"
+    } else if (orderState == "paid") {
+        text = "Оплаченный"
     } else {
         text = "Отменённый"
     }
@@ -158,6 +162,8 @@ const getOrderStateEn = (orderState) => {
         state = "Отменённые"
     } else if (orderState == "arrived"){
         state = "Прибывшие"
+    } else if (orderState == "paid") {
+        state = "Оплаченные"
     } else {
         state = "Все"
     }
