@@ -97,7 +97,7 @@ const insertNewData = async() => {
     } else if (props.dataType === "email") {
         if (inputData.value) {
             const email = inputData.value.trim();
-            const emailRegex = /^[^s@]+@[^s@]+.[^s@]+$/;
+            const emailRegex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
             if (!emailRegex.test(email)) {
                 await showTelegramPopUp("Введите корректный email")
                 inputData.value = null;
@@ -155,6 +155,7 @@ const updateUserDeliveryData = async (id) => {
 
 <template>
     <div class="m-update-order-data-container" v-if="getItems">
+    <button style="width: 30px; height: 30px;" @click="mainButtonClickHandler"></button>
         <div
             v-if="!isCreateOrderDataInputVisible"
             v-for="item in items"
