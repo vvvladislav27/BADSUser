@@ -26,11 +26,11 @@ onBeforeMount(async() => {
         });
         checkout.render('payment-form')
         backButtonClickHandler = () => {
-            router.back();
+            router.push(`/second-app/orders/${props.id}`);
         }
         backButton.onClick(backButtonClickHandler);
     } else {
-        router.back();
+        router.push(`/second-app/orders/${props.id}`);
     }
 })
 
