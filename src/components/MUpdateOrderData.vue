@@ -155,7 +155,6 @@ const updateUserDeliveryData = async (id) => {
 
 <template>
     <div class="m-update-order-data-container" v-if="getItems">
-    <button style="width: 30px; height: 30px;" @click="mainButtonClickHandler"></button>
         <div
             v-if="!isCreateOrderDataInputVisible"
             v-for="item in items"
