@@ -1,8 +1,9 @@
 <script setup>
 import { onBeforeMount, onBeforeUnmount } from 'vue';
 import { getInvoiceLink } from '@/api/yookassa';
-import { backButton } from '@/tg';
+import { backButton, showTelegramPopUp } from '@/tg';
 import { router } from '@/router';
+import { updateOrder } from '@/api/order';
 
 let backButtonClickHandler;
 
@@ -20,9 +21,16 @@ onBeforeMount(async() => {
     if (payment){
         const checkout = new window.YooMoneyCheckoutWidget({
             confirmation_token: payment.confirmation.confirmation_token,
-            return_url: 'https://example.com',
             error_callback: function(error) {
             }
+        });
+        checkout.on('success', async() => {
+            await updateOrder(props.id, "paid")
+            router.push(`/second-app/orders/${props.id}`)
+            checkout.destroy();
+        });
+        checkout.on('fail', async() => {
+            await showTelegramPopUp("Оплата не прошла, попробуйте снова")
         });
         checkout.render('payment-form')
         backButtonClickHandler = () => {
