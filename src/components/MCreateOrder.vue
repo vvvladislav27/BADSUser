@@ -4,7 +4,6 @@ import store from '@/store';
 import { router } from '@/router';
 import { formatAmount, getImage } from '@/utils';
 import { createOrder } from '@/api/order';
-import { getInvoiceLink } from '@/api/yookassa';
 import { getDeliveryData } from '@/api/delivery';
 import { showTelegramPopUp, mainButton, backButton, setupButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
@@ -92,21 +91,8 @@ const handleClickMainButton = async() => {
     }
     const order = await createOrder(data)
     if (order) {
-        const payment = await getInvoiceLink(order.id)
-        if (payment) {
-            const checkout = new window.YooMoneyCheckoutWidget({
-            confirmation_token: payment.confirmation.confirmation_token,
-            return_url: 'https://example.com',
-            customization: {
-                modal: true
-            },
-            error_callback: function(error) {
-            }
-        });
-        checkout.render()
-        }
+        router.push(`/second-app/order_paid/${order.id}`)
     }
-    mainButton.hideProgress()
 }
 
 
