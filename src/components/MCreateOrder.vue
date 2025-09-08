@@ -80,7 +80,6 @@ const handleClickMainButton = async() => {
         await showTelegramPopUp(message)
         return
     }
-    mainButton.showProgress()
     const data = {
         "address": deliveryData.value.address,
         "full_name": deliveryData.value.full_name,
