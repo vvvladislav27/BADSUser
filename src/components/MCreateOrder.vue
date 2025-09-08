@@ -51,16 +51,6 @@ onBeforeUnmount(() => {
 
 
 
-const handleInvoiceClosed = async(event) => {
-    if (event.status == "paid") {
-        await showTelegramPopUp("Заказ оплачен")
-        await store.dispatch("GET_AND_SET_USER_CART_ITEMS_AFTER_PAID")
-        await store.dispatch("RESET_SELECTED_ITEMS")
-        router.push("/second-app/")
-    }
-}
-
-
 
 
 const handleClickMainButton = async() => {
@@ -90,6 +80,8 @@ const handleClickMainButton = async() => {
     }
     const order = await createOrder(data)
     if (order) {
+        await store.dispatch("GET_AND_SET_USER_CART_ITEMS_AFTER_PAID")
+        await store.dispatch("RESET_SELECTED_ITEMS")
         router.push(`/second-app/order_paid/${order.id}`)
     }
 }
