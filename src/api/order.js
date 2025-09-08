@@ -55,6 +55,8 @@ const createOrder = async(data) => {
     });
     if (response.ok) {
         return await response.json()
+    } else if (response.status === 400) {
+        showTelegramPopUp("Не удалось создать заказ. Одна или несколько позиций в заказе превышают доступное количество на складе.")
     } else {
         showTelegramPopUp("Не удалось создать заказ, проверьте корзину!");
         return null;
