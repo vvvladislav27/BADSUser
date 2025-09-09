@@ -105,7 +105,9 @@ onBeforeMount(async() => {
 onBeforeUnmount(() => {
     backButton.offClick(backButtonClickHandler);
     mainButton.offClick(mainButtonClickHandler);
-    mainButton.hide()
+    secondaryButton.offClick(secondaryButtonClickHandler);
+    hideButton(secondaryButton);
+    hideButton(mainButton);
 });
 
 
