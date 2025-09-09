@@ -353,6 +353,7 @@ const showMoreReview = async() => {
 
 .m-user-food-sup-description{
     margin-bottom: 20px;
+    white-space: pre-wrap;
 }
 
 .m-user-food-sup-review-more{
