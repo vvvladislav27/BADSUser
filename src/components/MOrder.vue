@@ -4,7 +4,7 @@ import { getOrderById, updateOrder } from '@/api/order';
 import { formatAmount, formatTime, formatDateForOrder, getOrderStateTextRu, getImage } from '@/utils';
 import store from '@/store';
 import { router } from '@/router';
-import { showTelegramPopUpWithKeyboard, mainButton, backButton, hideButton, setupButton } from '@/tg';
+import { showTelegramPopUpWithKeyboard, mainButton, backButton, hideButton, setupButton, secondaryButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 const photos = computed(() => store.state.foodSupsPhotos);
@@ -13,6 +13,8 @@ const addressPickUpPoint = ref("");
 
 let mainButtonClickHandler;
 let backButtonClickHandler;
+let secondaryButtonClickHandler;
+let secondaryButtonState = "canceled"
 
 
 const props = defineProps({
@@ -32,9 +34,21 @@ watch(order, () => {
 const setTgButtons = () => {
     let buttonText;
     let newOrderState;
-    mainButton.offClick(mainButtonClickHandler)
-    hideButton(mainButton)
-    if (order.value.state == "created" || order.value.state == "packed") {
+    mainButton.offClick(mainButtonClickHandler);
+    secondaryButton.offClick(secondaryButtonClickHandler);
+    hideButton(mainButton);
+    hideButton(secondaryButton);
+    if (order.value.state == "created") {
+        buttonText = `Оплатить - ${formatAmount(order.value.cost)} руб`
+        newOrderState = "paid"
+        secondaryButtonClickHandler = async() => {
+            const result = await showTelegramPopUpWithKeyboard("Хотите отменить заказ?")
+            if (result === "confirm") {
+                order.value = await updateOrder(order.value.id, secondaryButtonState, addressPickUpPoint.value);
+            }
+        }
+        setupButton(secondaryButton, "Отменить", secondaryButtonClickHandler)
+    } else if (order.value.state == "packed") {
         buttonText = "Отменить"
         newOrderState = "canceled"
     } else if (order.value.state == "arrived") {
@@ -52,11 +66,18 @@ const setTgButtons = () => {
                 order.value = await updateOrder(order.value.id, newOrderState, addressPickUpPoint.value);
             }
             return
+        } else if (newOrderState == "paid") {
+            router.push(`/second-app/order_paid/${order.value.id}`)
         } else {
             order.value = await updateOrder(order.value.id, newOrderState, addressPickUpPoint.value);
         }
     };
-    if (order.value.state == "created" || order.value.state == "packed" || order.value.state == "arrived" || order.value.state == "received") {
+    if (
+        order.value.state == "created" || 
+        order.value.state == "packed" || 
+        order.value.state == "arrived" || 
+        order.value.state == "received"
+    ) {
         mainButton.onClick(mainButtonClickHandler);
         mainButton.show();
     }
@@ -93,6 +114,7 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="m-order-container" v-if="order">
+        <button style="width: 30px; height: 30px;" @click="mainButtonClickHandler"></button>
         <div class="m-order-data-title">Информация о заказе</div>
         <div class="m-order-wrapper">
             <div class="m-order-data-wrapper">
