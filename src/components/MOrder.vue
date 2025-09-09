@@ -48,7 +48,7 @@ const setTgButtons = () => {
             }
         }
         setupButton(secondaryButton, "Отменить", secondaryButtonClickHandler)
-    } else if (order.value.state == "packed") {
+    } else if (order.value.state == "packed" || order.value.state == "paid") {
         buttonText = "Отменить"
         newOrderState = "canceled"
     } else if (order.value.state == "arrived") {
@@ -76,7 +76,8 @@ const setTgButtons = () => {
         order.value.state == "created" || 
         order.value.state == "packed" || 
         order.value.state == "arrived" || 
-        order.value.state == "received"
+        order.value.state == "received" ||
+        order.value.state == "paid"
     ) {
         mainButton.onClick(mainButtonClickHandler);
         mainButton.show();
