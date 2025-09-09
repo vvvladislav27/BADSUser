@@ -114,7 +114,6 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="m-order-container" v-if="order">
-        <button style="width: 30px; height: 30px;" @click="mainButtonClickHandler"></button>
         <div class="m-order-data-title">Информация о заказе</div>
         <div class="m-order-wrapper">
             <div class="m-order-data-wrapper">
