@@ -2,31 +2,6 @@ import { API_BASE_URL } from "@/config";
 import { initData, showTelegramPopUp } from "@/tg";
 
 
-const getOrdersWithFilters = async(filters, type, sort, q) => {
-    const data = {
-        "filters": filters,
-        "type": type,
-        "sort": sort,
-        "q": q,
-        "uid": null
-    }
-    const response = await fetch(`${API_BASE_URL}/v0/orders/search_user_orders`, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-            "auth": initData,
-            "app": "user"
-        },
-        body: JSON.stringify(data)
-    });
-    if (response.ok) {
-        return await response.json()
-    } else {
-        return []
-    }
-}
-
-
 const getOrderById = async(orderId) => {
     const response = await fetch(`${API_BASE_URL}/v0/orders/${orderId}`, {
         method: "GET",
@@ -121,4 +96,4 @@ const skipFoodSupReview = async(data) => {
 }
 
 
-export {getOrdersWithFilters, getOrderById, updateOrder, getOrdersForInsertReviews, skipFoodSupReview, createOrder}
+export {getOrderById, updateOrder, getOrdersForInsertReviews, skipFoodSupReview, createOrder}
