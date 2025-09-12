@@ -19,8 +19,6 @@ const type = computed(() => store.state.favoriteFoodSupsSearchType);
 const sort = computed(() => store.state.favoriteFoodSupsSearchSort);
 const photos = computed(() => store.state.foodSupsPhotos);
 
-
-const isSearchInputActive = computed(() => store.state.isSearchInputActive);
 const arrow = computed(() => (sort.value === "desc" ? "⬇" : "⬆"));
 const isContextMenuVisible = ref(false);
 const isFoodSupFiltersVisible = ref(false);

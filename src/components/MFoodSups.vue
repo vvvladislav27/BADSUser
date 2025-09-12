@@ -132,8 +132,8 @@ watch([isVideoLoad, isDataLoaded], () => {
 });
 
 
-watch([sort, type, filters, search], () => {
-    store.dispatch("GET_AND_SET_PRODUCTS")
+watch([sort, type, filters, search], async() => {
+    await store.dispatch("GET_AND_SET_PRODUCTS")
 },  {deep: true});
 
 
@@ -141,7 +141,7 @@ watch([sort, type, filters, search], () => {
 watch(isContextMenuVisible, () => {
     if (!isContextMenuVisible.value) {
         backButton.offClick(backButtonClickHandler);
-        backButton.hide();
+        hideButton(backButton);
         updateTgButtons();
     } else {
         backButton.show();
