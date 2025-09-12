@@ -8,7 +8,7 @@ import { backButton, mainButton, secondaryButton, setupButton, hideButton } from
 const currentType = computed(() => router.currentRoute.value.name == "FoodSups"? "food_sups": "favorite_food_sup")
 
 const activeInput = ref()
-const filters = computed(() => currentType.value == "food_sups"? store.state.filters: store.state.favoriteFoodSupsFilters);
+const filters = computed(() => currentType.value == "food_sups"? store.state.foodSupFilters: store.state.favoriteFoodSupsFilters);
 const buttons = [1, 2, 3, 4, 5]
 const filtersList = ref([]); 
 

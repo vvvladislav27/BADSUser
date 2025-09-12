@@ -20,11 +20,11 @@ const isSearchInputActive = computed(() => store.state.isSearchInputActive)
 
 const search = computed(() => {
     if (typeSearch.value === "food_sup") {
-        return store.state.search;
+        return store.state.foodSupSearchQuery;
     } else if (typeSearch.value === "orders") {
-        return store.state.searchQueryForOrders;
+        return store.state.orderSearchQuery;
     } else if (typeSearch.value === "favorite_food_sup") {
-        return store.state.favoriteFoodSupsSearch
+        return store.state.favoriteFoodSupsSearchQuery
     } else {
         return null;
     }
@@ -36,9 +36,9 @@ const q = ref(search.value? search.value: "");
 
 const filters = computed(() => {
     if (typeSearch.value === "food_sup") {
-        return store.state.filters;
+        return store.state.foodSupFilters;
     } else if (typeSearch.value === "orders") {
-        return store.state.searchFiltersForOrders;
+        return store.state.orderFilters;
     } else if (typeSearch.value === "favorite_food_sup") {
         return store.state.favoriteFoodSupsFilters
     } else {

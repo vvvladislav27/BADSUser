@@ -46,7 +46,7 @@ export const GET_AND_SET_USER_CART_ITEMS_AFTER_PAID = async({commit}) => {
 
 
 export const GET_AND_SET_PRODUCTS = async({commit, state}) => {
-    const foodSups = await searchData("food_sups", state.filters, state.type, state.sort, state.search)
+    const foodSups = await searchData("food_sups", state.foodSupFilters, state.foodSupSearchType, state.foodSupSearchSort, state.foodSupSearchQuery)
     commit("SET_PRODUCTS", foodSups.food_sups)
 }
 

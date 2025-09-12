@@ -1,12 +1,12 @@
 export const PRODUCTS = state => state.products
-export const FILTERS = state => state.filters
+export const FILTERS = state => state.foodSupFilters
 export const IS_SEARCH_FILTERS_ACTIVE = state => state.isSearchInputActive
 export const CART = state => state.cart
 export const MAIN_BUTTON_TEXT = state => state.mainButtonText
-export const SORT = state => state.sort
-export const TYPE = state => state.type
+export const SORT = state => state.foodSupSearchSort
+export const TYPE = state => state.foodSupSearchType
 export const FAV_FOOD_SUPS = state => state.favFoodSups
 export const USER_CART_ITEMS = state => state.userCartItems
 export const FOOD_SUPS_PHOTOS = state => state.foodSupsPhotos
 export const USER_ORDER_ITEMS = state => state.userOrderItems
-export const SEARCH = state => state.search
+export const SEARCH = state => state.foodSupSearchQuery

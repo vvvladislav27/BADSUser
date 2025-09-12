@@ -11,7 +11,7 @@ const format = "dd.MM.yyyy"
 
 const filterList = ref([]);
 const buttons = ["all", "created", "packed", "send", "received", "finished", "canceled", "arrived", "paid"]
-const filters = computed(() => store.state.searchFiltersForOrders);
+const filters = computed(() => store.state.orderFilters);
 
 const isContextMenuStateVisible = ref(false);
 

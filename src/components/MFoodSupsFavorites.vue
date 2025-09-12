@@ -14,9 +14,9 @@ import { setAnimationForText } from '@/animation';
 
 
 const filters = computed(() => store.state.favoriteFoodSupsFilters);
-const search = computed(() => store.state.favoriteFoodSupsSearch);
-const type = computed(() => store.state.favoriteFoodSupsType);
-const sort = computed(() => store.state.favoriteFoodSupsSort);
+const search = computed(() => store.state.favoriteFoodSupsSearchQuery);
+const type = computed(() => store.state.favoriteFoodSupsSearchType);
+const sort = computed(() => store.state.favoriteFoodSupsSearchSort);
 const photos = computed(() => store.state.foodSupsPhotos);
 
 

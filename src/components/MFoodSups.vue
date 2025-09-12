@@ -20,10 +20,10 @@ import {
  } from '@/tg';
 
 
-const filters = computed(() => store.state.filters);
-const search = computed(() => store.state.search);
-const type = computed(() => store.state.type);
-const sort = computed(() => store.state.sort);
+const filters = computed(() => store.state.foodSupFilters);
+const search = computed(() => store.state.foodSupSearchQuery);
+const type = computed(() => store.state.foodSupSearchType);
+const sort = computed(() => store.state.foodSupSearchSort);
 const foodSups = computed(() => store.state.products);
 const userCartItems = computed(() => store.state.userCartItems);
 const favFoodSups = computed(() => store.state.favFoodSups);

@@ -18,38 +18,38 @@ export const REMOVE_ORDER_ITEM_FOR_REVIEW = (state) => {
 
 export const SET_FILTERS = (state, {filters, type}) => {
     if (type == "food_sups") {
-        state.filters = filters
+        state.foodSupFilters = filters
     } else if (type == "favorite_food_sup") {
         state.favoriteFoodSupsFilters = filters
     } else {
-        state.searchFiltersForOrders = filters
+        state.orderFilters = filters
     }
 }
 
 
 export const RESET_FILTERS = (state, type) => {
     if (type == "food_sups") {
-        state.filters = []
+        state.foodSupFilters = []
     } else if (type == "favorite_food_sup") {
         state.favoriteFoodSupsFilters = []
     } else {
-        state.searchFiltersForOrders = []
+        state.orderFilters = []
     }
 }
 
 
 export const REMOVE_FILTER = (state,  {index, type}) => {
     if (type == "food_sup") {
-        if (index >= 0 && index < state.filters.length) {
-            state.filters.splice(index, 1);
+        if (index >= 0 && index < state.foodSupFilters.length) {
+            state.foodSupFilters.splice(index, 1);
         }
     } else if (type == "favorite_food_sup") {
         if (index >=0 && index < state.favoriteFoodSupsFilters.length) {
             state.favoriteFoodSupsFilters.splice(index, 1)
         }
     } else {
-        if (index >= 0 && index < state.searchFiltersForOrders.length) {
-            state.searchFiltersForOrders.splice(index, 1)
+        if (index >= 0 && index < state.orderFilters.length) {
+            state.orderFilters.splice(index, 1)
         }
     }
 }
@@ -60,12 +60,12 @@ export const TOGGLE_SEARCH_INPUT_ACTIVE = (state) => {
 
 
 export const SET_SORT = (state, type) => {
-    if (state.type == type) {
-        state.sort = state.sort === "desc" ? "asc" : "desc";
+    if (state.foodSupSearchType == type) {
+        state.foodSupSearchSort = state.foodSupSearchSort === "desc" ? "asc" : "desc";
     } else {
-        state.sort = "desc"
+        state.foodSupSearchSort = "desc"
     }
-    state.type = type
+    state.foodSupSearchType = type
 }
 
 
@@ -141,11 +141,11 @@ export const UPDATE_ORDER_ITEM = (state, userOrderItem) => {
 
 export const UPDATE_SEARCH_VALUE = (state, { search, type }) => {
     if (type == "food_sup") {
-        state.search = search
+        state.foodSupSearchQuery = search
     } else if (type == "favorite_food_sup") {
-        state.favoriteFoodSupsSearch = search;
+        state.favoriteFoodSupsSearchQuery = search;
     } else {
-        state.searchQueryForOrders = search;
+        state.orderSearchQuery = search;
     }
 }
 
@@ -174,22 +174,22 @@ export const RESET_SELECTED_ITEMS = (state) => {
 
 
 export const SET_SORT_SEARCH_TYPE_FOR_ORDERS = (state, type) => {
-    if (state.searchTypeForOrders == type) {
-        state.searchSortForOrders = state.searchSortForOrders === "desc" ? "asc" : "desc";
+    if (state.orderSearchType == type) {
+        state.orderSearchSort = state.orderSearchSort === "desc" ? "asc" : "desc";
     } else {
-        state.searchSortForOrders = "desc"
+        state.orderSearchSort = "desc"
     }
-    state.searchTypeForOrders = type
+    state.orderSearchType = type
 }
 
 
 export const SET_SORT_FOR_FAVORITES_FOOD_SUPS = (state, type) => {
-    if (state.favoriteFoodSupsType == type) {
-        state.favoriteFoodSupsSort = state.favoriteFoodSupsSort === "desc"? "asc": "desc";
+    if (state.favoriteFoodSupsSearchType == type) {
+        state.favoriteFoodSupsSearchSort = state.favoriteFoodSupsSearchSort === "desc"? "asc": "desc";
     } else {
-        state.favoriteFoodSupsSort = "desc"
+        state.favoriteFoodSupsSearchSort = "desc"
     }
-    state.favoriteFoodSupsType = type
+    state.favoriteFoodSupsSearchType = type
 }
 
 

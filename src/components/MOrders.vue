@@ -14,10 +14,10 @@ import store from '@/store';
 import { router } from '@/router';
 
 
-const filters = computed(() => store.state.searchFiltersForOrders);
-const search = computed(() => store.state.searchQueryForOrders);
-const type = computed(() => store.state.searchTypeForOrders);
-const sort = computed(() => store.state.searchSortForOrders);
+const filters = computed(() => store.state.orderFilters);
+const search = computed(() => store.state.orderSearchQuery);
+const type = computed(() => store.state.orderSearchType);
+const sort = computed(() => store.state.orderSearchSort);
 const photos = computed(() => store.state.foodSupsPhotos);
 
 

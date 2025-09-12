@@ -12,9 +12,10 @@ const state = {
     products: [],
     isSearchInputActive: false,
     search: "",
-    filters: [],
-    sort: "desc",
-    type: "rating",
+    foodSupSearchQuery: "",
+    foodSupFilters: [],
+    foodSupSearchSort: "desc",
+    foodSupSearchType: "rating",
     foodSupsPhotos: {},
     favFoodSups: {},
     user: {},
@@ -22,15 +23,15 @@ const state = {
     userCartItems: {},
     userCartFoodSups: [],
     userOrderItems: {},
-    searchFiltersForOrders: [],
-    searchSortForOrders: "desc",
-    searchTypeForOrders: "created_date",
-    searchQueryForOrders: "",
+    orderFilters: [],
+    orderSearchSort: "desc",
+    orderSearchType: "created_date",
+    orderSearchQuery: "",
     orderItemsForReviews: [],
     favoriteFoodSupsFilters: [],
-    favoriteFoodSupsSort: "desc",
-    favoriteFoodSupsType: "rating",
-    favoriteFoodSupsSearch: ""
+    favoriteFoodSupsSearchSort: "desc",
+    favoriteFoodSupsSearchType: "rating",
+    favoriteFoodSupsSearchQuery: ""
   }
 
   const vuexLocal = new VuexPersistence({
