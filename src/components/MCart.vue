@@ -4,23 +4,23 @@ import { computed, onMounted, onUnmounted, watch } from 'vue';
 import { formatAmount } from '@/utils';
 import { router, lastRoute } from '@/router';
 import { vibrate, getImage } from '@/utils';
-import { showTelegramPopUp, showTelegramPopUpWithKeyboard, mainButton, secondaryButton, backButton, hideButton } from '@/tg';
+import { showTelegramPopUp, showTelegramPopUpWithKeyboard, mainButton, secondaryButton, backButton, hideButton, setupButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 const photos = computed(() => store.state.foodSupsPhotos);
 const cartFoodSups = computed(() => store.state.userCartItems);
 const orderFoodSups = computed(() => store.state.userOrderItems)
 
-secondaryButton.text = "Очистить корзину"
 
 const text = computed(() => {
-    const userOrderKeys = Object.keys(orderFoodSups.value);
-    const cartFoodKeys = Object.keys(cartFoodSups.value);
-    if (cartFoodKeys.length === 0) {
+    const countOrderItems = Object.keys(orderFoodSups.value).length;
+    const countCartItems = Object.keys(cartFoodSups.value).length;
+    if (countCartItems === 0) {
         return "Выбрать все";
     }
-    return (userOrderKeys.length === cartFoodKeys.length) ? "Отменить все" : "Выбрать все";
+    return (countCartItems === countOrderItems) ? "Отменить все" : "Выбрать все";
 });
+
 
 let mainButtonClickHandler;
 let secondaryButtonClickHandler;
@@ -41,17 +41,14 @@ const initButtons = () => {
     };
     backButton.onClick(backButtonClickHandler);
     const text = getTextForMainButton();
-    mainButton.text = text;
-    mainButton.show();
     mainButtonClickHandler = () => {
         navigateToCreateOrder();
     };
-    mainButton.onClick(mainButtonClickHandler);
+    setupButton(mainButton, text, mainButtonClickHandler);
     secondaryButtonClickHandler = () => {
         clearCart();
     };
-    secondaryButton.onClick(secondaryButtonClickHandler);
-    secondaryButton.show();
+    setupButton(secondaryButton, "Очистить корзину", secondaryButtonClickHandler);
 }
 
 
@@ -140,25 +137,22 @@ const increment = async(item) => {
 
 
 const toggleItems = async() => {
-    const isSelectingAll = text.value === "Выбрать все";
-    const items = isSelectingAll ? { ...cartFoodSups.value } : null;
-    if (isSelectingAll) {
-        await store.dispatch("ADD_ITEMS_TO_ORDER", items);
-    } else {
-        await store.dispatch("REMOVE_ITEMS_FROM_ORDER");
+    let items = null;
+    if (text.value === "Выбрать все") {
+        items = { ...cartFoodSups.value };
     }
-    text.value = isSelectingAll ? "Отменить все" : "Выбрать все";
+    await store.dispatch("TOGGLE_ORDER_ITEMS", items);
 }
 
 
-const toggleItem = (item) => {
-    const itemExists = orderFoodSups.value[item.food_sup.id] !== undefined;
-    if (!itemExists) {
+const toggleItem = async(item) => {
+    let data = item;
+    if (!isOrdered(item)) {
          vibrate();
-         store.dispatch("ADD_ITEM_TO_ORDER", item)
     } else {
-        store.dispatch("REMOVE_ITEM_FROM_ORDER", item.food_sup.id)
+        data = item.food_sup.id
     }
+    await store.dispatch("TOGGLE_ORDER_ITEM", data)
 };
 
 
