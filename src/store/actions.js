@@ -68,9 +68,10 @@ export const TOGGLE_SEARCH_INPUT_ACTIVE = ({commit}) => {
     commit("TOGGLE_SEARCH_INPUT_ACTIVE")
 }
 
-export const SET_SORT = ({commit}, type) => {
-    commit("SET_SORT", type)
+export const SET_SORT = ({commit}, {type, category}) => {
+    commit("SET_SORT", {type, category})
 }
+
 
 export const TOGGLE_FAV_FOOD_SUP = async({commit}, foodSupId) => {
     const result = await toggleFavFoodSup(foodSupId)
@@ -187,14 +188,6 @@ export const RESET_SELECTED_ITEMS = ({commit}) => {
     commit("RESET_SELECTED_ITEMS")
 }
 
-
-export const SET_SORT_SEARCH_TYPE_FOR_ORDERS = ({commit}, type) => {
-    commit("SET_SORT_SEARCH_TYPE_FOR_ORDERS", type)
-}
-
-export const SET_SORT_FOR_FAVORITES_FOOD_SUPS = ({commit}, type) => {
-    commit("SET_SORT_FOR_FAVORITES_FOOD_SUPS", type)
-}
 
 export const RESET_VIDEO_LOADED = ({commit}) => {
     commit("RESET_VIDEO_LOADED")
