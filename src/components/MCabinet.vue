@@ -3,26 +3,18 @@ import { computed, onBeforeMount, onBeforeUnmount, ref, onMounted } from 'vue';
 import store from '@/store';
 import { router } from '@/router';
 import { getByUserId } from '@/api/user';
-import { mainButton, secondaryButton, backButton, showTelegramPopUp } from '@/tg';
+import { mainButton, secondaryButton, backButton, showTelegramPopUp, hideButton } from '@/tg';
 
 const user = computed(() => store.state.user)
 
 
-mainButton.text = "Написать продавцу"
-secondaryButton.text = "Удаление профиля"
-
 let backButtonClickHandler;
 
-const userData = ref();
-
-
-const getUser = async() => {
-    userData.value = await getByUserId(user.value.telegram_id);
-}
+const u = ref();
 
 
 onBeforeMount(async() => {
-    await getUser()
+    u.value = await getByUserId(user.value.telegram_id);
     backButtonClickHandler = () => {
         router.push("/second-app/")
     }
@@ -30,35 +22,36 @@ onBeforeMount(async() => {
 })
 
 onMounted(() => {
+    mainButton.text = "Написать продавцу"
+    secondaryButton.text = "Удаление профиля"
     backButton.show();
     mainButton.show();
     secondaryButton.show();
 })
 
+
 onBeforeUnmount(() => {
     backButton.offClick(backButtonClickHandler)
-    mainButton.hide();
-    secondaryButton.hide();
+    hideButton(mainButton);
+    hideButton(secondaryButton);
 })
 
 
-const openFavoriteFoodSups = async() => {
-    if (userData.value.count_fav_food_sups == 0) {
+const navigateToFavoriteFoodSups = async() => {
+    if (u.value.count_fav_food_sups == 0) {
         await showTelegramPopUp("Нет избранных товаров")
         return
-    } else {
-        router.push('/second-app/food_sups/favorites')
     }
+    router.push('/second-app/food_sups/favorites')
 }
 
 
-const openOrders = async() => {
-    if (userData.value.count_orders == 0) {
+const navigateToOrders = async() => {
+    if (u.value.count_orders == 0) {
         await showTelegramPopUp("Нет заказов")
         return
-    } else {
-        router.push('/second-app/orders')
     }
+    router.push('/second-app/orders')
 }
 
 
@@ -66,24 +59,24 @@ const openOrders = async() => {
 </script>
 
 <template>
-    <div class="m-cabinet-container" v-if="userData">
+    <div class="m-cabinet-container" v-if="u">
         <img
-            v-if="!userData.photo_url" 
+            v-if="!u.photo_url" 
             src="/base-user.png" 
             class="m-cabinet-image"/>
         <img
             v-else
-            :src="userData.photo_url" 
+            :src="u.photo_url" 
             class="m-cabinet-image"/>
         <div class="m-cabinet-header">
             <div class="m-cabinet-header-hello">Здравствуйте,
-                <p>{{ userData.first_name }} !</p>
+                <p>{{ u.first_name }} !</p>
             </div>
             <div class="m-cabinet-header-bonus">Бонусов · 0</div>
         </div>
         <div class="m-cabinet-body">
-            <div @click="openOrders">{{userData.count_orders > 0? `Заказов · ${userData.count_orders}`: "Нет заказов"}}</div>
-            <div @click="openFavoriteFoodSups">{{ userData.count_fav_food_sups > 0? `Избранное · ${userData.count_fav_food_sups}`: "Нет избранного" }}</div>
+            <div @click="navigateToOrders">{{u.count_orders > 0? `Заказов · ${u.count_orders}`: "Нет заказов"}}</div>
+            <div @click="navigateToFavoriteFoodSups">{{ u.count_fav_food_sups > 0? `Избранное · ${u.count_fav_food_sups}`: "Нет избранного" }}</div>
             <div>Нет обращений</div>
         </div>
     </div>
