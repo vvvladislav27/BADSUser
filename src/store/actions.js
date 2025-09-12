@@ -64,9 +64,6 @@ export const REMOVE_FILTER = ({commit}, {index, type}) => {
     commit("REMOVE_FILTER",  {index, type})
 }
 
-export const TOGGLE_SEARCH_INPUT_ACTIVE = ({commit}) => {
-    commit("TOGGLE_SEARCH_INPUT_ACTIVE")
-}
 
 export const SET_SORT = ({commit}, {type, category}) => {
     commit("SET_SORT", {type, category})

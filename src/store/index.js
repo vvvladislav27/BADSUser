@@ -10,7 +10,6 @@ const state = {
     isVideoLoaded: false,
     isDataLoaded: false,
     products: [],
-    isSearchInputActive: false,
     search: "",
     foodSupSearchQuery: "",
     foodSupFilters: [],

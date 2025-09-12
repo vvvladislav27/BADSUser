@@ -54,9 +54,6 @@ export const REMOVE_FILTER = (state,  {index, type}) => {
     }
 }
 
-export const TOGGLE_SEARCH_INPUT_ACTIVE = (state) => {
-    state.isSearchInputActive = !state.isSearchInputActive
-}
 
 
 export const SET_SORT = (state, { type, category }) => {
