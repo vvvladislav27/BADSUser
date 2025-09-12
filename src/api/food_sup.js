@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/config";
-import { initData } from "@/tg";
+import { initData, showTelegramPopUp } from "@/tg";
 
 
 
@@ -14,7 +14,8 @@ const getFoodSupById = async(foodSupId) => {
     if (response.ok) {
         return await response.json();
     } else {
-        console.error("Не удалось получить БАД")
+        await showTelegramPopUp("Не удалось найти товар")
+        return null
     }
 }
 

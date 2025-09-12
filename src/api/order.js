@@ -73,7 +73,7 @@ const getOrdersForInsertReviews = async() => {
     if (response.ok) {
         return await response.json();
     } else {
-        return null
+        return []
     }
 }
 

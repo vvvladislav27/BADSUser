@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/config";
-import { initData } from "@/tg";
+import { initData, showTelegramPopUp } from "@/tg";
 
 
 
@@ -33,7 +33,8 @@ const insertReview = async(review) => {
     if (response.ok) {
         return await response.json()
     } else {
-        return []
+        await showTelegramPopUp("Не удалось добавить отзыв")
+        return null
     }
 }
 

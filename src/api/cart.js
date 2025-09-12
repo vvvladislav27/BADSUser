@@ -13,7 +13,7 @@ const getCart = async () => {
     if (response.ok) {
         return await response.json()
     } else {
-        return []
+        return null
     }
 }
 
