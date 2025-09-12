@@ -28,9 +28,9 @@ const foodSups = computed(() => store.state.products);
 const userCartItems = computed(() => store.state.userCartItems);
 const favFoodSups = computed(() => store.state.favFoodSups);
 const orderItemsForReviews = computed(() => store.state.orderItemsForReviews);
-const isSearchInputActive = computed(() => store.state.isSearchInputActive);
 const isContextMenuVisible = ref(false);
 const isFoodSupFiltersVisible = ref(false);
+
 const arrow = computed(() => (sort.value === "desc" ? "⬇" : "⬆"));
 const isVideoVisible = computed(() => store.state.isVideoVisible);
 const isVideoLoad = computed(() => store.state.isVideoLoaded);
@@ -44,11 +44,9 @@ let mainButtonClickHandler;
 let secondaryButtonClickHandler;
 let backButtonClickHandler;
 
-onMounted(() => {
-    if (backButton.isVisible) {
-        backButton.hide();
-    }
-    store.dispatch("GET_AND_SET_PRODUCTS")
+onMounted(async() => {
+    hideButton(backButton);
+    await store.dispatch("GET_AND_SET_PRODUCTS")
     if (isVideoLoad.value) {
         updateTgButtons();
     }
@@ -59,15 +57,14 @@ onMounted(() => {
 onUnmounted(() =>{
     mainButton.offClick(mainButtonClickHandler);
     secondaryButton.offClick(secondaryButtonClickHandler);
-    mainButton.hide();
-    secondaryButton.hide();
-    toogleIsSearchInputActive();
+    hideButton(mainButton);
+    hideButton(secondaryButton);
 });
 
 
 watch(isFoodSupFiltersVisible, () => {
     if (!isFoodSupFiltersVisible.value) {
-        backButton.hide();
+        hideButton(backButton);
         updateTgButtons();
     } else {
         hideButton(mainButton);
@@ -161,21 +158,13 @@ const toggleContextMenuVisible = () => {
 
 
 
-const toogleIsSearchInputActive = () => {
-    if (isSearchInputActive.value) {
-        store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
-    }
-}
-
-
-
 const onVideoEnded = () => {
     store.dispatch("SET_IS_VIDEO_LOADED")
 }
 
 
 const setSort = (type) => {
-    store.dispatch("SET_SORT", type)
+    store.dispatch("SET_SORT", {"type": type, "category": "food_sups"});
 }
 
 

@@ -21,7 +21,6 @@ const sort = computed(() => store.state.orderSearchSort);
 const photos = computed(() => store.state.foodSupsPhotos);
 
 
-const isSearchInputActive = computed(() => store.state.isSearchInputActive);
 const arrow = computed(() => (sort.value === "desc" ? "⬇" : "⬆"));
 const isContextMenuVisible = ref(false);
 const isOrderFiltersVisible = ref(false);
@@ -54,11 +53,6 @@ onBeforeUnmount(() =>{
     backButton.offClick(backButtonClickHandler);
 });
 
-
-
-const toogleIsFilterVisible = () => {
-    isOrderFiltersVisible.value = !isOrderFiltersVisible.value
-}
 
 
 watch([sort, type, filters, search], async() => {
@@ -101,15 +95,13 @@ const toggleContextMenuVisible = () => {
 };
 
 
-const toogleIsSearchInputActive = () => {
-    if (isSearchInputActive.value) {
-        store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
-    }
+const toogleIsFilterVisible = () => {
+    isOrderFiltersVisible.value = !isOrderFiltersVisible.value
 }
 
 
 const setSort = (type) => {
-    store.dispatch("SET_SORT_SEARCH_TYPE_FOR_ORDERS", type)
+    store.dispatch("SET_SORT", {"type": type, "category": "orders"});
 }
 
 </script>

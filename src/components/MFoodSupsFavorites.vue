@@ -104,15 +104,9 @@ const toggleContextMenuVisible = () => {
 };
 
 
-const toogleIsSearchInputActive = () => {
-    if (isSearchInputActive.value) {
-        store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
-    }
-}
-
 
 const setSort = (type) => {
-    store.dispatch("SET_SORT_FOR_FAVORITES_FOOD_SUPS", type)
+    store.dispatch("SET_SORT", {"type": type, "category": "favorite_food_sups"});
 }
 
 
