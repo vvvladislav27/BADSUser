@@ -1,9 +1,15 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onUnmounted } from 'vue';
 import store from '@/store'; 
 import { getFilterButtonName } from '@/utils';
 
 const emit = defineEmits(["openFilters"])
+
+onUnmounted(() => {
+    if (isSearchInputActive.value) {
+        store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
+    }
+})
 
 
 const props = defineProps({
