@@ -131,24 +131,18 @@ export const SET_FOOD_SUPS_PHOTOS = ({commit}, { path, photo }) => {
     commit("SET_FOOD_SUPS_PHOTOS", { path, photo })
 }
 
-export const ADD_ITEM_TO_ORDER = ({commit}, item) => {
-    commit("ADD_ITEM_TO_ORDER", item)
+
+export const TOGGLE_ORDER_ITEM = ({commit}, item) => {
+    commit("TOGGLE_ORDER_ITEM", item)
 }
 
-export const REMOVE_ITEM_FROM_ORDER = ({commit}, foodSupId) => {
-    commit("REMOVE_ITEM_FROM_ORDER", foodSupId)
+export const TOGGLE_ORDER_ITEMS = ({commit}, items) => {
+    commit("TOGGLE_ORDER_ITEMS", items)
 }
 
-export const ADD_ITEMS_TO_ORDER = ({commit}, userOrderItems) => {
-    commit("ADD_ITEMS_TO_ORDER", userOrderItems)
-}
 
-export const REMOVE_ITEMS_FROM_ORDER = ({commit}) => {
-    commit("REMOVE_ITEMS_FROM_ORDER")
-}
-
-export const UPDATE_ORDER_ITEM = ({commit},  userOrderItem) => {
-    commit("UPDATE_ORDER_ITEM",  userOrderItem)
+export const UPDATE_ORDER_ITEM = ({commit},  item) => {
+    commit("UPDATE_ORDER_ITEM",  item)
 }
 
 export const UPDATE_SEARCH_VALUE = ({commit}, {search, type}) => {

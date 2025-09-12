@@ -123,24 +123,28 @@ export const TOGGLE_SELECT_ITEM = (state, item) => {
     }
 }
 
-export const ADD_ITEM_TO_ORDER = (state, item) => {
-    state.userOrderItems[item.food_sup.id] = item
+
+
+export const TOGGLE_ORDER_ITEM = (state, item) => {
+    if (typeof(item) === 'object') {
+        state.userOrderItems[item.food_sup.id] = item;
+    } else {
+        delete state.userOrderItems[item];
+    }
 }
 
-export const REMOVE_ITEM_FROM_ORDER = (state, foodSupId) => {
-    delete state.userOrderItems[foodSupId]
+
+export const TOGGLE_ORDER_ITEMS = (state, items) => {
+    if (items) {
+        state.userOrderItems = items;
+    } else {
+        state.userOrderItems = {};
+    }
 }
 
-export const ADD_ITEMS_TO_ORDER = (state, userOrderItems) => {
-    state.userOrderItems = userOrderItems
-};
 
-export const REMOVE_ITEMS_FROM_ORDER = (state) => {
-    state.userOrderItems = {};
-};
-
-export const UPDATE_ORDER_ITEM = (state, userOrderItem) => {
-    state.userOrderItems[userOrderItem.food_sup.id] = userOrderItem;
+export const UPDATE_ORDER_ITEM = (state, item) => {
+    state.userOrderItems[item.food_sup.id] = item;
 };
 
 export const UPDATE_SEARCH_VALUE = (state, { search, type }) => {
