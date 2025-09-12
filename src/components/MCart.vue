@@ -1,18 +1,26 @@
 <script setup>
 import store from '@/store';
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { computed, onMounted, onUnmounted, watch } from 'vue';
 import { formatAmount } from '@/utils';
 import { router, lastRoute } from '@/router';
 import { vibrate, getImage } from '@/utils';
-import { showTelegramPopUp, showTelegramPopUpWithKeyboard, mainButton, secondaryButton, backButton } from '@/tg';
+import { showTelegramPopUp, showTelegramPopUpWithKeyboard, mainButton, secondaryButton, backButton, hideButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 const photos = computed(() => store.state.foodSupsPhotos);
 const cartFoodSups = computed(() => store.state.userCartItems);
 const orderFoodSups = computed(() => store.state.userOrderItems)
 
-const text = ref("Выбрать все")
 secondaryButton.text = "Очистить корзину"
+
+const text = computed(() => {
+    const userOrderKeys = Object.keys(orderFoodSups.value);
+    const cartFoodKeys = Object.keys(cartFoodSups.value);
+    if (cartFoodKeys.length === 0) {
+        return "Выбрать все";
+    }
+    return (userOrderKeys.length === cartFoodKeys.length) ? "Отменить все" : "Выбрать все";
+});
 
 let mainButtonClickHandler;
 let secondaryButtonClickHandler;
@@ -36,11 +44,11 @@ const initButtons = () => {
     mainButton.text = text;
     mainButton.show();
     mainButtonClickHandler = () => {
-        createOrder();
+        navigateToCreateOrder();
     };
     mainButton.onClick(mainButtonClickHandler);
     secondaryButtonClickHandler = () => {
-        clearCartItems();
+        clearCart();
     };
     secondaryButton.onClick(secondaryButtonClickHandler);
     secondaryButton.show();
@@ -66,40 +74,28 @@ onMounted(async() => {
         await getImage(item.food_sup.photo_path)
     }
     initButtons();
-    updateText();
     setAnimationForText('.m-cart-item-text-wrapper');
 });
-
-
-const updateText = () => {
-    const userOrderKeys = Object.keys(orderFoodSups.value);
-    const cartFoodKeys = Object.keys(cartFoodSups.value);
-    text.value = (userOrderKeys.length === cartFoodKeys.length) ? "Отменить все" : "Выбрать все";
-}
 
 
 onUnmounted(() => {
     backButton.offClick(backButtonClickHandler);
     mainButton.offClick(mainButtonClickHandler);
     secondaryButton.offClick(secondaryButtonClickHandler);
-    if (secondaryButton.isVisible) {
-        secondaryButton.hide()
-    }
+    hideButton(secondaryButton);
 })
 
 
-const createOrder = async() => {
+const navigateToCreateOrder = async() => {
     if (Object.keys(orderFoodSups.value).length == 0) {
         await showTelegramPopUp("Выберите товар для оплаты")
         return
-    } else {
-        router.push("/second-app/create_order")
-    }
-
+    };
+    router.push("/second-app/create_order");
 }
 
 
-const clearCartItems = async() => {
+const clearCart = async() => {
     const result = await showTelegramPopUpWithKeyboard(`Очистить содержимое корзины?`)
     if (result == "confirm") {
         await store.dispatch("CLEAR_CART_ITEMS");
@@ -172,11 +168,8 @@ const isOrdered = (item) => {
 
 
 watch(orderFoodSups, () => {
-    if (mainButton.isVisible) {
-        mainButton.hide();
-    }
+    hideButton(mainButton);
     const newText = getTextForMainButton()
-    updateText();
     mainButton.text = newText
     mainButton.show();
 },  {deep: true});
