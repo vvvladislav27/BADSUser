@@ -4,12 +4,8 @@ import store from '@/store';
 import { getFilterButtonName } from '@/utils';
 
 const emit = defineEmits(["openFilters"])
+const isSearchInputActive = ref(false);
 
-onUnmounted(() => {
-    if (isSearchInputActive.value) {
-        store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
-    }
-})
 
 
 const props = defineProps({
@@ -19,9 +15,15 @@ const props = defineProps({
     }
 })
 
-
 const typeSearch = ref(props.what);
-const isSearchInputActive = computed(() => store.state.isSearchInputActive)
+
+
+onUnmounted(() => {
+    if (isSearchInputActive.value) {
+        toggleSearchInputActive();
+    }
+})
+
 
 
 const search = computed(() => {
@@ -56,7 +58,7 @@ const filters = computed(() => {
 
 
 const toggleSearchInputActive = () => {
-    store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
+    isSearchInputActive.value = !isSearchInputActive.value
 }
 
 
@@ -68,6 +70,9 @@ const removeFilter = (index) => {
 const clearSearch = () => {
     q.value = ''
     store.dispatch("UPDATE_SEARCH_VALUE", {"search": q.value, "type": typeSearch.value});
+    if (isSearchInputActive.value) {
+        toggleSearchInputActive();
+    }
 };
 
 const onSearchInput = () => {
