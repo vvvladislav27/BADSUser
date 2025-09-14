@@ -56,12 +56,7 @@ const close = () => {
         <button 
             v-for="b in buttons"
             :key="b"
-            :class="['m-context-menu-btn', {active: cuurentValue == b,
-                 'custom-width': cuurentValue == 'created_date'
-                 || cuurentValue == 'costs'
-                 || cuurentValue == 'item_count'
-                 || cuurentValue == 'unique_item_count'
-                 }]"
+            :class="['m-context-menu-btn', {active: cuurentValue == b}]"
             @click="setSort(b)">
             {{ getSortedNameText(b) }}
             <span v-if="cuurentValue === b && sort != 'orders'" >{{ arrow }}</span> 
@@ -102,10 +97,6 @@ const close = () => {
     border-radius: 4px;
 }
 
-
-.custom-width {
-    width: 350px;
-}
 
 .active{
     border: 2px solid #013b45;
