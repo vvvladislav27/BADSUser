@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { router } from '@/router';
 import store from '@/store';
 import MContextMenu from './MContextMenu.vue';
@@ -54,7 +54,7 @@ onMounted(async() => {
 
 
 
-onUnmounted(() =>{
+onBeforeUnmount(() =>{
     mainButton.offClick(mainButtonClickHandler);
     secondaryButton.offClick(secondaryButtonClickHandler);
     hideButton(mainButton);

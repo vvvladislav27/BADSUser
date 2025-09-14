@@ -1,6 +1,6 @@
 <script setup>
 import store from '@/store';
-import { computed, onMounted, onUnmounted, watch } from 'vue';
+import { computed, onMounted, watch, onBeforeUnmount } from 'vue';
 import { formatAmount } from '@/utils';
 import { router, lastRoute } from '@/router';
 import { vibrate, getImage } from '@/utils';
@@ -75,7 +75,7 @@ onMounted(async() => {
 });
 
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
     backButton.offClick(backButtonClickHandler);
     mainButton.offClick(mainButtonClickHandler);
     secondaryButton.offClick(secondaryButtonClickHandler);
