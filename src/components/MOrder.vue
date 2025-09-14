@@ -1,7 +1,7 @@
 <script setup>
 import { onBeforeUnmount, ref, computed, watch, onBeforeMount } from 'vue';
 import { getOrderById, updateOrder } from '@/api/order';
-import { formatAmount, formatTime, formatDateForOrder, getOrderStateTextRu, getImage } from '@/utils';
+import { formatAmount, formatTime, formatDateForOrder, getOrderStateForOrder, getImage } from '@/utils';
 import store from '@/store';
 import { router } from '@/router';
 import { showTelegramPopUpWithKeyboard, mainButton, backButton, hideButton, setupButton, secondaryButton } from '@/tg';
@@ -10,11 +10,18 @@ import { setAnimationForText } from '@/animation';
 const photos = computed(() => store.state.foodSupsPhotos);
 const order = ref();
 const addressPickUpPoint = ref("");
+let secondaryButtonState = "canceled"
 
 let mainButtonClickHandler;
 let backButtonClickHandler;
-let secondaryButtonClickHandler;
-let secondaryButtonState = "canceled"
+let secondaryButtonClickHandler = async() => {
+    const result = await showTelegramPopUpWithKeyboard("Хотите отменить заказ?")
+    if (result === "confirm") {
+        order.value = await updateOrder(order.value.id, secondaryButtonState, addressPickUpPoint.value);
+    }
+};
+
+
 
 
 const props = defineProps({
@@ -31,57 +38,45 @@ watch(order, () => {
 
 
 
-const setTgButtons = () => {
+const setTgButtons = (orderState) => {
     let buttonText;
     let newOrderState;
     mainButton.offClick(mainButtonClickHandler);
     secondaryButton.offClick(secondaryButtonClickHandler);
     hideButton(mainButton);
     hideButton(secondaryButton);
-    if (order.value.state == "created") {
-        buttonText = `Оплатить - ${formatAmount(order.value.cost)} руб`
-        newOrderState = "paid"
-        secondaryButtonClickHandler = async() => {
-            const result = await showTelegramPopUpWithKeyboard("Хотите отменить заказ?")
-            if (result === "confirm") {
-                order.value = await updateOrder(order.value.id, secondaryButtonState, addressPickUpPoint.value);
-            }
-        }
-        setupButton(secondaryButton, "Отменить", secondaryButtonClickHandler)
-    } else if (order.value.state == "packed" || order.value.state == "paid") {
-        buttonText = "Отменить"
-        newOrderState = "canceled"
-    } else if (order.value.state == "arrived") {
-        buttonText = "Заказ получен"
-        newOrderState = "received"
-    } else if (order.value.state == "received") {
-        buttonText = "Завершить"
-        newOrderState = "finished"
+    const orderStates = {
+        created: { buttonText: `Оплатить - ${formatAmount(order.value.cost)} руб`, newOrderState: "paid" },
+        packed: { buttonText: "Отменить", newOrderState: "canceled" },
+        paid: { buttonText: "Отменить", newOrderState: "canceled" },
+        arrived: { buttonText: "Заказ получен", newOrderState: "received"},
+        received: { buttonText: "Завершить", newOrderState: "finished"}
     }
-    mainButton.text = buttonText;
+    if (orderStates[orderState]) {
+        buttonText = orderStates[orderState].buttonText;
+        newOrderState = orderStates[orderState].newOrderState;
+        if (orderState == "created") {
+            setupButton(secondaryButton, "Отменить заказ", secondaryButtonClickHandler);
+        }
+    }
     mainButtonClickHandler = async() => {
         if (newOrderState === "canceled") {
             const result = await showTelegramPopUpWithKeyboard("Хотите отменить заказ?")
             if (result === "confirm") {
                 order.value = await updateOrder(order.value.id, newOrderState, addressPickUpPoint.value);
             }
-            return
+            return;
         } else if (newOrderState == "paid") {
             router.push(`/second-app/order_paid/${order.value.id}`)
+            return;
         } else {
             order.value = await updateOrder(order.value.id, newOrderState, addressPickUpPoint.value);
+            return;
         }
     };
-    if (
-        order.value.state == "created" || 
-        order.value.state == "packed" || 
-        order.value.state == "arrived" || 
-        order.value.state == "received" ||
-        order.value.state == "paid"
-    ) {
-        mainButton.onClick(mainButtonClickHandler);
-        mainButton.show();
-    }
+    if (orderStates[orderState]) {
+        setupButton(mainButton, buttonText, mainButtonClickHandler);
+    };
 }
 
 
@@ -125,7 +120,7 @@ onBeforeUnmount(() => {
             </div>
             <div class="m-order-data-wrapper">
                 <div>Статус</div>
-                <div class="m-order-data-content"> {{ getOrderStateTextRu(order.state) }} </div>
+                <div class="m-order-data-content"> {{ getOrderStateForOrder(order.state) }} </div>
             </div>
             <div class="m-order-data-wrapper">
                 <div>Дата создания</div>

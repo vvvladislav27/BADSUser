@@ -5,7 +5,7 @@ import { router } from '@/router';
 import { formatAmount, getImage } from '@/utils';
 import { createOrder } from '@/api/order';
 import { getDeliveryData } from '@/api/delivery';
-import { showTelegramPopUp, mainButton, backButton, setupButton } from '@/tg';
+import { showTelegramPopUp, mainButton, backButton, setupButton, hideButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 const user = computed(() => store.state.user);
@@ -46,7 +46,7 @@ onMounted(async() => {
 onBeforeUnmount(() => {
     backButton.offClick(backButtonClickHandler);
     mainButton.offClick(mainButtonClickHandler);
-    mainButton.hide();
+    hideButton(mainButton);
 })
 
 

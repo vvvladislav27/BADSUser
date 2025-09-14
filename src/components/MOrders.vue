@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, watch, onBeforeMount, nextTick } from 'vue';
 
-import {getSortedNameText, formatAmount, getOrderStateTextRu, getImage } from '@/utils';
+import {getSortedNameText, formatAmount, getOrderStateForOrder, getImage } from '@/utils';
 import { searchData } from '@/api/search';
 import MSearch from './MSearch.vue';
 import MContextMenu from './MContextMenu.vue';
@@ -134,7 +134,7 @@ const setSort = (type) => {
                     <div class="m-order-item-content-name-wrapper">
                         <div class="m-order-item-content-text">Заказ №{{ order.id }} - {{ order.items.length }}шт ({{ formatAmount(order.cost) }}) руб</div>
                     </div>
-                    <div class="m-order-item-state-text">{{ getOrderStateTextRu(order.state) }}</div>
+                    <div class="m-order-item-state-text">{{ getOrderStateForOrder(order.state) }}</div>
                 </div>
             </div>
         </div>

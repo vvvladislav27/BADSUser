@@ -110,7 +110,7 @@ const decrement = async(item) => {
         if (result == "confirm"){
             await store.dispatch("DECREMENT_CART_ITEM", item.food_sup.id);
                 if (isOrderItem) {
-                    store.dispatch("REMOVE_ITEM_FROM_ORDER", item.food_sup.id);
+                    await store.dispatch("REMOVE_ITEM_FROM_ORDER", item.food_sup.id);
                 }
         }
     } else {

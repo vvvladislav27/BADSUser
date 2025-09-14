@@ -2,7 +2,7 @@
 
 import { ref, computed, onBeforeMount, onBeforeUnmount } from 'vue';
 import store from '@/store';
-import { getOrderStateEn } from '@/utils';
+import { getOrderStateForOrders } from '@/utils';
 import '@vuepic/vue-datepicker/dist/main.css';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import MContextMenu from './MContextMenu.vue';
@@ -141,7 +141,7 @@ const toogleIsContextMenuStateVisible = () => {
                     class="m-user-filter-status-btn"
                     type="button"
                     @click="toogleIsContextMenuStateVisible"
-                    >{{  getOrderStateEn(currentState)  }}
+                    >{{  getOrderStateForOrders(currentState)  }}
                 </button>
             </div>
             <div class="m-user-filter-title">Период</div>
