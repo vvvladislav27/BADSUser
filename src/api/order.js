@@ -13,7 +13,8 @@ const getOrderById = async(orderId) => {
     if (response.ok) {
         return await response.json();
     } else {
-        console.error("Не удалось получить заказ")
+        await showTelegramPopUp("Не удалось получить заказ, попробуйте позже")
+        return null
     }
 }
 
@@ -57,6 +58,7 @@ const updateOrder = async(orderId, state, address) => {
     if (response.ok) {
         return await response.json()
     } else {
+        await showTelegramPopUp("Не удалось обновить статус заказа")
         return []
     }
 }

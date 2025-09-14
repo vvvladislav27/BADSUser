@@ -22,7 +22,7 @@ const toggleFavFoodSup = async(foodSupId) => {
     const data = {
         "food_sup_id": foodSupId
     }
-    const response = await fetch(`${API_BASE_URL}/v0/fav_food_sups/toggle_item`, {
+    const response = await fetch(`${API_BASE_URL}/v0/fav_food_sups/toggle`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const toggleFavFoodSup = async(foodSupId) => {
     if (response.ok) {
         return await response.json()
     } else {
-        return []
+        return null
     }
 }
 

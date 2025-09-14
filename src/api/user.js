@@ -31,6 +31,7 @@ const getByUserId = async(userId) => {
     if (response.ok) {
         return await response.json();
     } else {
+        await showTelegramPopUp("Не удалось получить данные для кабинета")
         return null
     }
 }

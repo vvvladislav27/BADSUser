@@ -52,7 +52,7 @@ const addCartItem = async (cartId, foodSupId, count) => {
     if (response.ok) {
         return await response.json()
     } else {
-        return []
+        return null
     }
 }
 
@@ -76,7 +76,7 @@ const updateCartItem = async (cartItemId, cartId, foodSupId, count) => {
     if (response.ok) {
         return await response.json()
     } else {
-        return []
+        return null
     }
 }
 
