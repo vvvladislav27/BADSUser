@@ -183,3 +183,7 @@ export const RESET_SELECTED_ITEMS = ({commit}) => {
 export const RESET_VIDEO_LOADED = ({commit}) => {
     commit("RESET_VIDEO_LOADED")
 }
+
+export const TOGGLE_SEARCH_INPUT_ACTIVE = ({commit}) => {
+    commit("TOGGLE_SEARCH_INPUT_ACTIVE")
+}

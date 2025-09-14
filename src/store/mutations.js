@@ -184,3 +184,7 @@ export const RESET_SELECTED_ITEMS = (state) => {
 export const RESET_VIDEO_LOADED = (state) => {
     state.isVideoVisible = false;
 }
+
+export const TOGGLE_SEARCH_INPUT_ACTIVE = (state) => {
+    state.isSearchInputActive = !state.isSearchInputActive
+}

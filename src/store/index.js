@@ -9,6 +9,7 @@ const state = {
     isVideoVisible: true,
     isVideoLoaded: false,
     isDataLoaded: false,
+    isSearchInputActive: false,
     products: [],
     search: "",
     foodSupSearchQuery: "",
