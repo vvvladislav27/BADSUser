@@ -38,69 +38,42 @@ const getFormatDate = (dateString) => {
 }
 
 const getSortedNameText = (b) => {
-    let text;
-    if (b == "price") {
-        text = "Цена"
-    } else if (b == "rating") {
-        text = "Рейтинг"
-    } else if (b == "name") {
-        text = "Название"
-    } else if (b == "cost") {
-        text = "Стоимость" 
-    } else if (b == "created_date") {
-        text = "Дата создания"
-    } else if (b == "item_count") {
-        text = "Количество"
-    } else if (b == "unique_item_count") {
-        text = "Количество уникальных"
-    } else if (b == "all") {
-        text = "Все"
-    } else if (b == "created") {
-        text = "Созданные"
-    } else if (b == "packed") {
-        text = "Упакованные"
-    } else if (b == "send") {
-        text = "Отправленные"
-    } else if (b == "received") {
-        text = "Полученные"
-    } else if (b == "finished") {
-        text = "Завершённые"
-    } else if (b == "canceled") {
-        text = "Отменённые"
-    } else if (b == "arrived") {
-        text = "Прибывшие"
-    } else if (b == "paid") {
-        text = "Оплаченные"
+    const textMap = {
+        price: "Цена",
+        rating: "Рейтинг",
+        name: "Название",
+        cost: "Стоимость",
+        created_date: "Дата создания",
+        item_count: "Количество",
+        unique_item_count: "Количество уникальных",
+        all: "Все",
+        created: "Созданные",
+        packed: "Упакованные",
+        send: "Отправленные",
+        received: "Полученные",
+        finished: "Завершённые",
+        canceled: "Отменённые",
+        arrived: "Прибывшие",
+        paid: "Оплаченные"
     }
-    return text
+    return textMap[b] || null;
 }
 
 
 const getPackageItemCountText = (foodSup) => {
     let text= `${foodSup.package_item_count}`;
     if (foodSup.type_ == "pills") {
-        if (foodSup.package_item_count == 12) {
-            text += " таблеток"
-        } else {
-            text += " таблетки"
-        }
+        text += foodSup.package_item_count == 12? " таблеток": " таблетки"
     } else {
-        if (foodSup.package_item_count == 12) {
-            text += " капсул"
-        } else {
-            text += " капсулы"
-        }
+        text += foodSup.package_item_count == 12? " капсул": " капсулы"
     };
     return text;
 };
 
 
+
 const getStockItemCountText = (foodSup) => {
-    if (foodSup.stock_item_count == 0) {
-        return "Нет в наличии"
-    } else {
-        return `В наличии ${foodSup.stock_item_count} шт.`
-    }
+    return foodSup.stock_item_count == 0? "Нет в наличии": `В наличии ${foodSup.stock_item_count} шт.`
 }
 
 const getImage = async(photo_path) => {
@@ -123,51 +96,32 @@ const formatDate = (dateString) => {
   };
 
 
-  const getOrderStateTextRu = (orderState) => {
-    let text 
-    if (orderState == "created") {
-        text = "Создан"
-    } else if (orderState == "packed") {
-        text = "Упакован"
-    } else if (orderState == "send") {
-        text = "Отправленный"
-    } else if (orderState == "received") {
-        text = "Полученный"
-    } else if (orderState == "finished") {
-        text = "Завершённый"
-    } else if (orderState == "arrived") {
-        text = "Прибыл"
-    } else if (orderState == "paid") {
-        text = "Оплаченный"
-    } else {
-        text = "Отменённый"
-    }
-    return text
+const getOrderStateForOrder = (orderState) => {
+    const stateMap = {
+        created: "Создан",
+        packed: "Упакован",
+        send: "Отправленный",
+        received: "Полученный",
+        finished: "Завершённый",
+        arrived: "Прибыл",
+        paid: "Оплачен"
+    };
+    return stateMap[orderState] || "Отменённый";
 }
 
 
-const getOrderStateEn = (orderState) => {
-    let state;
-    if (orderState == "created") {
-        state = "Созданные"
-    } else if (orderState == "packed") {
-        state = "Упакованные"
-    } else if (orderState == "send") {
-        state = "Отправленные"
-    } else if (orderState == "received") {
-        state = "Полученные"
-    } else if (orderState == "finished") {
-        state = "Завершённые"
-    } else if (orderState == "canceled") {
-        state = "Отменённые"
-    } else if (orderState == "arrived"){
-        state = "Прибывшие"
-    } else if (orderState == "paid") {
-        state = "Оплаченные"
-    } else {
-        state = "Все"
-    }
-    return state
+const getOrderStateForOrders = (orderState) => {
+    const stateMap = {
+        created: "Созданные",
+        packed: "Упакованные",
+        send: "Отправленные",
+        received: "Полученные",
+        finished: "Завершённые",
+        canceled: "Отменённые",
+        arrived: "Прибывшие",
+        paid: "Оплаченные"
+    };
+    return stateMap[orderState] || "Все";
 }
 
 
@@ -219,11 +173,7 @@ const getReviewText = (foodSup) => {
 
 const getQuantityText = (foodSup) => {
     let text= `${foodSup.package_item_count}`;
-    if (foodSup.type_ == "pills") {
-        text += " таблеток"
-    } else {
-        text += " капсул"
-    };
+    text += foodSup.type_ == "pills"? " таблеток": " капсул"
     return text;
 };
 
@@ -234,7 +184,7 @@ const getFilterButtonName = (filter) => {
     } else if (filter.name == "Рейтинг") {
         return `Рейтинг > ${filter.rating}`
     } else if (filter.name == "Состояние заказа") {
-        return getOrderStateEn(filter.state)
+        return getOrderStateForOrders(filter.state)
     } else if (filter.name == "Дата") {
         if (filter.from_date && filter.to_date) {
             return `С ${getFormatDate(filter.from_date)} по ${getFormatDate(filter.to_date)}`
@@ -264,8 +214,8 @@ export {
     getPackageItemCountText, 
     getImage,
     formatDate,
-    getOrderStateTextRu,
-    getOrderStateEn,
+    getOrderStateForOrder,
+    getOrderStateForOrders,
     formatDateForOrder,
     getFormatDate,
     formatTime,
