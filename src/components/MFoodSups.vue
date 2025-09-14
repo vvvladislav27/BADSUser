@@ -19,7 +19,7 @@ import {
     hideButton,
  } from '@/tg';
 
-
+const isSearchInputActive = computed(() => store.state.isSearchInputActive);
 const filters = computed(() => store.state.foodSupFilters);
 const search = computed(() => store.state.foodSupSearchQuery);
 const type = computed(() => store.state.foodSupSearchType);
@@ -199,6 +199,12 @@ const addReview = async() => {
 
 const toogleIsFilterVisible = () => {
     isFoodSupFiltersVisible.value = !isFoodSupFiltersVisible.value
+}
+
+const toogleIsSearchInputActive = () => {
+    if (isSearchInputActive.value) {
+        store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
+    }
 }
 
 </script>

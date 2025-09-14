@@ -12,7 +12,7 @@ import { router } from '@/router';
 import { backButton} from '@/tg';
 import { setAnimationForText } from '@/animation';
 
-
+const isSearchInputActive = computed(() => store.state.isSearchInputActive);
 const filters = computed(() => store.state.favoriteFoodSupsFilters);
 const search = computed(() => store.state.favoriteFoodSupsSearchQuery);
 const type = computed(() => store.state.favoriteFoodSupsSearchType);
@@ -107,6 +107,12 @@ const setSort = (type) => {
     store.dispatch("SET_SORT", {"type": type, "category": "favorite_food_sups"});
 }
 
+
+const toogleIsSearchInputActive = () => {
+    if (isSearchInputActive.value) {
+        store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
+    }
+}
 
 </script>
 

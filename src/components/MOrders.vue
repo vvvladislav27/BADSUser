@@ -13,7 +13,7 @@ import { setAnimationForText } from '@/animation';
 import store from '@/store';
 import { router } from '@/router';
 
-
+const isSearchInputActive = computed(() => store.state.isSearchInputActive);
 const filters = computed(() => store.state.orderFilters);
 const search = computed(() => store.state.orderSearchQuery);
 const type = computed(() => store.state.orderSearchType);
@@ -102,6 +102,12 @@ const toogleIsFilterVisible = () => {
 
 const setSort = (type) => {
     store.dispatch("SET_SORT", {"type": type, "category": "orders"});
+}
+
+const toogleIsSearchInputActive = () => {
+    if (isSearchInputActive.value) {
+        store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
+    }
 }
 
 </script>
