@@ -4,7 +4,7 @@ import store from '@/store';
 import { getFilterButtonName } from '@/utils';
 
 const emit = defineEmits(["openFilters"])
-const isSearchInputActive = ref(false);
+const isSearchInputActive = computed(() => store.state.isSearchInputActive)
 
 
 
@@ -20,7 +20,7 @@ const typeSearch = ref(props.what);
 
 onUnmounted(() => {
     if (isSearchInputActive.value) {
-        toggleSearchInputActive();
+        store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE")
     }
 })
 
@@ -58,7 +58,7 @@ const filters = computed(() => {
 
 
 const toggleSearchInputActive = () => {
-    isSearchInputActive.value = !isSearchInputActive.value
+    store.dispatch("TOGGLE_SEARCH_INPUT_ACTIVE");
 }
 
 
