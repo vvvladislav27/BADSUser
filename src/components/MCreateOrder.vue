@@ -4,7 +4,6 @@ import store from '@/store';
 import { router } from '@/router';
 import { formatAmount, getImage } from '@/utils';
 import { createOrder } from '@/api/order';
-import { getDeliveryData } from '@/api/delivery';
 import { showTelegramPopUp, mainButton, backButton, setupButton, hideButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
@@ -12,7 +11,6 @@ const user = computed(() => store.state.user);
 const photos = computed(() => store.state.foodSupsPhotos);
 const orderItems = computed(() => Object.values(store.state.userOrderItems));
 const orderItemsIds = ref([]);
-const deliveryData = ref();
 
 let backButtonClickHandler;
 let mainButtonClickHandler;
@@ -20,7 +18,6 @@ let mainButtonClickHandler;
 
 
 onBeforeMount(async() => {
-    deliveryData.value = await getDeliveryData(user.value.telegram_id)
     for (let item of orderItems.value) {
         await getImage(item.food_sup.photo_path)
     }
@@ -56,13 +53,13 @@ onBeforeUnmount(() => {
 const handleClickMainButton = async() => {
     let message = "Для оформления заказа необходимо указать";
     let insertData = false;
-    if (!user.value.address_id) {
+    if (!user.value.address) {
         message += " адрес";
         insertData = true;
-    } else if (!user.value.full_name_id) {
+    } else if (!user.value.full_name) {
         message += " ФИО";
         insertData = true;
-    } else if (!user.value.email_id) {
+    } else if (!user.value.email) {
         message += " email"
         insertData = true;
     }
@@ -71,11 +68,11 @@ const handleClickMainButton = async() => {
         return
     }
     const data = {
-        "address": deliveryData.value.address,
-        "full_name": deliveryData.value.full_name,
-        "email": deliveryData.value.email,
-        "phone": deliveryData.value.phone,
-        "city": deliveryData.value.city,
+        "address": user.value.address.full_address,
+        "full_name": user.value.full_name.name,
+        "email": user.value.email.name,
+        "phone": user.value.phone.number,
+        "city": user.value.address.city,
         "cart_items_ids": orderItemsIds.value
     }
     const order = await createOrder(data)
@@ -108,7 +105,7 @@ const calculateTotalPriceAndSetMainButton = () => {
 </script>
 
 <template>
-    <div class="m-create-order-container" v-if="deliveryData">
+    <div class="m-create-order-container">
         <div class="m-create-order-header">
             <div class="m-create-order-header-shipping-information">Информация о доставке</div>
             <div class="m-create-order-header-shipping-information-item">
@@ -116,7 +113,7 @@ const calculateTotalPriceAndSetMainButton = () => {
                 <div 
                     class="m-create-order-header-shipping-information-item-text"
                     @click="router.push({name: 'UpdateOrderData', params: { dataType: 'address' }})">
-                    {{ deliveryData.address? deliveryData.address : 'Не указан'}}
+                    {{ user.address? user.address.full_address : 'Не указан'}}
                 </div>
             </div>
             <div class="m-create-order-header-shipping-information-item">
@@ -124,7 +121,7 @@ const calculateTotalPriceAndSetMainButton = () => {
                 <div 
                     class="m-create-order-header-shipping-information-item-text"
                     @click="router.push({name: 'UpdateOrderData', params: { dataType: 'full_name' }})">
-                    {{ deliveryData.full_name? deliveryData.full_name : 'Не указано'}}
+                    {{ user.full_name? user.full_name.name : 'Не указано'}}
                 </div>
             </div>
             <div class="m-create-order-header-shipping-information-item">
@@ -132,7 +129,7 @@ const calculateTotalPriceAndSetMainButton = () => {
                 <div 
                     class="m-create-order-header-shipping-information-item-text"
                     @click="router.push({name: 'UpdateOrderData', params: { dataType: 'phone' }})">
-                    {{ deliveryData.phone? deliveryData.phone : 'Не указан'}}
+                    {{ user.phone? user.phone.number : 'Не указан'}}
                 </div>
             </div>
             <div class="m-create-order-header-shipping-information-item">
@@ -140,7 +137,7 @@ const calculateTotalPriceAndSetMainButton = () => {
                 <div 
                     class="m-create-order-header-shipping-information-item-text"
                     @click="router.push({name: 'UpdateOrderData', params: { dataType: 'email' }})">
-                    {{ deliveryData.email? deliveryData.email : 'Не указан'}}
+                    {{ user.email? user.email.name : 'Не указан'}}
                 </div>
             </div>
         </div>
