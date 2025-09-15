@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "@/config";
 import { initData } from "@/tg";
+import store from "@/store";
 
 
 const searchData = async(what, filters, type, sort, q) => {
@@ -8,7 +9,8 @@ const searchData = async(what, filters, type, sort, q) => {
         "filters": filters,
         "type": type,
         "order": sort,
-        "q": q
+        "q": q,
+        "uid": store.state.user.telegram_id
     }
     const response = await fetch(`${API_BASE_URL}/v0/search/`, {
         method: "POST",
