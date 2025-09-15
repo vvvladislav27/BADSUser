@@ -2,14 +2,7 @@
 import { computed, ref, onBeforeMount, onBeforeUnmount } from 'vue';
 import store from '@/store';
 import { router } from '@/router';
-import { 
-    getListAddress, 
-    getListEmails, 
-    getListFullNames, 
-    getListPhones, 
-    deleteEntity,
-    createEntity
-} from '@/api/delivery';
+import { deleteEntity, createEntity, updateEntity, getEninties } from '@/api/delivery';
 import { useTelInput } from 'vue3-headless-tel-input';
 import { showTelegramPopUp, showTelegramPopUpWithKeyboard, mainButton, backButton } from '@/tg';
 
@@ -61,21 +54,18 @@ onBeforeUnmount(() => {
 const getData = async() => {
     if (props.dataType == "address") {
         inputText.value = "Введите адрес"
-        fieldId.value = user.value.address_id;
-        items.value = await getListAddress(user.value.telegram_id);
+        fieldId.value = user.value.address? user.value.address.id: null;
     } else if (props.dataType == "full_name") {
         inputText.value = "Введите ФИО"
-        fieldId.value = user.value.full_name_id;
-        items.value = await getListFullNames(user.value.telegram_id);
+        fieldId.value = user.value.full_name? user.value.full_name.id: null;
     } else if (props.dataType == "phone") {
         inputText.value = "Введите номер телефона"
-        fieldId.value = user.value.phone_id;
-        items.value = await getListPhones(user.value.telegram_id);
+        fieldId.value = user.value.phone? user.value.phone.id: null;
     } else {
         inputText.value = "Введите email"
-        fieldId.value = user.value.email_id;
-        items.value = await getListEmails(user.value.telegram_id);
+        fieldId.value = user.value.email? user.value.email.id: null;
     }
+    items.value = await getEninties(user.value.telegram_id, props.dataType);
     getItems.value = true;
 }
 
@@ -110,7 +100,10 @@ const insertNewData = async() => {
     if (inputData.value) {
         const result = await createEntity(inputData.value, props.dataType)
         if (result) {
-            updateUserDeliveryData(result.id);
+            const u = await store.dispatch("GET_AND_SET_USER")
+            if (u) {
+                router.push("/second-app/create_order");
+            }
         }
     }
 }
@@ -132,21 +125,12 @@ const removeDataFromList = async (itemId) => {
 }
 
 const updateUserDeliveryData = async (id) => {
-    const u = user.value;
-    const fieldMapping = {
-        address: 'address_id',
-        phone: 'phone_id',
-        email: 'email_id',
-        full_name: 'full_name_id'
-    };
-    const field = fieldMapping[props.dataType];
-    if (field) {
-        u[field] = id;
-        const result = await store.dispatch("UPDATE_USER_DELIVERY_DATA", u)
-        if (result) {
+    const result = await updateEntity(id, props.dataType)
+    if (result) {
+        const u = await store.dispatch("GET_AND_SET_USER")
+        if (u) {
             router.push("/second-app/create_order");
         }
-        
     }
 };
 
