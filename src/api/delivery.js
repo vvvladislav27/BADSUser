@@ -3,76 +3,8 @@ import { initData } from "@/tg";
 import { showTelegramPopUp } from "@/tg";
 
 
-
-const getDeliveryData = async(uid) => {
-    const response = await fetch(`${API_BASE_URL}/v0/delivery/get_delivery_data/${uid}`, {
-        method: "GET",
-        headers: {
-            "auth": initData,
-            "app": "user"
-        }
-    });
-    if (response.ok) {
-        return await response.json()
-    } else {
-        await showTelegramPopUp("Не удалось получить данные доставки")
-        return null
-    }
-}
-
-
-
-const getListEmails = async(uid) => {
-    const response = await fetch(`${API_BASE_URL}/v0/delivery/list_emails/${uid}`, {
-        method: "GET",
-        headers: {
-            "auth": initData,
-            "app": "user"
-        }
-    });
-    if (response.ok) {
-        return await response.json()
-    } else {
-        return []
-    }
-}
-
-
-
-const getListPhones = async(uid) => {
-    const response = await fetch(`${API_BASE_URL}/v0/delivery/list_phones/${uid}`, {
-        method: "GET",
-        headers: {
-            "auth": initData,
-            "app": "user"
-        }
-    });
-    if (response.ok) {
-        return await response.json()
-    } else {
-        return []
-    }
-}
-
-
-const getListFullNames = async(uid) => {
-    const response = await fetch(`${API_BASE_URL}/v0/delivery/list_full_names/${uid}`, {
-        method: "GET",
-        headers: {
-            "auth": initData,
-            "app": "user"
-        }
-    });
-    if (response.ok) {
-        return await response.json()
-    } else {
-        return []
-    }
-}
-
-
-const getListAddress = async(uid) => {
-    const response = await fetch(`${API_BASE_URL}/v0/delivery/list_addresses/${uid}`, {
+const getEninties = async(uid, entity) => {
+    const response = await fetch(`${API_BASE_URL}/v0/delivery/list_${entity}/${uid}`, {
         method: "GET",
         headers: {
             "auth": initData,
@@ -103,6 +35,26 @@ const deleteEntity = async(entityId, entity) => {
 }
 
 
+const updateEntity = async(entity_id, entity) => {
+    const data = {"entity_id": entity_id}
+    const response = await fetch(`${API_BASE_URL}/v0/delivery/${entity}`, {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json',
+            "auth": initData,
+            "app": "user"
+        },
+        body: JSON.stringify(data)
+    });
+    if (response.ok) {
+        return await response.json();
+    } else {
+        await showTelegramPopUp("Не удалось обновить данные")
+        return null
+    }
+}
+
+
 const createEntity = async(payload, entity) => {
     const data = {"data": payload}
     const response = await fetch(`${API_BASE_URL}/v0/delivery/${entity}`, {
@@ -126,9 +78,6 @@ const createEntity = async(payload, entity) => {
 export {
     createEntity,
     deleteEntity, 
-    getListAddress, 
-    getListEmails, 
-    getListFullNames, 
-    getListPhones, 
-    getDeliveryData
+    updateEntity,
+    getEninties
 }
