@@ -166,11 +166,11 @@ export const UPDATE_USER_SHOW_INSTRUCTION = async({commit, state}) => {
     }
 }
 
-export const UPDATE_USER_DELIVERY_DATA = async({commit}, user) => {
-    const u = await updateUser(user);
-    if (u) {
+export const GET_AND_SET_USER = async({commit}) => {
+    const user = await getSelf();
+    if (user) {
         commit("SET_USER", user);
-        return u;
+        return user;
     }
 
 }
