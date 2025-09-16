@@ -6,7 +6,7 @@ import { getSelf, updateUser } from "@/api/user";
 import { showTelegramPopUp } from "@/tg";
 
 
-export const GET_AND_SET_DATA = async({commit}) => {
+export const GET_AND_SET_DATA = async({commit, state}) => {
     const user = await getSelf();
     if (user.is_blocked) {
         await showTelegramPopUp("Вы заблокированы администратором приложения");
@@ -15,12 +15,14 @@ export const GET_AND_SET_DATA = async({commit}) => {
     if (user.is_blocked) {
         return true
     }
-    const [cart, favoriteFoodSup, cartItems, orderItemsforReview] = await Promise.all([
+    const [foodSups, cart, favoriteFoodSup, cartItems, orderItemsforReview] = await Promise.all([
+        searchData("food_sups", state.foodSupFilters, state.foodSupSearchType, state.foodSupSearchSort, state.foodSupSearchQuery),
         getCart(),
         getFavFoodSups(),
         getCartItems(),
         getOrdersForInsertReviews()
     ])
+    commit("SET_PRODUCTS", foodSups.food_sups)
     commit("SET_USER_CART", cart);
     commit("SET_FAV_FOOD_SUPS", favoriteFoodSup);
     commit("SET_USER_CART_ITEMS", cartItems);
