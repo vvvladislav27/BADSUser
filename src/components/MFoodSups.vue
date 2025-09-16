@@ -44,9 +44,8 @@ let mainButtonClickHandler;
 let secondaryButtonClickHandler;
 let backButtonClickHandler;
 
-onMounted(async() => {
+onMounted(() => {
     hideButton(backButton);
-    await store.dispatch("GET_AND_SET_PRODUCTS")
     if (isVideoLoad.value) {
         updateTgButtons();
     }
