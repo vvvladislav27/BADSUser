@@ -72,7 +72,7 @@ const handleClickMainButton = async() => {
         "address": user.value.address.full_address,
         "full_name": user.value.full_name.name,
         "email": user.value.email.name,
-        "phone": user.value.phone.number,
+        "phone": user.value.phone? user.value.phone.number: null,
         "city": user.value.address.city,
         "cart_items_ids": orderItemsIds.value
     }
