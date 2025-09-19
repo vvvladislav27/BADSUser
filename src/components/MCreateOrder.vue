@@ -11,6 +11,7 @@ const user = computed(() => store.state.user);
 const photos = computed(() => store.state.foodSupsPhotos);
 const orderItems = computed(() => Object.values(store.state.userOrderItems));
 const orderItemsIds = ref([]);
+const totalPrice = ref(0);
 
 let backButtonClickHandler;
 let mainButtonClickHandler;
@@ -75,6 +76,11 @@ const handleClickMainButton = async() => {
         "city": user.value.address.city,
         "cart_items_ids": orderItemsIds.value
     }
+    if (totalPrice.value >= 1500) {
+        await showTelegramPopUp("Поздравляем! Ваша доставка — бесплатна")
+    } else {
+        await showTelegramPopUp("Обратите внимание: стоимость доставки оплачивается  Вами при получении заказа")
+    }
     const order = await createOrder(data)
     if (order) {
         router.push(`/second-app/order_paid/${order.id}`)
@@ -85,17 +91,16 @@ const handleClickMainButton = async() => {
 
 
 const calculateTotalPriceAndSetMainButton = () => {
-    let totalPrice = 0;
     const uniqueOrderItemsIds = new Set();
     for (let item of orderItems.value) {
         uniqueOrderItemsIds.add(item.id);
-        totalPrice += item.count * item.food_sup.price;
+        totalPrice.value += item.count * item.food_sup.price;
     }
     orderItemsIds.value = Array.from(uniqueOrderItemsIds);
     mainButtonClickHandler = () => {
         handleClickMainButton();
     }
-    setupButton(mainButton, `Оплатить - ${formatAmount(totalPrice)} руб`, mainButtonClickHandler)
+    setupButton(mainButton, `Оплатить - ${formatAmount(totalPrice.value)} руб`, mainButtonClickHandler)
 };
 
 
