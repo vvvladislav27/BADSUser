@@ -3,12 +3,13 @@ import { computed, onBeforeMount, onBeforeUnmount, ref, onMounted } from 'vue';
 import store from '@/store';
 import { router } from '@/router';
 import { getByUserId } from '@/api/user';
-import { mainButton, secondaryButton, backButton, showTelegramPopUp, hideButton } from '@/tg';
+import { mainButton, secondaryButton, backButton, showTelegramPopUp, hideButton, setupButton, tg } from '@/tg';
 
 const user = computed(() => store.state.user)
 
 
 let backButtonClickHandler;
+let mainButtonClickHandler;
 
 const u = ref();
 
@@ -22,7 +23,10 @@ onBeforeMount(async() => {
 })
 
 onMounted(() => {
-    mainButton.text = "Написать продавцу"
+    mainButtonClickHandler = () => {
+        tg.openTelegramLink("https://t.me/FlaskaTek")
+    };
+    setupButton(mainButton, "Написать продавцу", mainButtonClickHandler);
     secondaryButton.text = "Удаление профиля"
     backButton.show();
     mainButton.show();
@@ -31,7 +35,8 @@ onMounted(() => {
 
 
 onBeforeUnmount(() => {
-    backButton.offClick(backButtonClickHandler)
+    backButton.offClick(backButtonClickHandler);
+    mainButton.offClick(mainButtonClickHandler);
     hideButton(mainButton);
     hideButton(secondaryButton);
 })
