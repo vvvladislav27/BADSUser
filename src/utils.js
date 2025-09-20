@@ -155,8 +155,6 @@ const getReviewText = (foodSup) => {
     let text = '';
     if (foodSup.rating) {
         text = `${foodSup.rating}`
-    } else {
-        text = "0"
     }
     if (foodSup.count_reviews === 0) {
         text += " (Нет отзывов)";
