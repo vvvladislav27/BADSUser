@@ -87,4 +87,5 @@ export {
     copyTextAndShowPopUp,
     setupButton,
     hideButton,
+    tg
 }
