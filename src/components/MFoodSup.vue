@@ -9,6 +9,7 @@ import MReview from './MReview.vue';
 import { showTelegramPopUpWithKeyboard, mainButton, secondaryButton, backButton, copyTextAndShowPopUp, hideButton, setupButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
+const isLoaded = ref(false);
 const cartFoodSups = computed(() => store.state.userCartItems);
 const favFoodSups = computed(() => store.state.favFoodSups);
 const photos = computed(() => store.state.foodSupsPhotos);
@@ -79,6 +80,7 @@ onBeforeMount(async() => {
     ])
     foodSup.value = food_sup
     reviews.value = list_reviews
+    isLoaded.value = true;
     if (reviews.value.length == 10) {
         hasMoreReviews.value = true;
     };
@@ -141,12 +143,18 @@ const showMoreReview = async() => {
 </script>
 
 <template>
-    <div class="m-food-sup-container" v-if="foodSup">
+    <div class="m-food-sup-container" v-if="isLoaded">
         <div class="m-food-sup-image-container">
             <img 
                 v-if="photos[foodSup.photo_path]"
                 :src="photos[foodSup.photo_path]"
                 class="m-user-food-sup-photo">
+                <div
+                    class="m-user-food-sup-img-rating-container"
+                    v-if="reviews.length > 0">
+                    <span class="rating">{{ foodSup.rating }}</span>
+                    <span class="star">★</span>
+                </div>
                 <div class="m-user-food-sup-text-header">Не является лекарственным средством</div>
                 <div class="m-user-food-sup-text-bottom">Данные о сертификации товара</div>
                 <div 
@@ -230,7 +238,6 @@ const showMoreReview = async() => {
 
 .m-user-food-sup-text-header, .m-user-food-sup-text-bottom{
     color: black;
-    font-size: 14px;
     right: 0;
     position: absolute;
 }
@@ -243,6 +250,25 @@ const showMoreReview = async() => {
 .m-user-food-sup-text-bottom{
     padding: 0px 10px 10px 0px;
     bottom: 0;
+}
+
+
+.m-user-food-sup-img-rating-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 0px 0px 10px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.star {
+    color: gold;
+}
+
+.rating{
+    color: black;
+    font-weight: 700;
 }
 
 .m-user-food-sup-img-favorite-container{
