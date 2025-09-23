@@ -257,13 +257,14 @@ const showMoreReview = async() => {
     position: absolute;
     top: 0;
     left: 0;
-    padding: 10px 0px 0px 10px;
+    padding: 10px 0px 0px 12px;
     font-weight: 700;
     text-align: center;
+    font-size: 30px;
 }
 
 .star {
-    color: gold;
+    color: black;
 }
 
 .rating{
