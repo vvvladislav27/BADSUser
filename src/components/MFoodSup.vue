@@ -133,6 +133,7 @@ const showMoreReview = async() => {
     page.value ++ 
     const moreReviews = await getReviews(props.id, page.value)
     if (moreReviews.length < 10) {
+        reviews.value.push(...moreReviews);
         hasMoreReviews.value = false;
     } else {
         reviews.value.push(...moreReviews);
