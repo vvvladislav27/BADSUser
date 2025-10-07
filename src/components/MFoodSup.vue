@@ -94,6 +94,8 @@ onBeforeMount(async() => {
             } else {
                 router.push("/second-app/")
             }
+        } else if (!lastRoute.name) {
+            router.push('/second-app/');
         } else {
             router.back();
         }
