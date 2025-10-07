@@ -67,12 +67,16 @@ const getTextForMainButton = () => {
 
 
 onMounted(async() => {
-    for (let item of Object.values(cartFoodSups.value) ) {
-        await getImage(item.food_sup.photo_path)
-    }
     initButtons();
     setAnimationForText('.m-cart-item-text-wrapper');
 });
+
+
+watch(cartFoodSups, async() => {
+    for (let item of Object.values(cartFoodSups.value) ) {
+        await getImage(item.food_sup.photo_path)
+    }
+},  {deep: true});
 
 
 onBeforeUnmount(() => {
