@@ -63,9 +63,9 @@ const getSortedNameText = (b) => {
 const getPackageItemCountText = (foodSup) => {
     let text= `${foodSup.package_item_count}`;
     if (foodSup.type_ == "pills") {
-        text += foodSup.package_item_count == 12? " таблеток": " таблетки"
+        text += foodSup.package_item_count == 24? " таблетки": " таблеток"
     } else {
-        text += foodSup.package_item_count == 12? " капсул": " капсулы"
+        text += foodSup.package_item_count == 24? " капсулы": " капсул"
     };
     return text;
 };
@@ -169,12 +169,6 @@ const getReviewText = (foodSup) => {
 };
 
 
-const getQuantityText = (foodSup) => {
-    let text= `${foodSup.package_item_count}`;
-    text += foodSup.type_ == "pills"? " таблеток": " капсул"
-    return text;
-};
-
 
 const getFilterButtonName = (filter) => {
     if (filter.name == "Количество") {
@@ -218,6 +212,5 @@ export {
     getFormatDate,
     formatTime,
     getReviewText,
-    getQuantityText,
     getFilterButtonName
 }
