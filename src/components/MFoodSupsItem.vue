@@ -1,7 +1,7 @@
 <script setup>
 
 import { ref, computed, onBeforeMount } from 'vue';
-import { formatAmount, vibrate, getReviewText, getQuantityText, getImage } from '@/utils';
+import { formatAmount, vibrate, getReviewText, getPackageItemCountText, getImage } from '@/utils';
 import store from '@/store';
 import { router } from '@/router';
 import { showTelegramPopUpWithKeyboard } from '@/tg';
@@ -141,7 +141,7 @@ const navigateToFoodSup = (id) => {
             <div class="m-food-sups-item-data-name-wrapper" :id="foodSup.id">
                 <div class="m-food-sups-item-data-name">{{ foodSup.name }}</div>
             </div>
-            <div class="m-food-sups-item-data-count">{{ getQuantityText(foodSup) }}</div>
+            <div class="m-food-sups-item-data-count">{{ getPackageItemCountText(foodSup) }}</div>
             <div class="m-food-sups-item-data-raiting">{{ getReviewText(foodSup) }}</div>
         </div>
         <div class="m-food-sups-item-data-price">{{ formatAmount(foodSup.price) }} ₽</div>
