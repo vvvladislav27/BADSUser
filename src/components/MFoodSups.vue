@@ -6,12 +6,8 @@ import MContextMenu from './MContextMenu.vue';
 import MFoodSupsItem from './MFoodSupsItem.vue';
 import MSearch from './MSearch.vue';
 import MFoodSupFilter from './MFoodSupFilter.vue';
-import MReviewContextMenu from './MReviewContextMenu.vue';
 import { getSortedNameText } from '@/utils';
-import { insertReview } from '../api/reviews';
-import { skipFoodSupReview } from '@/api/order';
 import { 
-    showTelegramPopUp, 
     mainButton, 
     secondaryButton, 
     backButton, 
