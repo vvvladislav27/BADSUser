@@ -191,6 +191,11 @@ const showMoreReview = async() => {
                 </div>
             </div>
             <div 
+                class="m-user-food-sup-producer"
+                v-if="foodSup.producer">
+                Производитель: {{ foodSup.producer.name }}
+            </div>
+            <div 
                 class="m-user-food-sup-barcode"
                 @click="copyTextAndShowPopUp(foodSup.barcode)"
                 >
@@ -342,7 +347,7 @@ const showMoreReview = async() => {
     text-align: right;
 }
 
-.m-user-food-sup-barcode{
+.m-user-food-sup-barcode, .m-user-food-sup-producer{
     height: 30px;
     display: flex;
     align-items: center;
