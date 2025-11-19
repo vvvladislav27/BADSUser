@@ -27,7 +27,7 @@ const sort = computed(() => store.state.foodSupSearchSort);
 const foodSups = computed(() => store.state.products);
 const userCartItems = computed(() => store.state.userCartItems);
 const favFoodSups = computed(() => store.state.favFoodSups);
-const orderItemsForReviews = computed(() => store.state.orderItemsForReviews);
+/*const orderItemsForReviews = computed(() => store.state.orderItemsForReviews);*/
 const isContextMenuVisible = ref(false);
 const isFoodSupFiltersVisible = ref(false);
 
@@ -80,18 +80,6 @@ const updateTgButtons = () => {
     hideButton(mainButton)
     mainButton.offClick(mainButtonClickHandler);
     secondaryButton.offClick(secondaryButtonClickHandler);
-    if (orderItemsForReviews.value.length > 0) {
-        mainButtonClickHandler = () => {
-            addReview()
-        }
-        secondaryButtonClickHandler = () => {
-            skipReview()
-        }
-        setupButton(mainButton, "Добавить", mainButtonClickHandler);
-        setupButton(secondaryButton, "Пропустить", secondaryButtonClickHandler);
-        return;
-    }
-
     const hasFavorites = favFoodSups.value && Object.keys(favFoodSups.value).length >= 1;
     const hasCartItems = userCartItems.value && Object.keys(userCartItems.value).length >= 1;
     
@@ -173,7 +161,7 @@ const updateData = (data) => {
 }
 
 
-const skipReview = async() => {
+/*const skipReview = async() => {
     const data = {
         "order_id": review.value.order_id,
         "food_sup_id": review.value.food_sup_id,
@@ -182,10 +170,10 @@ const skipReview = async() => {
     await skipFoodSupReview(data)
     store.dispatch("REMOVE_ORDER_ITEM_FOR_REVIEW", 0)
     updateTgButtons();
-}
+}*/
 
 
-const addReview = async() => {
+/*const addReview = async() => {
     if (!review.value || !review.value.mark) {
         await showTelegramPopUp("Укажите оценку!")
     } else {
@@ -193,7 +181,7 @@ const addReview = async() => {
         store.dispatch("REMOVE_ORDER_ITEM_FOR_REVIEW", 0)
         updateTgButtons();
     }
-}
+}*/
 
 
 const toogleIsFilterVisible = () => {
@@ -218,14 +206,14 @@ const toogleIsSearchInputActive = () => {
         <source src="/c.mp4" type="video/mp4" />
         Ваш браузер не поддерживает анимацию.
     </video>
-    <m-review-context-menu
+    <!--<m-review-context-menu
         v-if="!isVideoVisible && orderItemsForReviews.length > 0"
         @data="updateData">
-    </m-review-context-menu>
+    </m-review-context-menu>-->
     <div 
         class="m-food-sups-container" 
         @click="toogleIsSearchInputActive"
-        v-else-if="!isVideoVisible && orderItemsForReviews.length == 0"
+        v-else-if="!isVideoVisible"
         >
         <m-search 
             :what="'food_sup'"
