@@ -5,13 +5,15 @@ import { router } from '@/router';
 import { formatAmount, getImage } from '@/utils';
 import { createOrder } from '@/api/order';
 import { showTelegramPopUp, mainButton, backButton, setupButton, hideButton } from '@/tg';
+import MLegalPasport from './MLegalPasport.vue';
 import { setAnimationForText } from '@/animation';
 
-const user = computed(() => store.state.user);
 const photos = computed(() => store.state.foodSupsPhotos);
 const orderItems = computed(() => Object.values(store.state.userOrderItems));
 const orderItemsIds = ref([]);
 const totalPrice = ref(0);
+const isInsertLegalPassportVisible = ref(false);
+const legalPassport = ref("");
 
 let backButtonClickHandler;
 let mainButtonClickHandler;
@@ -27,11 +29,6 @@ onBeforeMount(async() => {
 
 
 onMounted(async() => {
-    if (!user.value.show_instruction) {
-        const message = "Доставка товаров осуществляется на ближайший к указанному адресу пункт выдачи СДЭК"
-        await showTelegramPopUp(message)
-        await store.dispatch("UPDATE_USER_SHOW_INSTRUCTION")
-    }
     calculateTotalPriceAndSetMainButton();
     backButtonClickHandler = async() => {
         await store.dispatch("RESET_SELECTED_ITEMS")
@@ -48,10 +45,30 @@ onBeforeUnmount(() => {
 })
 
 
-
-
-
 const handleClickMainButton = async() => {
+    if (!legalPassport.value) {
+        isInsertLegalPassportVisible.value = true;
+    } else {
+        if (isInsertLegalPassportVisible.value) {
+            isInsertLegalPassportVisible.value = false;
+        };
+        const data = {
+            "legal_passport": legalPassport.value,
+            "cart_items_ids": orderItemsIds.value
+        }
+        const result = await createOrder(data);
+        if (result) {
+            showTelegramPopUp("Cпасибо за заказ!\nОжидайте, скоро с вами свяжется представитель компании для завершения оформления")
+            router.push("/second-app/")
+        }
+    }
+}
+
+const setLegalPassport = (data) => {
+    legalPassport.value = data
+}
+
+/*const handleClickMainButton = async() => {
     let message = "Для оформления заказа необходимо указать";
     let insertData = false;
     if (!user.value.address) {
@@ -87,7 +104,7 @@ const handleClickMainButton = async() => {
         await store.dispatch("GET_AND_SET_USER_CART_ITEMS_AFTER_PAID")
         await store.dispatch("RESET_SELECTED_ITEMS")
     }
-}
+}*/
 
 
 const calculateTotalPriceAndSetMainButton = () => {
@@ -110,8 +127,9 @@ const calculateTotalPriceAndSetMainButton = () => {
 </script>
 
 <template>
+    <m-legal-pasport v-if="isInsertLegalPassportVisible" @legalPassport="setLegalPassport"></m-legal-pasport>
     <div class="m-create-order-container">
-        <div class="m-create-order-header">
+        <!--<div class="m-create-order-header">
             <div class="m-create-order-header-shipping-information">Информация о доставке</div>
             <div class="m-create-order-header-shipping-information-item">
                 <div>АДРЕС</div>
@@ -145,7 +163,7 @@ const calculateTotalPriceAndSetMainButton = () => {
                     {{ user.email? user.email.name : 'Не указан'}}
                 </div>
             </div>
-        </div>
+        </div>-->
         <div class="m-create-order-content-title">Содержимое заказа</div>
         <div class="m-create-order-items-container">
             <div 
