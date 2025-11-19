@@ -99,12 +99,7 @@ const formatDate = (dateString) => {
 const getOrderStateForOrder = (orderState) => {
     const stateMap = {
         created: "Создан",
-        packed: "Упакован",
-        send: "Отправленный",
-        received: "Полученный",
-        finished: "Завершённый",
-        arrived: "Прибыл",
-        paid: "Оплачен"
+        processed: "Оформлен"
     };
     return stateMap[orderState] || "Отменённый";
 }
