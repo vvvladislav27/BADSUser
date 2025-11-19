@@ -130,7 +130,11 @@ onBeforeUnmount(() => {
                 <div>Время создания</div>
                 <div class="m-order-data-content"> {{ formatTime(order.created_at) }} </div>
             </div>
-            <div class="m-order-data-title" style="margin-top: 0;">Информация о получателе</div>
+            <div class="m-order-data-wrapper">
+                <div>Юридический паспорт</div>
+                <div class="m-order-data-content"> {{order.legal_passport? order.legal_passport: "Не указан" }} </div>
+            </div>
+            <!--<div class="m-order-data-title" style="margin-top: 0;">Информация о получателе</div>
             <div class="m-order-data-wrapper">
                 <div>АДРЕС</div>
                 <div class="m-order-data-content">{{ order.delivery_address }}</div>
@@ -153,7 +157,7 @@ onBeforeUnmount(() => {
             <div class="m-order-data-wrapper">
                 <div>Email</div>
                 <div class="m-order-data-content"> {{order.email? order.email: "Не указан" }}  </div>
-            </div>
+            </div>-->
             <div class="m-order-data-title">Содержимое заказа</div>
             <div class="m-order-container">
                 <div class="m-order-type-name">БАД</div>
