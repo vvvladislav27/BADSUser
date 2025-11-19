@@ -64,7 +64,7 @@ const updateOrder = async(orderId, state, address) => {
 }
 
 
-const getOrdersForInsertReviews = async() => {
+/*const getOrdersForInsertReviews = async() => {
     const response = await fetch(`${API_BASE_URL}/v0/orders/insert_reviews`, {
         method: "GET",
         headers: {
@@ -77,7 +77,7 @@ const getOrdersForInsertReviews = async() => {
     } else {
         return []
     }
-}
+}*/
 
 
 const skipFoodSupReview = async(data) => {
@@ -98,4 +98,4 @@ const skipFoodSupReview = async(data) => {
 }
 
 
-export {getOrderById, updateOrder, getOrdersForInsertReviews, skipFoodSupReview, createOrder}
+export {getOrderById, updateOrder, skipFoodSupReview, createOrder}
