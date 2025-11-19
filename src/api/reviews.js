@@ -20,7 +20,7 @@ const getReviews = async(foodSupId, page) => {
 }
 
 
-const insertReview = async(review) => {
+/*const insertReview = async(review) => {
     const response = await fetch(`${API_BASE_URL}/v0/reviews/`, {
         method: "POST",
         headers: {
@@ -36,8 +36,8 @@ const insertReview = async(review) => {
         await showTelegramPopUp("Не удалось добавить отзыв")
         return null
     }
-}
+}*/
 
 
 
-export {getReviews, insertReview}
+export {getReviews}

@@ -80,7 +80,7 @@ const updateOrder = async(orderId, state, address) => {
 }*/
 
 
-const skipFoodSupReview = async(data) => {
+/*const skipFoodSupReview = async(data) => {
     const response = await fetch(`${API_BASE_URL}/v0/orders/item/skip_review`, {
         method: "PATCH",
         headers: {
@@ -95,7 +95,7 @@ const skipFoodSupReview = async(data) => {
     } else {
         return null
     }
-}
+}*/
 
 
-export {getOrderById, updateOrder, skipFoodSupReview, createOrder}
+export {getOrderById, updateOrder, createOrder}
