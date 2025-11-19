@@ -1,7 +1,6 @@
 import { searchData } from "@/api/search";
 import { getFavFoodSups, toggleFavFoodSup } from "@/api/fav_food_sup";
 import { getCartItems, addCartItem, getCart, updateCartItem, deleteCartItem, clearCart } from "@/api/cart";
-import { getOrdersForInsertReviews } from "@/api/order";
 import { getSelf, updateUser } from "@/api/user";
 import { showTelegramPopUp } from "@/tg";
 
@@ -15,18 +14,16 @@ export const GET_AND_SET_DATA = async({commit, state}) => {
     if (user.is_blocked) {
         return true
     }
-    const [foodSups, cart, favoriteFoodSup, cartItems, orderItemsforReview] = await Promise.all([
+    const [foodSups, cart, favoriteFoodSup, cartItems] = await Promise.all([
         searchData("food_sups", state.foodSupFilters, state.foodSupSearchType, state.foodSupSearchSort, state.foodSupSearchQuery),
         getCart(),
         getFavFoodSups(),
         getCartItems(),
-        getOrdersForInsertReviews()
     ])
     commit("SET_PRODUCTS", foodSups.food_sups)
     commit("SET_USER_CART", cart);
     commit("SET_FAV_FOOD_SUPS", favoriteFoodSup);
     commit("SET_USER_CART_ITEMS", cartItems);
-    commit("SET_ORDERS_FOR_REVIEWS", orderItemsforReview)
     commit("SET_IS_DATA_LOADED");
     return false
 }

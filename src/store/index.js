@@ -27,7 +27,6 @@ const state = {
     orderSearchSort: "desc",
     orderSearchType: "created_date",
     orderSearchQuery: "",
-    orderItemsForReviews: [],
     favoriteFoodSupsFilters: [],
     favoriteFoodSupsSearchSort: "desc",
     favoriteFoodSupsSearchType: "rating",
