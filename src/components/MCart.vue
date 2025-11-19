@@ -89,7 +89,7 @@ onBeforeUnmount(() => {
 
 const navigateToCreateOrder = async() => {
     if (Object.keys(orderFoodSups.value).length == 0) {
-        await showTelegramPopUp("Выберите товар для оплаты")
+        await showTelegramPopUp("Выберите товар для оформления заказа")
         return
     };
     router.push("/second-app/create_order");
