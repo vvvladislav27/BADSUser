@@ -156,14 +156,14 @@ export const SET_IS_VIDEO_VISIBLE = ({commit}) => {
     commit("SET_IS_VIDEO_VISIBLE")
 }
 
-export const UPDATE_USER_SHOW_INSTRUCTION = async({commit, state}) => {
+/*export const UPDATE_USER_SHOW_INSTRUCTION = async({commit, state}) => {
     const u = state.user;
     u.show_instruction = true;
     const user = await updateUser(u)
     if (user) {
         commit("SET_USER", user);
     }
-}
+}*/
 
 export const GET_AND_SET_USER = async({commit}) => {
     const user = await getSelf();
