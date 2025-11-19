@@ -117,7 +117,7 @@ const calculateTotalPriceAndSetMainButton = () => {
     mainButtonClickHandler = () => {
         handleClickMainButton();
     }
-    setupButton(mainButton, `Оплатить - ${formatAmount(totalPrice.value)} руб`, mainButtonClickHandler)
+    setupButton(mainButton, `Оформить`, mainButtonClickHandler)
 };
 
 
