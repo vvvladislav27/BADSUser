@@ -4,7 +4,7 @@ import { initData, showTelegramPopUp } from "@/tg";
 
 
 
-const getReviews = async(foodSupId, page) => {
+/*const getReviews = async(foodSupId, page) => {
     const response = await fetch(`${API_BASE_URL}/v0/reviews/items/${foodSupId}?page=${page}`, {
         method: "GET",
         headers: {
@@ -17,7 +17,7 @@ const getReviews = async(foodSupId, page) => {
     } else {
         return []
     }
-}
+}*/
 
 
 /*const insertReview = async(review) => {
@@ -39,5 +39,3 @@ const getReviews = async(foodSupId, page) => {
 }*/
 
 
-
-export {getReviews}
