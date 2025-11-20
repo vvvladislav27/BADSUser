@@ -4,12 +4,14 @@ import { router } from '@/router';
 import store from '@/store';
 import { vibrate } from '@/utils';
 import { backButton, mainButton, secondaryButton, setupButton, hideButton } from '@/tg';
+import MContextMenuProducer from './MContextMenuProducer.vue';
 
 const currentType = computed(() => router.currentRoute.value.name == "FoodSups"? "food_sups": "favorite_food_sup")
 
 const activeInput = ref()
 const filters = computed(() => currentType.value == "food_sups"? store.state.foodSupFilters: store.state.favoriteFoodSupsFilters);
-const buttons = [1, 2, 3, 4, 5]
+//const buttons = [1, 2, 3, 4, 5]
+const isContextMenuVisible = ref(false);
 const filtersList = ref([]); 
 
 let mainButtonClickHandler;
@@ -22,24 +24,29 @@ const emit = defineEmits(["close"])
 const setFilters = async() => {
     const filterData = [];
     const data = {
+        producer: currentProducer.value || null,
         priceFrom: priceFrom.value || null,
         priceTo: priceTo.value || null,
         package_item_count: package_item_count.value || null
     };
-    const addFilter = (name, rating, priceFrom, priceTo, package_item_count) => {
+    const addFilter = (name, priceFrom, priceTo, package_item_count, producer) => {
         filterData.push({
             name: name,
             package_item_count: package_item_count,
             price_from: priceFrom,
-            price_to: priceTo
+            price_to: priceTo,
+            producer: producer
         });
     };
     if (data.priceFrom || data.priceTo) {
-        addFilter("Цена", null, data.priceFrom, data.priceTo, null);
+        addFilter("Цена", data.priceFrom, data.priceTo, null, null);
     };
     if (data.package_item_count) {
-        addFilter("Количество", null, null, null, data.package_item_count);
+        addFilter("Количество", null, null, data.package_item_count, null);
     };
+    if (data.producer && data.producer !== "Все") {
+        addFilter("Производитель", null, null, null, data.producer)
+    }
     filtersList.value = filterData;
     if (filtersList.value) {
         await store.dispatch("SET_FILTERS", {"filters": filtersList.value, "type": currentType.value});
@@ -129,15 +136,29 @@ const initialPrice = computed(() => {
     return filters.value.find(filter => filter.name === "Цена") || {};
 });
 
+const initialValueProducer = computed(() => {
+    const filter = filters.value.find(filter => filter.name === "Производитель");
+    return filter? filter.producer: "Все"
+});
 
 //const rating = ref(initialRating.value);
 const package_item_count = ref(initialPackageItemCount.value);
 const priceFrom = ref(initialPrice.value.price_from || 0);
 const priceTo = ref(initialPrice.value.price_to || 0);
+const currentProducer = ref(initialValueProducer.value);
 
 
 const setActiveInput = (field) => {
     activeInput.value = field
+}
+
+const toggleIsContextMenuVisible = () => {
+    isContextMenuVisible.value = !isContextMenuVisible.value;
+};
+
+const setCurrentProducer = (data) => {
+    currentProducer.value = data.name;
+    toggleIsContextMenuVisible();
 }
 
 </script>
@@ -155,6 +176,15 @@ const setActiveInput = (field) => {
                 {{ button }}
                 </button>
             </div>-->
+            <div class="m-food-sup-filter-title">Производитель</div>
+            <div class="m-user-filter-producers">
+                <button 
+                    class="m-user-filter-producers-btn"
+                    type="button"
+                    @click="toggleIsContextMenuVisible"
+                    >{{ currentProducer }}
+                </button>
+            </div>
             <div class="m-food-sup-card-filter-title">Цена, ₽</div>
             <div class="m-food-sup-card-filter-price-pagination">
                 <p>от</p>
@@ -193,6 +223,13 @@ const setActiveInput = (field) => {
             </div>
         </div>
   </div>
+  <m-context-menu-producer
+    v-if="isContextMenuVisible"
+    @producer="setCurrentProducer"
+    :producer="currentProducer"
+    @close="toggleIsContextMenuVisible"
+  >
+  </m-context-menu-producer>
 </template>
 
 <style scoped>
@@ -244,6 +281,23 @@ const setActiveInput = (field) => {
     border-radius: 4px;
     color: black;
 }
+
+.m-user-filter-producers{
+    margin: 15px 0px 15px 0px;
+}
+
+.m-user-filter-producers-btn{
+    border: none;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    padding: 5px;
+    color:black;
+    width: 156px;
+    height: 38px;
+    font-size: var(--dp-font-size);
+}
+
 
 .m-food-sup-card-filter-raiting-buttons-item:first-child{
     margin-left: 0px;
