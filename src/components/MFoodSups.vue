@@ -32,7 +32,7 @@ const isVideoVisible = computed(() => store.state.isVideoVisible);
 const isVideoLoad = computed(() => store.state.isVideoLoaded);
 const isDataLoaded = computed(() => store.state.isDataLoaded);
 
-const buttons = ["name", "price", "rating"];
+const buttons = ["name", "price"];
 const review = ref();
 
 

@@ -22,7 +22,7 @@ const photos = computed(() => store.state.foodSupsPhotos);
 const arrow = computed(() => (sort.value === "desc" ? "⬇" : "⬆"));
 const isContextMenuVisible = ref(false);
 const isFoodSupFiltersVisible = ref(false);
-const buttons = ["name", "price", "rating"];
+const buttons = ["name", "price"];
 
 
 let backButtonClickHandler;
