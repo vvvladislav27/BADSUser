@@ -4,8 +4,6 @@ import store from '@/store';
 import { getImage, getPackageItemCountText, getStockItemCountText, vibrate, formatAmount, formatDate } from '@/utils';
 import { getFoodSupById } from '@/api/food_sup';
 import { router, lastRoute } from '@/router';
-import { getReviews } from '@/api/reviews';
-import MReview from './MReview.vue';
 import { showTelegramPopUpWithKeyboard, mainButton, secondaryButton, backButton, copyTextAndShowPopUp, hideButton, setupButton } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
@@ -14,10 +12,6 @@ const cartFoodSups = computed(() => store.state.userCartItems);
 const favFoodSups = computed(() => store.state.favFoodSups);
 const photos = computed(() => store.state.foodSupsPhotos);
 const foodSup = ref();
-const reviews = ref([]);
-const page = ref(1);
-
-const hasMoreReviews = ref();
 
 let mainButtonClickHandler;
 let secondaryButtonClickHandler;
@@ -74,16 +68,11 @@ const setTgButtons = () => {
 
 
 onBeforeMount(async() => {
-    const [food_sup, list_reviews] = await Promise.all([
-        getFoodSupById(props.id),
-        getReviews(props.id, page.value)
-    ])
-    foodSup.value = food_sup
-    reviews.value = list_reviews
+    foodSup.value = await getFoodSupById(props.id)
     isLoaded.value = true;
-    if (reviews.value.length == 10) {
+    /*if (reviews.value.length == 10) {
         hasMoreReviews.value = true;
-    };
+    };*/
     await getImage(foodSup.value.photo_path);
     setAnimationForText('.m-food-sup-name-wrapper');
     setTgButtons();
@@ -131,7 +120,7 @@ const toggleFavoriteFoodSup = async(id) => {
 
 
 
-const showMoreReview = async() => {
+/*const showMoreReview = async() => {
     page.value ++ 
     const moreReviews = await getReviews(props.id, page.value)
     if (moreReviews.length < 10) {
@@ -140,7 +129,7 @@ const showMoreReview = async() => {
     } else {
         reviews.value.push(...moreReviews);
     }
-}
+}*/
 
 
 </script>
@@ -152,12 +141,12 @@ const showMoreReview = async() => {
                 v-if="photos[foodSup.photo_path]"
                 :src="photos[foodSup.photo_path]"
                 class="m-user-food-sup-photo">
-                <div
+                <!--<div
                     class="m-user-food-sup-img-rating-container"
                     v-if="reviews.length > 0">
                     <span class="rating">{{ foodSup.rating }}</span>
                     <span class="star">★</span>
-                </div>
+                </div>-->
                 <div class="m-user-food-sup-text-header">Не является лекарственным средством</div>
                 <div class="m-user-food-sup-text-bottom">Данные о сертификации товара</div>
                 <div 
@@ -209,13 +198,13 @@ const showMoreReview = async() => {
             <div class="m-user-food-sup-description-wrapper">
                 <div class="m-user-food-sup-description-active-substance">Действующее вещество:  {{ foodSup.active_substance }}</div>
                 <div class="m-user-food-sup-description">{{ foodSup.description }}</div>
-                <m-review :reviews="reviews"></m-review>
+                <!--<m-review :reviews="reviews"></m-review>
                 <div 
                     v-if="hasMoreReviews"
                     @click="showMoreReview"
                     class="m-user-food-sup-review-more">
                     Показать еще
-                </div>
+                </div>-->
             </div>
         </div>
     </div>
