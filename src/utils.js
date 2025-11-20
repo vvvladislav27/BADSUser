@@ -171,6 +171,8 @@ const getFilterButtonName = (filter) => {
         return `Рейтинг > ${filter.rating}`
     } else if (filter.name == "Состояние заказа") {
         return getOrderStateForOrders(filter.state)
+    } else if (filter.name == "Производитель") {
+        return `Производитель: ${filter.producer}`
     } else if (filter.name == "Дата") {
         if (filter.from_date && filter.to_date) {
             return `С ${getFormatDate(filter.from_date)} по ${getFormatDate(filter.to_date)}`
