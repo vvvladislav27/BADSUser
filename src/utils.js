@@ -40,7 +40,6 @@ const getFormatDate = (dateString) => {
 const getSortedNameText = (b) => {
     const textMap = {
         price: "Цена",
-        rating: "Рейтинг",
         name: "Название",
         cost: "Стоимость",
         created_date: "Дата создания",
