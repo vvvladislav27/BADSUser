@@ -22,7 +22,6 @@ const emit = defineEmits(["close"])
 const setFilters = async() => {
     const filterData = [];
     const data = {
-        rating: rating.value || null,
         priceFrom: priceFrom.value || null,
         priceTo: priceTo.value || null,
         package_item_count: package_item_count.value || null
@@ -30,14 +29,10 @@ const setFilters = async() => {
     const addFilter = (name, rating, priceFrom, priceTo, package_item_count) => {
         filterData.push({
             name: name,
-            rating: rating,
             package_item_count: package_item_count,
             price_from: priceFrom,
             price_to: priceTo
         });
-    };
-    if (data.rating) {
-        addFilter('Рейтинг', data.rating, null, null, null);
     };
     if (data.priceFrom || data.priceTo) {
         addFilter("Цена", null, data.priceFrom, data.priceTo, null);
@@ -91,14 +86,14 @@ onBeforeUnmount(() => {
 })
 
 
-const setFilterRating = (value_) => {
+/*const setFilterRating = (value_) => {
     if (rating.value == value_) {
         rating.value = null
     } else {
         vibrate()
         rating.value = value_
     }
-}
+}*/
 
 const setFilterPackageItemCount = (value_) => {
     if (package_item_count.value == value_) {
@@ -118,10 +113,10 @@ const updatePriceTo = () => {
 }
 
 
-const initialRating = computed(() => {
+/*const initialRating = computed(() => {
     const filter = filters.value.find(filter => filter.name === "Рейтинг");
     return filter ? filter.rating : null;
-});
+});*/
 
 
 const initialPackageItemCount = computed(() => {
@@ -135,7 +130,7 @@ const initialPrice = computed(() => {
 });
 
 
-const rating = ref(initialRating.value);
+//const rating = ref(initialRating.value);
 const package_item_count = ref(initialPackageItemCount.value);
 const priceFrom = ref(initialPrice.value.price_from || 0);
 const priceTo = ref(initialPrice.value.price_to || 0);
@@ -150,7 +145,7 @@ const setActiveInput = (field) => {
 <template>
     <div class="m-food-sup-card-filter-container">
         <div class="m-food-sup-card-filter-content">
-            <div class="m-food-sup-card-filter-title">Мин. рейтинг</div>
+            <!--<div class="m-food-sup-card-filter-title">Мин. рейтинг</div>
             <div class="m-food-sup-card-filter-raiting-buttons">
                 <button 
                     class="m-food-sup-card-filter-raiting-buttons-item"
@@ -159,7 +154,7 @@ const setActiveInput = (field) => {
                     v-for="button in buttons">
                 {{ button }}
                 </button>
-            </div>
+            </div>-->
             <div class="m-food-sup-card-filter-title">Цена, ₽</div>
             <div class="m-food-sup-card-filter-price-pagination">
                 <p>от</p>
