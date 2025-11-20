@@ -15,7 +15,7 @@ const state = {
     foodSupSearchQuery: "",
     foodSupFilters: [],
     foodSupSearchSort: "desc",
-    foodSupSearchType: "rating",
+    foodSupSearchType: "name",
     foodSupsPhotos: {},
     favFoodSups: {},
     user: {},
@@ -29,7 +29,7 @@ const state = {
     orderSearchQuery: "",
     favoriteFoodSupsFilters: [],
     favoriteFoodSupsSearchSort: "desc",
-    favoriteFoodSupsSearchType: "rating",
+    favoriteFoodSupsSearchType: "name",
     favoriteFoodSupsSearchQuery: ""
   }
 
