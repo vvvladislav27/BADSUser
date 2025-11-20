@@ -145,7 +145,7 @@ const formatTime = (dateString) => {
 }
 
 
-const getReviewText = (foodSup) => {
+/*const getReviewText = (foodSup) => {
     let text = '';
     if (foodSup.rating) {
         text = `${foodSup.rating}`
@@ -160,7 +160,7 @@ const getReviewText = (foodSup) => {
         text += ` (${foodSup.count_reviews} отзывов)`;
     }
     return text;
-};
+};*/
 
 
 
@@ -207,6 +207,5 @@ export {
     formatDateForOrder,
     getFormatDate,
     formatTime,
-    getReviewText,
     getFilterButtonName
 }
