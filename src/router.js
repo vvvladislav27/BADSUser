@@ -7,7 +7,6 @@ import MCabinet from "./components/MCabinet.vue";
 import MFoodSupsFavorites from "./components/MFoodSupsFavorites.vue";
 import MOrders from "./components/MOrders.vue";
 import MOrder from "./components/MOrder.vue";
-import MUpdateOrderData from "./components/MUpdateOrderData.vue";
 import MBlocked from "./components/MBlocked.vue";
 import store from "./store";
 
@@ -24,7 +23,6 @@ const routes = [
     {path: "/second-app/orders", name: "Orders", component: MOrders},
     {path: "/second-app/orders/:id", name: "Order", component: MOrder, props: true},
     {path: "/second-app/create_order", name: "CreateOrder", component: MCreateOrder},
-    {path: "/second-app/create_order/update_data/:dataType", name: "UpdateOrderData", component: MUpdateOrderData, props: true},
     {path: "/second-app/blocked", name: "Blocked", component: MBlocked}
 ]
 
