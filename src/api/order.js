@@ -40,11 +40,10 @@ const createOrder = async(data) => {
 }
 
 
-const updateOrder = async(orderId, state, address) => {
+const updateOrder = async(orderId, state) => {
     const data = {
         "order_id": orderId,
-        "state": state,
-        "address": address
+        "state": state
     }
     const response = await fetch(`${API_BASE_URL}/v0/orders/change_state`, {
         method: "PATCH",
