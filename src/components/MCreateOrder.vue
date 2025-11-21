@@ -59,6 +59,7 @@ const handleClickMainButton = async() => {
         const result = await createOrder(data);
         if (result) {
             showTelegramPopUp("Cпасибо за заказ!\nОжидайте, скоро с вами свяжется представитель компании для завершения оформления")
+            await store.dispatch("GET_AND_SET_USER_CART_ITEMS_AFTER_PAID")
             router.push("/second-app/")
         }
     }
