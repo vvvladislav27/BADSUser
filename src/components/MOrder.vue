@@ -4,22 +4,23 @@ import { getOrderById, updateOrder } from '@/api/order';
 import { formatAmount, formatTime, formatDateForOrder, getOrderStateForOrder, getImage } from '@/utils';
 import store from '@/store';
 import { router } from '@/router';
-import { showTelegramPopUpWithKeyboard, mainButton, backButton, hideButton, setupButton, secondaryButton } from '@/tg';
+import { showTelegramPopUpWithKeyboard, mainButton, backButton, hideButton, setupButton, secondaryButton, tg } from '@/tg';
 import { setAnimationForText } from '@/animation';
 
 const photos = computed(() => store.state.foodSupsPhotos);
 const order = ref();
-const addressPickUpPoint = ref("");
-let secondaryButtonState = "canceled"
 
 let mainButtonClickHandler;
 let backButtonClickHandler;
-let secondaryButtonClickHandler = async() => {
+let secondaryButtonClickHandler;
+
+
+/*let secondaryButtonClickHandler = async() => {
     const result = await showTelegramPopUpWithKeyboard("Хотите отменить заказ?")
     if (result === "confirm") {
         order.value = await updateOrder(order.value.id, secondaryButtonState, addressPickUpPoint.value);
     }
-};
+};*/
 
 
 
@@ -39,51 +40,33 @@ watch(order, () => {
 
 
 const setTgButtons = (orderState) => {
-    let buttonText;
-    let newOrderState;
     mainButton.offClick(mainButtonClickHandler);
     secondaryButton.offClick(secondaryButtonClickHandler);
     hideButton(mainButton);
     hideButton(secondaryButton);
-    const orderStates = {
-        created: { buttonText: `Оплатить - ${formatAmount(order.value.cost)} руб`, newOrderState: "paid" },
-        packed: { buttonText: "Отменить", newOrderState: "canceled" },
-        paid: { buttonText: "Отменить", newOrderState: "canceled" },
-        arrived: { buttonText: "Заказ получен", newOrderState: "received"},
-        received: { buttonText: "Завершить", newOrderState: "finished"}
-    }
-    if (orderStates[orderState]) {
-        buttonText = orderStates[orderState].buttonText;
-        newOrderState = orderStates[orderState].newOrderState;
-        if (orderState == "created") {
-            setupButton(secondaryButton, "Отменить заказ", secondaryButtonClickHandler);
-        }
-    }
-    mainButtonClickHandler = async() => {
-        if (newOrderState === "canceled") {
-            const result = await showTelegramPopUpWithKeyboard("Хотите отменить заказ?")
+    const handleCheckUsername = () => {
+        tg.openTelegramLink("https://t.me/FlaskaTek")
+    };
+    if (orderState == "created") {
+        mainButtonClickHandler = async () => {
+            const result = await showTelegramPopUpWithKeyboard("Отменить заказ?");
             if (result === "confirm") {
-                order.value = await updateOrder(order.value.id, newOrderState, addressPickUpPoint.value);
+                order.value = await updateOrder(order.value.id, "canceled");
             }
-            return;
-        } else if (newOrderState == "paid") {
-            router.push(`/second-app/order_paid/${order.value.id}`)
-            return;
-        } else {
-            order.value = await updateOrder(order.value.id, newOrderState, addressPickUpPoint.value);
-            return;
-        }
-    };
-    if (orderStates[orderState]) {
-        setupButton(mainButton, buttonText, mainButtonClickHandler);
-    };
+        };
+        secondaryButtonClickHandler = () => handleCheckUsername();
+        setupButton(mainButton, "Отменить", mainButtonClickHandler);
+        setupButton(secondaryButton, "Написать продавцу", secondaryButtonClickHandler);
+    } else {
+        mainButtonClickHandler = () => handleCheckUsername();
+        setupButton(mainButton, "Написать продавцу", mainButtonClickHandler);
+    }
 }
 
 
 
 onBeforeMount(async() => {
     order.value = await getOrderById(props.id);
-    addressPickUpPoint.value = order.value.address_pick_up_point;
     setTgButtons(order.value.state);
     backButtonClickHandler = () => {
         router.push("/second-app/orders");
@@ -112,6 +95,8 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="m-order-container" v-if="order">
+        <button style="width: 30px; height: 30px;" @click="mainButtonClickHandler">{{ mainButton.text }}</button>
+        <button style="width: 30px; height: 30px;" @click="secondaryButtonClickHandler">{{ secondaryButton.text }}</button>
         <div class="m-order-data-title">Информация о заказе</div>
         <div class="m-order-wrapper">
             <div class="m-order-data-wrapper">
