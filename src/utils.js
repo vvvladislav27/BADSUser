@@ -47,13 +47,8 @@ const getSortedNameText = (b) => {
         unique_item_count: "Количество уникальных",
         all: "Все",
         created: "Созданные",
-        packed: "Упакованные",
-        send: "Отправленные",
-        received: "Полученные",
-        finished: "Завершённые",
         canceled: "Отменённые",
-        arrived: "Прибывшие",
-        paid: "Оплаченные"
+        processed: "Оформленные",
     }
     return textMap[b] || null;
 }
@@ -107,13 +102,8 @@ const getOrderStateForOrder = (orderState) => {
 const getOrderStateForOrders = (orderState) => {
     const stateMap = {
         created: "Созданные",
-        packed: "Упакованные",
-        send: "Отправленные",
-        received: "Полученные",
-        finished: "Завершённые",
         canceled: "Отменённые",
-        arrived: "Прибывшие",
-        paid: "Оплаченные"
+        processed: "Оформлен",
     };
     return stateMap[orderState] || "Все";
 }
