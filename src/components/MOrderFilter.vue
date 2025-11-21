@@ -10,7 +10,7 @@ import { mainButton, secondaryButton, hideButton, setupButton, backButton } from
 const format = "dd.MM.yyyy"
 
 const filterList = ref([]);
-const buttons = ["all", "created", "packed", "send", "received", "finished", "canceled", "arrived", "paid"]
+const buttons = ["all", "created", "canceled", "processed"]
 const filters = computed(() => store.state.orderFilters);
 
 const isContextMenuStateVisible = ref(false);
