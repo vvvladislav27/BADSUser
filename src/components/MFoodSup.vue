@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onBeforeMount, onUnmounted, computed, watch } from 'vue';
 import store from '@/store';
-import { getImage, getPackageItemCountText, getStockItemCountText, vibrate, formatAmount, formatDate } from '@/utils';
+import { getImage, getPackageItemCountText, vibrate, formatAmount, formatDate } from '@/utils';
 import { getFoodSupById } from '@/api/food_sup';
 import { router, lastRoute } from '@/router';
 import { showTelegramPopUpWithKeyboard, mainButton, secondaryButton, backButton, copyTextAndShowPopUp, hideButton, setupButton } from '@/tg';
@@ -176,7 +176,6 @@ const toggleFavoriteFoodSup = async(id) => {
                 </div>
                 <div class="m-user-food-sup-info">
                     <div class="m-user-food-sup-info-price">{{ formatAmount(foodSup.price) }} Руб</div>
-                    <div class="m-user-food-sup-info-box-item-count">{{ getStockItemCountText(foodSup) }} </div>
                 </div>
             </div>
             <div 

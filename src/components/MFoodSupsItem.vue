@@ -142,7 +142,6 @@ const navigateToFoodSup = (id) => {
                 <div class="m-food-sups-item-data-name">{{ foodSup.name }}</div>
             </div>
             <div class="m-food-sups-item-data-count">{{ getPackageItemCountText(foodSup) }}</div>
-            <div class="m-food-sups-item-data-raiting">В наличии {{ foodSup.stock_item_count}} шт.</div>
         </div>
         <div class="m-food-sups-item-data-price">{{ formatAmount(foodSup.price) }} ₽</div>
     </div>
