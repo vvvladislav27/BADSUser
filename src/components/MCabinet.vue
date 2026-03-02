@@ -3,7 +3,7 @@ import { computed, onBeforeMount, onBeforeUnmount, ref, onMounted } from 'vue';
 import store from '@/store';
 import { router } from '@/router';
 import { getByUserId } from '@/api/user';
-import { mainButton, secondaryButton, backButton, showTelegramPopUp, hideButton, setupButton, tg } from '@/tg';
+import { mainButton, secondaryButton, backButton, showTelegramPopUp, hideButton, setupButton, tg, initData } from '@/tg';
 
 const user = computed(() => store.state.user)
 
@@ -83,6 +83,7 @@ const navigateToOrders = async() => {
             <div @click="navigateToOrders">{{u.count_orders > 0? `Заказов · ${u.count_orders}`: "Нет заказов"}}</div>
             <div @click="navigateToFavoriteFoodSups">{{ u.count_fav_food_sups > 0? `Избранное · ${u.count_fav_food_sups}`: "Нет избранного" }}</div>
         </div>
+        <div>{{ initData }}</div>
     </div>
 
 
