@@ -82,8 +82,8 @@ const navigateToOrders = async() => {
         <div class="m-cabinet-body">
             <div @click="navigateToOrders">{{u.count_orders > 0? `Заказов · ${u.count_orders}`: "Нет заказов"}}</div>
             <div @click="navigateToFavoriteFoodSups">{{ u.count_fav_food_sups > 0? `Избранное · ${u.count_fav_food_sups}`: "Нет избранного" }}</div>
+            
         </div>
-        <div>{{ initData }}</div>
     </div>
 
 
